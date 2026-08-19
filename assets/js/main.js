@@ -2,6 +2,8 @@
 (function () {
   "use strict";
 
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   var header = document.querySelector(".site-header");
   var toggle = document.querySelector(".nav-toggle");
   var mobileNav = document.querySelector(".mobile-nav");
@@ -47,6 +49,127 @@
     });
   } else {
     revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+  }
+
+  // ---------------- Animated counters ----------------
+  // Custom expo-out easing — matches the CSS --ease token, never linear.
+  function easeOutExpo(t) {
+    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  }
+
+  function animateCount(el) {
+    var target = parseFloat(el.dataset.count);
+    if (isNaN(target)) return;
+    var suffix = el.dataset.suffix || "";
+    var decimals = el.dataset.count.indexOf(".") > -1 ? el.dataset.count.split(".")[1].length : 0;
+    if (reduceMotion) {
+      el.textContent = target.toFixed(decimals) + suffix;
+      return;
+    }
+    var duration = 1400;
+    var start = null;
+    function tick(ts) {
+      if (start === null) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var eased = easeOutExpo(progress);
+      var value = target * eased;
+      el.textContent = value.toFixed(decimals) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  var counters = document.querySelectorAll("[data-count]");
+  if ("IntersectionObserver" in window && counters.length) {
+    var countIo = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animateCount(entry.target);
+            countIo.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+    counters.forEach(function (el) { countIo.observe(el); });
+  } else {
+    counters.forEach(function (el) {
+      el.textContent = el.dataset.count + (el.dataset.suffix || "");
+    });
+  }
+
+  // ---------------- Hero parallax (decorative only, GPU-only transform) ----------------
+  if (!reduceMotion) {
+    var parallaxEls = document.querySelectorAll("[data-parallax]");
+    if (parallaxEls.length) {
+      var ticking = false;
+      function updateParallax() {
+        var vh = window.innerHeight;
+        parallaxEls.forEach(function (el) {
+          var rect = el.getBoundingClientRect();
+          if (rect.bottom < 0 || rect.top > vh) return;
+          var speed = parseFloat(el.dataset.parallax) || 0.15;
+          var offset = (rect.top - vh / 2) * speed;
+          el.style.transform = "translate3d(0, " + offset.toFixed(1) + "px, 0)";
+        });
+        ticking = false;
+      }
+      document.addEventListener(
+        "scroll",
+        function () {
+          if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+          }
+        },
+        { passive: true }
+      );
+      updateParallax();
+    }
+  }
+
+  // ---------------- Hero headline word-stagger on load ----------------
+  // Walks child nodes so inline tags (e.g. <em>) survive as single animated units.
+  document.querySelectorAll("[data-split-words]").forEach(function (el) {
+    var i = 0;
+    var out = [];
+    el.childNodes.forEach(function (node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.textContent.split(/(\s+)/).forEach(function (chunk) {
+          if (!chunk.trim()) {
+            if (chunk) out.push(chunk);
+            return;
+          }
+          out.push('<span class="word-wrap"><span class="word" style="transition-delay:' + i * 70 + 'ms">' + chunk + "</span></span>");
+          i++;
+        });
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        out.push('<span class="word-wrap"><span class="word" style="transition-delay:' + i * 70 + 'ms">' + node.outerHTML + "</span></span>");
+        i++;
+      }
+    });
+    el.innerHTML = out.join("");
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        el.classList.add("is-in");
+      });
+    });
+  });
+
+  // ---------------- Magnetic buttons (desktop / fine-pointer only) ----------------
+  if (!reduceMotion && window.matchMedia("(pointer: fine)").matches) {
+    document.querySelectorAll(".btn").forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var rect = btn.getBoundingClientRect();
+        var x = e.clientX - rect.left - rect.width / 2;
+        var y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = "translate3d(" + (x * 0.25).toFixed(1) + "px, " + (y * 0.35).toFixed(1) + "px, 0)";
+      });
+      btn.addEventListener("mouseleave", function () {
+        btn.style.transform = "";
+      });
+    });
   }
 
   // ---------------- AI Front Desk Assistant ----------------

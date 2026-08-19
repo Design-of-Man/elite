@@ -208,6 +208,23 @@ p { margin: 0 0 1.1em; color: var(--steel); max-width: 62ch; }
   overflow: hidden;
   padding-top: 6rem;
 }
+.hero-glow {
+  position: absolute;
+  width: 620px; height: 620px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,169,97,0.16), transparent 70%);
+  top: -120px; right: -160px;
+  pointer-events: none;
+  animation: heroGlowDrift 14s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  will-change: transform;
+}
+@keyframes heroGlowDrift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(-40px, 50px, 0) scale(1.12); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow { animation: none; }
+}
 .hero::before {
   content: "";
   position: absolute; inset: 0;
@@ -272,6 +289,23 @@ p { margin: 0 0 1.1em; color: var(--steel); max-width: 62ch; }
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
 .reveal.is-visible { opacity: 1; transform: translateY(0); }
 .reveal-stagger.is-visible > * { transition-delay: calc(var(--i, 0) * 90ms); }
+
+/* ---------------- Hero headline word-stagger ---------------- */
+[data-split-words] { display: block; }
+.word-wrap { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; }
+.word {
+  display: inline-block;
+  transform: translateY(115%) rotate(4deg);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+[data-split-words].is-in .word { transform: translateY(0) rotate(0deg); }
+
+/* ---------------- Animated counters ---------------- */
+[data-count] { font-variant-numeric: tabular-nums; display: inline-block; }
+
+/* ---------------- Magnetic buttons ---------------- */
+.btn { transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), background 0.3s, color 0.3s, border-color 0.3s; }
 
 /* ---------------- Cards / grids ---------------- */
 .grid { display: grid; gap: 1.75rem; }
