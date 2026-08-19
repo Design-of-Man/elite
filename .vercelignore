@@ -1,0 +1,3 @@
+_dev/
+*.md
+!README.md
