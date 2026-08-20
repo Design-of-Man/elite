@@ -79,19 +79,37 @@
   <section class="section">
     <div class="container split">
       <div class="reveal">
-        <form action="/api/schedule" method="POST" style="display:grid;gap:var(--sp-sm);max-width:30rem">
+        <form action="/api/schedule" method="POST" class="form-stack">
           <div class="grid grid--2" style="gap:var(--sp-sm)">
-            <input type="text" name="first_name" placeholder="First Name" required>
-            <input type="text" name="last_name" placeholder="Last Name" required>
+            <div class="field">
+              <label for="first_name">First Name</label>
+              <input id="first_name" type="text" name="first_name" autocomplete="given-name" required>
+            </div>
+            <div class="field">
+              <label for="last_name">Last Name</label>
+              <input id="last_name" type="text" name="last_name" autocomplete="family-name" required>
+            </div>
           </div>
-          <input type="tel" name="phone" placeholder="Phone" required>
-          <input type="email" name="email" placeholder="Email" required>
-          <select name="location">
-            <option>Port St. Lucie</option>
-            <option>Palm Beach Gardens</option>
-            <option>Either — whichever is soonest</option>
-          </select>
-          <textarea name="message" placeholder="Tell us about your injury or reason for visit" rows="4"></textarea>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input id="phone" type="tel" name="phone" autocomplete="tel" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="location">Preferred Location</label>
+            <select id="location" name="location">
+              <option>Port St. Lucie</option>
+              <option>Palm Beach Gardens</option>
+              <option>Either — whichever is soonest</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="message">Reason for Visit</label>
+            <textarea id="message" name="message" rows="4" placeholder="Tell us about your injury or reason for visit"></textarea>
+          </div>
           <button class="btn btn--gold" type="submit" style="justify-self:start">Submit Request</button>
         </form>
       </div>
@@ -171,7 +189,7 @@
     <div class="ai-msg disclaimer">This assistant can answer general questions about our practice. It does not provide medical advice — for clinical questions, please call 561-202-8886.</div>
   </div>
   <form id="ai-form" class="ai-input-row">
-    <input id="ai-input" type="text" placeholder="Ask about services, locations, booking…" autocomplete="off">
+    <input id="ai-input" type="text" aria-label="Ask the front desk assistant a question" placeholder="Ask about services, locations, booking…" autocomplete="off">
     <button type="submit">Send</button>
   </form>
 </div>

@@ -1112,6 +1112,15 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 3px rgba(169, 121, 60, 0.22);
 }
 textarea { resize: vertical; min-height: 8rem; }
+
+/* Field stack. Labels are visible mono, not placeholders — a placeholder
+   disappears the moment someone starts typing. */
+.form-stack {
+  display: grid;
+  gap: var(--sp-md);
+  max-width: 34rem;
+}
+.field { display: grid; gap: 0; }
 label {
   display: block;
   margin-bottom: 0.5rem;
@@ -1207,7 +1216,9 @@ label {
 ::selection { background: var(--brass); color: var(--ink); }
 
 .skip-link {
-  position: absolute;
+  /* Fixed, not absolute — an absolute skip link sits at the top of the
+     document, so focusing it partway down the page scrolls it out of sight. */
+  position: fixed;
   top: -60px; left: var(--gutter);
   z-index: 1000;
   padding: 0.85rem 1.4rem;
