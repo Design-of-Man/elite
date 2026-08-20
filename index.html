@@ -15,8 +15,8 @@
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/v2.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -114,10 +114,12 @@
 
   <section class="hero">
     <div class="hero-glow"></div>
-    <div class="container hero-grid">
-      <div>
+    <div class="container hero-layout">
+      <div class="hero-intro">
         <p class="eyebrow">Port St. Lucie &amp; Palm Beach Gardens, FL</p>
-        <h1 data-split-words>Elite orthopedic care, <em>built like an athlete's recovery plan.</em></h1>
+        <h1 data-split-words>Elite orthopedic care, <em>built like an athlete’s recovery plan.</em></h1>
+      </div>
+      <div class="hero-support">
         <p class="hero-lede">Dr. Marc F. Matarazzo — board-certified, fellowship-trained, 23+ years treating professional athletes and everyday patients — combines surgical precision with regenerative medicine to get you back to full strength.</p>
         <div class="hero-actions">
           <a class="btn btn--gold" href="/schedule-appointment/">Schedule Appointment</a>
@@ -225,17 +227,17 @@
       <div class="quote-track reveal-stagger reveal">
         <div class="quote-card reveal" style="--i:0">
           <div class="stars">★★★★★</div>
-          <p>"I'm grateful for Dr. Matarazzo's skill in cartilage restoration. My knee feels better than ever."</p>
+          <p>“I’m grateful for Dr. Matarazzo’s skill in cartilage restoration. My knee feels better than ever.”</p>
           <footer>Sarah <span>Cartilage Restoration Patient</span></footer>
         </div>
         <div class="quote-card reveal" style="--i:1">
           <div class="stars">★★★★★</div>
-          <p>"Dr. Matarazzo's expertise is unmatched. His dedication to patient care and precision in surgery is truly commendable."</p>
+          <p>“Dr. Matarazzo’s expertise is unmatched. His dedication to patient care and precision in surgery is truly commendable.”</p>
           <footer>Michael <span>Knee Replacement Patient</span></footer>
         </div>
         <div class="quote-card reveal" style="--i:2">
           <div class="stars">★★★★★</div>
-          <p>"The team at Dr. Matarazzo's clinic is exceptional. They make you feel comfortable and well-cared for."</p>
+          <p>“The team at Dr. Matarazzo’s clinic is exceptional. They make you feel comfortable and well-cared for.”</p>
           <footer>John <span>Shoulder Reconstruction Patient</span></footer>
         </div>
       </div>
@@ -246,8 +248,8 @@
     <div class="container reveal">
       <p class="eyebrow" style="justify-content:center">Ready When You Are</p>
       <h2>Get back to full strength.</h2>
-      <p style="margin-inline:auto;color:var(--steel-light)">Two South Florida locations. Same-week appointments available.</p>
-      <div style="margin-top:2rem">
+      <p style="margin-inline:auto">Two South Florida locations. Same-week appointments available.</p>
+      <div style="margin-top:var(--sp-lg)">
         <a class="btn btn--gold" href="/schedule-appointment/">Schedule Appointment</a>
         <a class="btn btn--outline" href="tel:+15612028886">Call 561-202-8886</a>
       </div>
@@ -260,9 +262,9 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <strong style="font-family:var(--font-display);font-size:1.3rem;color:#fff">ELITE Sports Medicine</strong>
-        <p style="margin-top:1rem;font-size:var(--step--1)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
-        <div class="footer-social" style="margin-top:1.25rem">
+        <strong class="footer-brand">ELITE Sports Medicine</strong>
+        <p style="margin-top:var(--sp-sm)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
+        <div class="footer-social" style="margin-top:var(--sp-md)">
           <a href="https://www.instagram.com/drmarcmatarazzo/" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
           <a href="https://www.linkedin.com/in/matarazzo/" aria-label="LinkedIn" target="_blank" rel="noopener">in</a>
         </div>
@@ -281,7 +283,7 @@
         <ul>
           <li>1100 SW St. Lucie West Blvd.<br>Ste. 105, Port St. Lucie, FL 34986</li>
         </ul>
-        <h4 style="margin-top:1.5rem">Palm Beach Gardens</h4>
+        <h4 style="margin-top:var(--sp-md)">Palm Beach Gardens</h4>
         <ul>
           <li>11380 Prosperity Farms Rd<br>Ste 204, Palm Beach Gardens, FL 33410</li>
         </ul>
@@ -296,7 +298,7 @@
     </div>
     <div class="footer-bottom">
       <span>&copy; <span id="year"></span> Elite Sports Medicine. All rights reserved.</span>
-      <span>Site by <a href="https://tidelinedigital.com" style="color:var(--gold)">Design of Man</a></span>
+      <span>Site by <a href="https://tidelinedigital.com">Design of Man</a></span>
     </div>
   </div>
 </footer>
