@@ -13,8 +13,8 @@
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/v2.css">
 
 <script type="application/ld+json">
 {
@@ -71,7 +71,7 @@
     <div class="hero-glow"></div>
     <div class="container">
       <p class="eyebrow">Schedule Appointment</p>
-      <h1 data-split-words>Let's get you <em>back to full strength.</em></h1>
+      <h1 data-split-words>Let’s get you <em>back to full strength.</em></h1>
       <p class="hero-lede">Fill out the form below or call us directly — our team responds same business day.</p>
     </div>
   </section>
@@ -79,31 +79,49 @@
   <section class="section">
     <div class="container split">
       <div class="reveal">
-        <form action="/api/schedule" method="POST" style="display:grid;gap:1rem;max-width:480px">
-          <div class="grid grid--2" style="gap:1rem">
-            <input type="text" name="first_name" placeholder="First Name" required style="padding:0.9rem;border:1px solid var(--line-dark);font-family:var(--font-body)">
-            <input type="text" name="last_name" placeholder="Last Name" required style="padding:0.9rem;border:1px solid var(--line-dark);font-family:var(--font-body)">
+        <form action="/api/schedule" method="POST" class="form-stack">
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field">
+              <label for="first_name">First Name</label>
+              <input id="first_name" type="text" name="first_name" autocomplete="given-name" required>
+            </div>
+            <div class="field">
+              <label for="last_name">Last Name</label>
+              <input id="last_name" type="text" name="last_name" autocomplete="family-name" required>
+            </div>
           </div>
-          <input type="tel" name="phone" placeholder="Phone" required style="padding:0.9rem;border:1px solid var(--line-dark);font-family:var(--font-body)">
-          <input type="email" name="email" placeholder="Email" required style="padding:0.9rem;border:1px solid var(--line-dark);font-family:var(--font-body)">
-          <select name="location" style="padding:0.9rem;border:1px solid var(--line-dark);font-family:var(--font-body)">
-            <option>Port St. Lucie</option>
-            <option>Palm Beach Gardens</option>
-            <option>Either — whichever is soonest</option>
-          </select>
-          <textarea name="message" placeholder="Tell us about your injury or reason for visit" rows="4" style="padding:0.9rem;border:1px solid var(--line-dark);font-family:var(--font-body)"></textarea>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input id="phone" type="tel" name="phone" autocomplete="tel" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="location">Preferred Location</label>
+            <select id="location" name="location">
+              <option>Port St. Lucie</option>
+              <option>Palm Beach Gardens</option>
+              <option>Either — whichever is soonest</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="message">Reason for Visit</label>
+            <textarea id="message" name="message" rows="4" placeholder="Tell us about your injury or reason for visit"></textarea>
+          </div>
           <button class="btn btn--gold" type="submit" style="justify-self:start">Submit Request</button>
         </form>
       </div>
       <div class="reveal">
-        <div class="directions-card" style="margin-bottom:1.5rem">
+        <div class="directions-card" style="margin-bottom:var(--sp-md)">
           <h4>Port St. Lucie</h4>
-          <p style="margin:0 0 0.5rem">1100 SW St. Lucie West Blvd., Ste. 105<br>Port St. Lucie, FL 34986</p>
+          <p style="margin:0 0 var(--sp-2xs)">1100 SW St. Lucie West Blvd., Ste. 105<br>Port St. Lucie, FL 34986</p>
           <a class="card-link" href="tel:+15612028886">561-202-8886</a>
         </div>
         <div class="directions-card">
           <h4>Palm Beach Gardens</h4>
-          <p style="margin:0 0 0.5rem">11380 Prosperity Farms Rd, Ste 204<br>Palm Beach Gardens, FL 33410</p>
+          <p style="margin:0 0 var(--sp-2xs)">11380 Prosperity Farms Rd, Ste 204<br>Palm Beach Gardens, FL 33410</p>
           <a class="card-link" href="tel:+15612028886">561-202-8886</a>
         </div>
       </div>
@@ -115,9 +133,9 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <strong style="font-family:var(--font-display);font-size:1.3rem;color:#fff">ELITE Sports Medicine</strong>
-        <p style="margin-top:1rem;font-size:var(--step--1)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
-        <div class="footer-social" style="margin-top:1.25rem">
+        <strong class="footer-brand">ELITE Sports Medicine</strong>
+        <p style="margin-top:var(--sp-sm)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
+        <div class="footer-social" style="margin-top:var(--sp-md)">
           <a href="https://www.instagram.com/drmarcmatarazzo/" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
           <a href="https://www.linkedin.com/in/matarazzo/" aria-label="LinkedIn" target="_blank" rel="noopener">in</a>
         </div>
@@ -137,7 +155,7 @@
         <ul>
           <li>1100 SW St. Lucie West Blvd.<br>Ste. 105, Port St. Lucie, FL 34986</li>
         </ul>
-        <h4 style="margin-top:1.5rem">Palm Beach Gardens</h4>
+        <h4 style="margin-top:var(--sp-md)">Palm Beach Gardens</h4>
         <ul>
           <li>11380 Prosperity Farms Rd<br>Ste 204, Palm Beach Gardens, FL 33410</li>
         </ul>
@@ -152,7 +170,7 @@
     </div>
     <div class="footer-bottom">
       <span>&copy; <span class="js-year"></span> Elite Sports Medicine. All rights reserved.</span>
-      <span>Site by <a href="https://tidelinedigital.com" style="color:var(--gold)">Design of Man</a></span>
+      <span>Site by <a href="https://tidelinedigital.com">Design of Man</a></span>
     </div>
   </div>
 </footer>
@@ -171,7 +189,7 @@
     <div class="ai-msg disclaimer">This assistant can answer general questions about our practice. It does not provide medical advice — for clinical questions, please call 561-202-8886.</div>
   </div>
   <form id="ai-form" class="ai-input-row">
-    <input id="ai-input" type="text" placeholder="Ask about services, locations, booking…" autocomplete="off">
+    <input id="ai-input" type="text" aria-label="Ask the front desk assistant a question" placeholder="Ask about services, locations, booking…" autocomplete="off">
     <button type="submit">Send</button>
   </form>
 </div>
