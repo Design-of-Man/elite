@@ -275,6 +275,7 @@
   fit();
   window.addEventListener('resize', fit);
   requestAnimationFrame(tick);
+  window.__ELITE_SEQ = state; // read-only debug/QA handle
 
   // ---- chrome: menu + panel reveals ----
   var menuBtn = document.getElementById('menuBtn');
