@@ -68,13 +68,16 @@
   --hairline: var(--rule);
 
   /* -- Type scale --------------------------------------------------------
-     Fluid throughout. step-5 is the headline voice: 44px -> 112px.         */
-  --step--2: clamp(0.68rem, 0.655rem + 0.11vw, 0.7rem);   /* labels    ~11px */
-  --step--1: clamp(0.82rem, 0.79rem + 0.14vw, 0.92rem);   /* captions       */
-  --step-0:  clamp(1rem, 0.972rem + 0.14vw, 1.08rem);     /* body           */
-  --step-1:  clamp(1.15rem, 1.08rem + 0.34vw, 1.4rem);    /* lede           */
-  --step-2:  clamp(1.4rem, 1.24rem + 0.78vw, 2rem);       /* h3             */
-  --step-3:  clamp(2rem, 1.6rem + 1.9vw, 3.4rem);         /* h2             */
+     Fluid throughout. step-5 is the headline voice: 44px -> 112px.
+     The reading steps (--2 through 3) were raised ~12% over the original
+     spec for legibility; the display ceiling is unchanged, so the
+     display-to-label ratio sits at ~8.9:1 rather than 10:1.               */
+  --step--2: clamp(0.76rem, 0.735rem + 0.11vw, 0.79rem);  /* labels  ~12.6px */
+  --step--1: clamp(0.92rem, 0.88rem + 0.16vw, 1.02rem);   /* captions       */
+  --step-0:  clamp(1.12rem, 1.09rem + 0.16vw, 1.2rem);    /* body    ~19.2px */
+  --step-1:  clamp(1.28rem, 1.2rem + 0.38vw, 1.55rem);    /* lede           */
+  --step-2:  clamp(1.55rem, 1.37rem + 0.86vw, 2.2rem);    /* h3             */
+  --step-3:  clamp(2.2rem, 1.76rem + 2.1vw, 3.7rem);      /* h2             */
   --step-4:  clamp(2.4rem, 1.85rem + 2.7vw, 4.6rem);      /* feature        */
   --step-5:  clamp(2.8rem, 2rem + 5.4vw, 7rem);           /* headline       */
 
@@ -643,12 +646,14 @@ strong, b { font-weight: 600; color: var(--fg); }
 .hero-stats div strong {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  font-size: clamp(1.95rem, 1.55rem + 1.35vw, 2.8rem);
   line-height: 1;
   letter-spacing: -0.01em;
   color: var(--brass-ink);
 }
-.hero-stats div span {
+/* Direct child only — the counter <span> sits inside <strong> and must keep
+   the display face, not the label face. */
+.hero-stats div > span {
   font-family: var(--font-mono);
   font-size: var(--step--2);
   letter-spacing: 0.14em;
@@ -844,7 +849,8 @@ strong, b { font-weight: 600; color: var(--fg); }
   color: var(--brass-ink);
 }
 .section--dark .stat-band .stat strong { color: var(--brass-lit); }
-.stat-band .stat span {
+/* Direct child only — see the note on .hero-stats. */
+.stat-band .stat > span {
   font-family: var(--font-mono);
   font-size: var(--step--2);
   letter-spacing: 0.14em;
