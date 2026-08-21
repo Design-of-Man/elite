@@ -1,0 +1,9 @@
+{
+  "frames": 303,
+  "fps": 12,
+  "pattern": "/assets/sequence/frames/f_%04d.webp",
+  "bundle": "https://d2ol7oe51mr4n9.cloudfront.net/user_3ICg9sa35AT4huxSVmeygPN8XVB/d727d52a-b51d-48af-9dd1-49463f275ead.gz",
+  "sha256": "34586309c6b9241352d07a0184188d87017b86dd8d6179d23afc07de99402d1e",
+  "zones": ["THE FIELD", "THE SCRUB", "THE GOWN", "THE GLOVES", "THE THRESHOLD"],
+  "source": "Seedance 2.0 (Higgsfield) — five chained clips, final frame of each clip used as start frame of the next"
+}

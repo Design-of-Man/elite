@@ -1,0 +1,5 @@
+# Frame sequence is fetched at build/deploy time (scripts/fetch-assets.mjs)
+assets/sequence/frames/
+assets/sequence/bundle.tgz
+assets/sequence/poster.jpg
+node_modules/
