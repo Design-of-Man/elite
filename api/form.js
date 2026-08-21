@@ -54,26 +54,51 @@ export default async function handler(req, res) {
   const notifyTo = process.env.LEAD_NOTIFY_EMAIL || "info@elitesportsmed.org";
   const replyTo = String(body.email || body.Email || "") || undefined;
 
-  if (apiKey) {
-    try {
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          from: "Elite Sports Medicine Website <website@elitesportsmed.org>",
-          to: [notifyTo],
-          ...(replyTo ? { reply_to: replyTo } : {}),
-          subject: `New submission — ${label}`,
-          html,
-        }),
-      });
-    } catch (err) {
-      console.error("Resend delivery failed", err);
+  // These forms carry PHI, so a submission is either delivered or visibly
+  // refused — never silently accepted. Nothing from the body is ever logged.
+  if (!apiKey) {
+    console.error(`Form delivery unconfigured (set RESEND_API_KEY); refused a ${label} submission.`);
+    return res.status(503).send(unavailablePage(label));
+  }
+
+  let delivered = false;
+  try {
+    const resend = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        from: "Elite Sports Medicine Website <website@elitesportsmed.org>",
+        to: [notifyTo],
+        ...(replyTo ? { reply_to: replyTo } : {}),
+        subject: `New submission — ${label}`,
+        html,
+      }),
+    });
+    delivered = resend.ok;
+    if (!resend.ok) {
+      console.error(`Resend rejected a ${label} submission: HTTP ${resend.status}`);
     }
-  } else {
-    console.log(`FORM SUBMISSION (email not yet configured — set RESEND_API_KEY): ${label}`, body);
+  } catch (err) {
+    console.error(`Resend delivery failed for a ${label} submission:`, err?.message || err);
+  }
+
+  if (!delivered) {
+    return res.status(503).send(unavailablePage(label));
   }
 
   res.writeHead(302, { Location: THANK_YOU[formType] || "/thank-you/" });
   res.end();
+}
+
+function unavailablePage(label) {
+  return `<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We couldn't submit your form | ELITE Sports Medicine</title>
+<link rel="stylesheet" href="/assets/css/v2.css"></head>
+<body><main id="main"><section class="section"><div class="container container--reading">
+<h1>We couldn't submit your form</h1>
+<p>Your ${escapeHtml(label.toLowerCase())} was <strong>not</strong> received — please don't assume we have it. Our online form delivery is temporarily unavailable.</p>
+<p>Call us at <a href="tel:+15612028886">561-202-8886</a> and our team will take your information directly, or bring the completed form to your appointment.</p>
+<p><a class="btn btn--gold" href="/">Back to Home</a></p>
+</div></section></main></body></html>`;
 }
