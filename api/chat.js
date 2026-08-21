@@ -1,6 +1,8 @@
 // Vercel serverless function — AI front-desk assistant for Elite Sports Medicine.
-// Keeps the xAI API key server-side. Requires XAI_API_KEY in the Vercel
-// project's environment variables.
+// Keeps API keys server-side. Tries Anthropic (ANTHROPIC_API_KEY) first, then
+// falls back to xAI Grok (XAI_API_KEY) if Anthropic is unset or its call
+// fails — whichever keys are present in the Vercel project's environment
+// variables are used.
 
 const SYSTEM_PROMPT = `You are the front-desk assistant for Elite Sports Medicine, Dr. Marc F. Matarazzo's orthopedic and sports medicine practice in South Florida.
 
@@ -17,14 +19,59 @@ Rules:
 - Keep answers under 4 sentences, warm and professional, no medical jargon without explanation.
 - If asked something unrelated to the practice, politely redirect to how you can help with the practice.`;
 
+async function callAnthropic(messages) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return null;
+
+  const upstream = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: "claude-sonnet-5",
+      max_tokens: 300,
+      system: SYSTEM_PROMPT,
+      messages,
+    }),
+  });
+
+  if (!upstream.ok) return null;
+  const data = await upstream.json();
+  return data?.content?.[0]?.text?.trim() || null;
+}
+
+async function callGrok(messages) {
+  const apiKey = process.env.XAI_API_KEY;
+  if (!apiKey) return null;
+
+  const upstream = await fetch("https://api.x.ai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: "grok-4-fast",
+      max_tokens: 300,
+      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+    }),
+  });
+
+  if (!upstream.ok) return null;
+  const data = await upstream.json();
+  return data?.choices?.[0]?.message?.content?.trim() || null;
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const apiKey = process.env.XAI_API_KEY;
-  if (!apiKey) {
+  if (!process.env.ANTHROPIC_API_KEY && !process.env.XAI_API_KEY) {
     return res.status(200).json({
       reply: "Our online assistant isn't fully connected yet — please call 561-202-8886 or use the Schedule Appointment page and our team will help right away.",
     });
@@ -48,27 +95,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const upstream = await fetch("https://api.x.ai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "grok-4-fast",
-        max_tokens: 300,
-        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
-      }),
-    });
-
-    if (!upstream.ok) {
+    const reply = (await callAnthropic(messages)) || (await callGrok(messages));
+    if (!reply) {
       return res.status(200).json({
         reply: "I'm having trouble reaching our system right now — please call 561-202-8886 for immediate help.",
       });
     }
-
-    const data = await upstream.json();
-    const reply = data?.choices?.[0]?.message?.content?.trim() || "I'm not sure how to help with that — please call 561-202-8886.";
     return res.status(200).json({ reply });
   } catch {
     return res.status(200).json({
