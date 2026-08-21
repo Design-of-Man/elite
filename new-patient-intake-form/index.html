@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Patient Intake Form | ELITE Sports Medicine</title>
+<meta name="description" content="Complete your new patient intake, insurance, medical history, and consent forms online before your first visit to Elite Sports Medicine.">
+<link rel="canonical" href="https://elitesportsmed.org/new-patient-intake-form/">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="New Patient Intake Form | ELITE Sports Medicine">
+<meta property="og:description" content="Complete your new patient intake, insurance, medical history, and consent forms online before your first visit to Elite Sports Medicine.">
+<meta property="og:url" content="https://elitesportsmed.org/new-patient-intake-form/">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/v2.css">
+
+
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="brand">
+      <strong>ELITE Sports Medicine</strong>
+      <span>Matarazzo Orthopedics</span>
+    </a>
+    <nav class="nav-desktop" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/services/">Services</a>
+      <a href="/marc-f-matarazzo/">Dr. Matarazzo</a>
+      <a href="/memberships/">Memberships</a>
+      <a href="/faq/">FAQ</a>
+      <a href="/areas-we-serve/">Locations</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="nav-phone" href="tel:+15612028886">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        561-202-8886
+      </a>
+      <a class="btn btn--gold" href="/schedule-appointment/">Schedule Appointment</a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-nav" aria-label="Mobile">
+  <a href="/">Home</a>
+  <a href="/services/">Services</a>
+  <a href="/marc-f-matarazzo/">Dr. Matarazzo</a>
+  <a href="/memberships/">Memberships</a>
+  <a href="/faq/">FAQ</a>
+  <a href="/areas-we-serve/">Locations</a>
+  <a href="/schedule-appointment/">Schedule Appointment</a>
+  <a class="nav-phone" href="tel:+15612028886">561-202-8886</a>
+</nav>
+
+<main id="main">
+
+  <section class="hero" style="min-height:40vh">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <p class="eyebrow">Patient Forms</p>
+      <h1 data-split-words>New Patient <em>Intake Form</em></h1>
+      <p class="hero-lede">Complete this before your first visit so we can prepare for your consultation. It covers demographics, insurance, medical history, and required consents.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <form action="/api/form" method="POST" class="form-stack form-stack--wide">
+        <input type="hidden" name="form_type" value="new_patient_intake">
+
+        <div class="form-section">
+          <h3>1. Patient Demographics</h3>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field"><label for="first_name">First Name</label><input id="first_name" type="text" name="first_name" autocomplete="given-name" required></div>
+            <div class="field"><label for="last_name">Last Name</label><input id="last_name" type="text" name="last_name" autocomplete="family-name" required></div>
+            <div class="field"><label for="dob">Date of Birth</label><input id="dob" type="date" name="date_of_birth" required></div>
+            <div class="field">
+              <label>Sex</label>
+              <div class="radio-group">
+                <span class="radio-row"><input type="radio" id="sex_m" name="sex" value="Male" required><label for="sex_m">Male</label></span>
+                <span class="radio-row"><input type="radio" id="sex_f" name="sex" value="Female"><label for="sex_f">Female</label></span>
+              </div>
+            </div>
+            <div class="field"><label for="phone">Phone Number</label><input id="phone" type="tel" name="phone" autocomplete="tel" required></div>
+            <div class="field"><label for="email">Email Address</label><input id="email" type="email" name="email" autocomplete="email"></div>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm);margin-top:var(--sp-sm)">
+            <div class="field"><label for="address">Address</label><input id="address" type="text" name="address" autocomplete="street-address"></div>
+            <div class="field"><label for="city">City</label><input id="city" type="text" name="city"></div>
+            <div class="field"><label for="state">State</label><input id="state" type="text" name="state"></div>
+            <div class="field"><label for="zip">Zip Code</label><input id="zip" type="text" name="zip"></div>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm);margin-top:var(--sp-sm)">
+            <div class="field">
+              <label>Marital Status</label>
+              <select name="marital_status">
+                <option>Single</option><option>Married</option><option>Divorced</option><option>Widow</option>
+              </select>
+            </div>
+            <div class="field"><label for="spouse_name">Spouse's Name</label><input id="spouse_name" type="text" name="spouse_name"></div>
+            <div class="field"><label for="spouse_phone">Spouse Phone Number</label><input id="spouse_phone" type="tel" name="spouse_phone"></div>
+            <div class="field"><label for="emergency_contact">Emergency Contact</label><input id="emergency_contact" type="text" name="emergency_contact"></div>
+            <div class="field"><label for="emergency_phone">Emergency Phone</label><input id="emergency_phone" type="tel" name="emergency_phone"></div>
+            <div class="field"><label for="emergency_relationship">Relationship to Patient</label><input id="emergency_relationship" type="text" name="emergency_relationship"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>2. Insurance Information</h3>
+          <div class="field">
+            <label>Do you have insurance?</label>
+            <div class="radio-group">
+              <span class="radio-row"><input type="radio" id="ins_yes" name="has_insurance" value="Yes"><label for="ins_yes">Yes</label></span>
+              <span class="radio-row"><input type="radio" id="ins_no" name="has_insurance" value="No"><label for="ins_no">No</label></span>
+            </div>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field">
+              <label>Primary Card Holder</label>
+              <select name="primary_card_holder"><option>Self</option><option>Spouse</option><option>Parent</option><option>Other</option></select>
+            </div>
+            <div class="field"><label for="primary_card_holder_other">If Other, specify</label><input id="primary_card_holder_other" type="text" name="primary_card_holder_other"></div>
+            <div class="field"><label for="primary_policy_holder">Primary Policy Holder Name</label><input id="primary_policy_holder" type="text" name="primary_policy_holder"></div>
+            <div class="field"><label for="primary_insurer">Primary Insurance Company</label><input id="primary_insurer" type="text" name="primary_insurer"></div>
+            <div class="field"><label for="primary_member_id">Member ID Number</label><input id="primary_member_id" type="text" name="primary_member_id"></div>
+            <div class="field"><label for="primary_group">Primary Group Number</label><input id="primary_group" type="text" name="primary_group"></div>
+          </div>
+          <div class="field" style="margin-top:var(--sp-sm)">
+            <label>Do you have secondary insurance?</label>
+            <div class="radio-group">
+              <span class="radio-row"><input type="radio" id="sec_ins_yes" name="has_secondary_insurance" value="Yes"><label for="sec_ins_yes">Yes</label></span>
+              <span class="radio-row"><input type="radio" id="sec_ins_no" name="has_secondary_insurance" value="No"><label for="sec_ins_no">No</label></span>
+            </div>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field">
+              <label>Secondary Card Holder</label>
+              <select name="secondary_card_holder"><option>Self</option><option>Spouse</option><option>Parent</option><option>Other</option></select>
+            </div>
+            <div class="field"><label for="secondary_card_holder_other">If Other, specify</label><input id="secondary_card_holder_other" type="text" name="secondary_card_holder_other"></div>
+            <div class="field"><label for="secondary_policy_holder">Secondary Policy Holder Name / DOB</label><input id="secondary_policy_holder" type="text" name="secondary_policy_holder"></div>
+            <div class="field"><label for="secondary_insurer">Secondary Insurance Company</label><input id="secondary_insurer" type="text" name="secondary_insurer"></div>
+            <div class="field"><label for="secondary_member_id">Secondary ID Number</label><input id="secondary_member_id" type="text" name="secondary_member_id"></div>
+            <div class="field"><label for="secondary_group">Secondary Group Number</label><input id="secondary_group" type="text" name="secondary_group"></div>
+            <div class="field"><label for="wc_claim">Workers' Comp Claim Number</label><input id="wc_claim" type="text" name="wc_claim_number"></div>
+            <div class="field"><label for="wc_doi">Workers' Comp Date of Injury</label><input id="wc_doi" type="date" name="wc_date_of_injury"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>3. Patient Medical History</h3>
+          <h4 style="margin-top:0">Allergies</h4>
+          <div class="check-grid">
+            <div class="check-item"><input type="checkbox" id="al_nkda" name="allergies[]" value="NKDA"><label for="al_nkda">NKDA (No Known Drug Allergies)</label></div>
+            <div class="check-item"><input type="checkbox" id="al_pen" name="allergies[]" value="Penicillin"><label for="al_pen">Penicillin</label></div>
+            <div class="check-item"><input type="checkbox" id="al_sulfa" name="allergies[]" value="Sulfa Drugs"><label for="al_sulfa">Sulfa Drugs</label></div>
+            <div class="check-item"><input type="checkbox" id="al_latex" name="allergies[]" value="Latex"><label for="al_latex">Latex</label></div>
+            <div class="check-item"><input type="checkbox" id="al_nsaid" name="allergies[]" value="Aspirin/NSAIDs"><label for="al_nsaid">Aspirin / NSAIDs</label></div>
+            <div class="check-item"><input type="checkbox" id="al_iodine" name="allergies[]" value="Iodine/Contrast Dye"><label for="al_iodine">Iodine / Contrast Dye</label></div>
+            <div class="check-item"><input type="checkbox" id="al_anesthetic" name="allergies[]" value="Local Anesthetics"><label for="al_anesthetic">Local Anesthetics</label></div>
+            <div class="check-item"><input type="checkbox" id="al_tape" name="allergies[]" value="Adhesive Tape"><label for="al_tape">Adhesive Tape</label></div>
+          </div>
+          <div class="field"><label for="allergies_other">Other Allergies</label><input id="allergies_other" type="text" name="allergies_other"></div>
+
+          <h4 style="margin-top:var(--sp-md)">Family History</h4>
+          <p>Please indicate if any immediate relatives have had the following conditions.</p>
+          <div style="overflow-x:auto">
+            <table class="simple-table">
+              <thead><tr><th>Condition</th><th>Mother</th><th>Father</th></tr></thead>
+              <tbody>
+                <tr><td>Anesthesia Problems</td><td><input type="text" name="family_anesthesia_mother"></td><td><input type="text" name="family_anesthesia_father"></td></tr>
+                <tr><td>Arthritis</td><td><input type="text" name="family_arthritis_mother"></td><td><input type="text" name="family_arthritis_father"></td></tr>
+                <tr><td>Cancer</td><td><input type="text" name="family_cancer_mother"></td><td><input type="text" name="family_cancer_father"></td></tr>
+                <tr><td>Diabetes</td><td><input type="text" name="family_diabetes_mother"></td><td><input type="text" name="family_diabetes_father"></td></tr>
+                <tr><td>Heart Problems</td><td><input type="text" name="family_heart_mother"></td><td><input type="text" name="family_heart_father"></td></tr>
+                <tr><td>Hypertension</td><td><input type="text" name="family_hypertension_mother"></td><td><input type="text" name="family_hypertension_father"></td></tr>
+                <tr><td>Stroke</td><td><input type="text" name="family_stroke_mother"></td><td><input type="text" name="family_stroke_father"></td></tr>
+                <tr><td>Thyroid Disorder</td><td><input type="text" name="family_thyroid_mother"></td><td><input type="text" name="family_thyroid_father"></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin-top:var(--sp-md)">Social History</h4>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field">
+              <label>Do you drink alcohol?</label>
+              <select name="alcohol"><option>No</option><option>Daily</option><option>Weekly</option><option>Infrequently</option><option>Recovering Alcoholic</option></select>
+            </div>
+            <div class="field">
+              <label>Do you smoke?</label>
+              <select name="smoke"><option>No</option><option>Smoke</option><option>Chew</option></select>
+            </div>
+            <div class="field">
+              <label>Do you drink caffeine?</label>
+              <select name="caffeine"><option>No</option><option>Daily</option><option>Weekly</option><option>Infrequently</option></select>
+            </div>
+          </div>
+
+          <h4 style="margin-top:var(--sp-md)">Surgical History</h4>
+          <p>Please list any hospitalizations, surgeries, fractures, or major illnesses you have had.</p>
+          <div style="overflow-x:auto">
+            <table class="simple-table">
+              <thead><tr><th>Type of Surgery</th><th>Year / Date</th><th>Doctor</th><th>Location</th></tr></thead>
+              <tbody>
+                <tr><td><input type="text" name="surgery_1_type"></td><td><input type="text" name="surgery_1_date"></td><td><input type="text" name="surgery_1_doctor"></td><td><input type="text" name="surgery_1_location"></td></tr>
+                <tr><td><input type="text" name="surgery_2_type"></td><td><input type="text" name="surgery_2_date"></td><td><input type="text" name="surgery_2_doctor"></td><td><input type="text" name="surgery_2_location"></td></tr>
+                <tr><td><input type="text" name="surgery_3_type"></td><td><input type="text" name="surgery_3_date"></td><td><input type="text" name="surgery_3_doctor"></td><td><input type="text" name="surgery_3_location"></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>4. Medical History</h3>
+          <p>Have you ever had any of the following?</p>
+          <div class="check-grid">
+            <div class="check-item"><input type="checkbox" id="mh_asthma" name="conditions[]" value="Asthma"><label for="mh_asthma">Asthma</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_anxiety" name="conditions[]" value="Anxiety/Depression"><label for="mh_anxiety">Anxiety / Depression</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_arthritis" name="conditions[]" value="Arthritis"><label for="mh_arthritis">Arthritis</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_cancer" name="conditions[]" value="Cancer"><label for="mh_cancer">Cancer</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_diabetes" name="conditions[]" value="Diabetes"><label for="mh_diabetes">Diabetes</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_heart" name="conditions[]" value="Heart Disease"><label for="mh_heart">Heart Disease</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_bp" name="conditions[]" value="High Blood Pressure"><label for="mh_bp">High Blood Pressure</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_kidney" name="conditions[]" value="Kidney Disease"><label for="mh_kidney">Kidney Disease</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_liver" name="conditions[]" value="Liver Disease"><label for="mh_liver">Liver Disease</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_seizure" name="conditions[]" value="Seizure Disorder"><label for="mh_seizure">Seizure Disorder</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_stroke" name="conditions[]" value="Stroke"><label for="mh_stroke">Stroke</label></div>
+            <div class="check-item"><input type="checkbox" id="mh_thyroid" name="conditions[]" value="Thyroid Disorder"><label for="mh_thyroid">Thyroid Disorder</label></div>
+          </div>
+          <div class="field"><label for="a1c">If Diabetes, last A1C</label><input id="a1c" type="text" name="last_a1c"></div>
+
+          <h4 style="margin-top:var(--sp-md)">Medications</h4>
+          <p>List any medications you are currently taking, including over-the-counter medications.</p>
+          <div style="overflow-x:auto">
+            <table class="simple-table">
+              <thead><tr><th>Medication</th><th>Dosage</th></tr></thead>
+              <tbody>
+                <tr><td><input type="text" name="medication_1_name"></td><td><input type="text" name="medication_1_dosage"></td></tr>
+                <tr><td><input type="text" name="medication_2_name"></td><td><input type="text" name="medication_2_dosage"></td></tr>
+                <tr><td><input type="text" name="medication_3_name"></td><td><input type="text" name="medication_3_dosage"></td></tr>
+                <tr><td><input type="text" name="medication_4_name"></td><td><input type="text" name="medication_4_dosage"></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>5. Prescription Policy</h3>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field"><label for="pharmacy_name">Pharmacy Name</label><input id="pharmacy_name" type="text" name="pharmacy_name"></div>
+            <div class="field"><label for="pharmacy_phone">Pharmacy Phone</label><input id="pharmacy_phone" type="tel" name="pharmacy_phone"></div>
+          </div>
+          <div class="field" style="margin-top:var(--sp-sm)"><label for="pharmacy_address">Pharmacy Address</label><input id="pharmacy_address" type="text" name="pharmacy_address"></div>
+          <div class="consent-box" style="margin-top:var(--sp-sm)">
+            <p>Do not wait until your last pill to call for a refill — a 72-hour turnaround is required. If you have not seen the physician in six months, your refill may be denied.</p>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="ack_rx_policy" name="ack_rx_policy" value="yes" required>
+            <label for="ack_rx_policy">I have read and understand the prescription policy outlined above.</label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>6. HIPAA Compliance — Patient Consent</h3>
+          <div class="consent-box">
+            <p>The Health Insurance Portability and Accountability Act (HIPAA) provides patients with fundamental rights to privacy regarding their protected health information (PHI). Elite Sports Medicine is committed to protecting your medical information and complying with HIPAA regulations.</p>
+            <h4>Consent to Use and Disclose Health Information</h4>
+            <p>By signing this form, I consent to the use and disclosure of my protected health information by Elite Sports Medicine for the purposes of treatment, payment, and healthcare operations, including coordination and management of healthcare, communication with other providers, billing and payment, and routine healthcare operations.</p>
+            <h4>Right to Revoke</h4>
+            <p>I understand that I have the right to revoke this consent in writing at any time, except to the extent that Elite Sports Medicine has already taken action based on my prior consent.</p>
+            <h4>Notice of Privacy Practices</h4>
+            <p>I acknowledge that I have received and had an opportunity to review Elite Sports Medicine's Notice of Privacy Practices (below), and have read and agree to the HIPAA Consent and Privacy Practices above.</p>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field"><label for="hipaa_contact_1_name">Individuals we may share your health information with — Name</label><input id="hipaa_contact_1_name" type="text" name="hipaa_contact_1_name"></div>
+            <div class="field"><label for="hipaa_contact_1_relationship">Relationship</label><input id="hipaa_contact_1_relationship" type="text" name="hipaa_contact_1_relationship"></div>
+            <div class="field"><label for="hipaa_contact_2_name">Name</label><input id="hipaa_contact_2_name" type="text" name="hipaa_contact_2_name"></div>
+            <div class="field"><label for="hipaa_contact_2_relationship">Relationship</label><input id="hipaa_contact_2_relationship" type="text" name="hipaa_contact_2_relationship"></div>
+          </div>
+          <div class="field" style="margin-top:var(--sp-sm)">
+            <label>May we leave a message regarding your care on your voicemail?</label>
+            <div class="radio-group">
+              <span class="radio-row"><input type="radio" id="vm_yes" name="voicemail_ok" value="Yes"><label for="vm_yes">Yes</label></span>
+              <span class="radio-row"><input type="radio" id="vm_no" name="voicemail_ok" value="No"><label for="vm_no">No</label></span>
+            </div>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm);margin-top:var(--sp-sm)">
+            <div class="field"><label for="hipaa_signature">Patient / Guardian Signature (type full name)</label><input id="hipaa_signature" type="text" name="hipaa_signature" required></div>
+            <div class="field"><label for="hipaa_printed_name">Printed Name</label><input id="hipaa_printed_name" type="text" name="hipaa_printed_name" required></div>
+            <div class="field"><label for="hipaa_relationship">Relationship to Patient (if applicable)</label><input id="hipaa_relationship" type="text" name="hipaa_signer_relationship"></div>
+            <div class="field"><label for="hipaa_date">Date</label><input id="hipaa_date" type="date" name="hipaa_signature_date" required></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>7. HIPAA Notice of Privacy Practices</h3>
+          <div class="consent-box">
+            <p>This notice describes how medical information about you may be used and disclosed and how you can get access to this information. Please review it carefully.</p>
+            <h4>1. Uses and Disclosures of Health Information</h4>
+            <p>We may use and disclose your health information for treatment, payment, and healthcare operations — for example, sharing information with other healthcare providers involved in your care, or with your insurance company to obtain payment for services.</p>
+            <h4>2. Your Rights</h4>
+            <p>You have the right to request restrictions on certain uses and disclosures of your information, receive confidential communications, inspect and copy your medical record, request an amendment to your record, receive an accounting of disclosures, and obtain a paper copy of this notice.</p>
+            <h4>3. Our Legal Duties</h4>
+            <p>We are required by law to maintain the privacy of your health information, provide you with this notice of our legal duties and privacy practices, and abide by the terms of this notice.</p>
+            <h4>4. Complaints</h4>
+            <p>If you believe your privacy rights have been violated, you may file a complaint with our office (Privacy Officer, Elite Sports Medicine, phone (561) 202-8886) or with the Secretary of the U.S. Department of Health and Human Services — Office for Civil Rights, 200 Independence Avenue, S.W., Washington, D.C. 20201, phone 1-877-696-6775, hhs.gov/ocr.</p>
+            <p>Effective Date: June 4, 2025</p>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>8. Medical Services Agreement</h3>
+          <div class="consent-box">
+            <h4>1. Medical Consent</h4>
+            <p>I hereby consent to medical evaluation and treatment by the providers and staff at Elite Sports Medicine, which may include diagnostic procedures, medical treatments, and other services deemed necessary for my care. I understand that I have the right to be informed about my treatment options and to ask questions regarding my care.</p>
+            <h4>2. Financial Agreement</h4>
+            <p>I understand and agree that all charges for services rendered are due at the time of service unless other arrangements have been made in advance, including copayments, deductibles, and coinsurance amounts required by my health insurance policy.</p>
+            <h4>3. Insurance and Patient Responsibility</h4>
+            <p>I understand that it is my responsibility to know the terms of my health insurance coverage. While Elite Sports Medicine may assist in verifying benefits, it is ultimately my responsibility to ensure services are covered, and I agree to pay any remaining balance not covered by my insurance.</p>
+            <h4>4. No-Show Fee Agreement</h4>
+            <p>If I fail to show up for a scheduled appointment without providing at least 24 hours' notice, I will be charged a $35.00 no-show fee. This fee is not covered by insurance and must be paid prior to scheduling any future appointments.</p>
+            <h4>5. Late Arrival Policy</h4>
+            <p>There is a 15-minute grace period for scheduled appointments. If I arrive more than 15 minutes past my appointment time, my appointment may be rescheduled at the discretion of the provider. Repeated late arrivals may also be subject to the no-show policy.</p>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field"><label for="msa_signature">Patient / Guardian Signature (type full name)</label><input id="msa_signature" type="text" name="msa_signature" required></div>
+            <div class="field"><label for="msa_printed_name">Printed Name</label><input id="msa_printed_name" type="text" name="msa_printed_name" required></div>
+            <div class="field"><label for="msa_relationship">Relationship to Patient (if applicable)</label><input id="msa_relationship" type="text" name="msa_signer_relationship"></div>
+            <div class="field"><label for="msa_date">Date</label><input id="msa_date" type="date" name="msa_signature_date" required></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>9. Consent to Treatment</h3>
+          <div class="consent-box">
+            <p>I voluntarily consent to receive medical care, treatment, and services by the providers and staff at Elite Sports Medicine, including physical examinations, diagnostic tests (e.g., X-rays, lab work), medical treatments, procedures or therapies, and administration of medications.</p>
+            <p>I understand I have the right to ask questions and be informed about the benefits, risks, and alternatives to any recommended treatment, and that I may refuse any treatment without jeopardizing my future care. I certify that I have read, understood, and agree to the above, and I authorize the medical staff of Elite Sports Medicine to provide evaluation and treatment as deemed necessary.</p>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="ack_consent_treatment" name="ack_consent_treatment" value="yes" required>
+            <label for="ack_consent_treatment">I have read, understood, and agree to the Consent to Treatment above.</label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>10. Signature &amp; Submission</h3>
+          <p>By signing below, you confirm that all information provided is accurate and complete to the best of your knowledge, and that you have read, understood, and agree to all policies and consents outlined in this intake form.</p>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field"><label for="final_printed_name">Printed Name</label><input id="final_printed_name" type="text" name="final_printed_name" required></div>
+            <div class="field"><label for="final_date">Date</label><input id="final_date" type="date" name="final_date" required></div>
+            <div class="field"><label for="final_signature">Signature (type full name)</label><input id="final_signature" type="text" name="final_signature" required></div>
+            <div class="field"><label for="final_relationship">Relationship to Patient (if applicable)</label><input id="final_relationship" type="text" name="final_signer_relationship"></div>
+            <div class="field"><label for="witness_name">Witness Name (optional)</label><input id="witness_name" type="text" name="witness_name"></div>
+          </div>
+        </div>
+
+        <button class="btn btn--gold" type="submit" style="justify-self:start">Submit Intake Forms</button>
+        <p class="field-note">Elite Sports Medicine &middot; 11380 Prosperity Farms Rd, Ste 204, Palm Beach Gardens, FL 33410 &middot; (561) 202-8886</p>
+      </form>
+    </div>
+  </section>
+
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <strong class="footer-brand">ELITE Sports Medicine</strong>
+        <p style="margin-top:var(--sp-sm)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
+        <div class="footer-social" style="margin-top:var(--sp-md)">
+          <a href="https://www.instagram.com/drmarcmatarazzo/" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
+          <a href="https://www.linkedin.com/in/matarazzo/" aria-label="LinkedIn" target="_blank" rel="noopener">in</a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/services/">Services</a></li>
+          <li><a href="/memberships/">Memberships</a></li>
+          <li><a href="/marc-f-matarazzo/">Dr. Matarazzo</a></li>
+          <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/schedule-appointment/">Schedule Appointment</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Port St. Lucie</h4>
+        <ul>
+          <li>1100 SW St. Lucie West Blvd.<br>Ste. 105, Port St. Lucie, FL 34986</li>
+        </ul>
+        <h4 style="margin-top:var(--sp-md)">Palm Beach Gardens</h4>
+        <ul>
+          <li>11380 Prosperity Farms Rd<br>Ste 204, Palm Beach Gardens, FL 33410</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+15612028886">561-202-8886</a></li>
+          <li><a href="mailto:info@elitesportsmed.org">info@elitesportsmed.org</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span class="js-year"></span> Elite Sports Medicine. All rights reserved.</span>
+      <span>Site by <a href="https://tidelinedigital.com">Design of Man</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>document.querySelectorAll(".js-year").forEach(function(el){ el.textContent = new Date().getFullYear(); });</script>
+
+<button id="ai-assistant-launcher" aria-label="Chat with our front desk assistant" aria-expanded="false">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+<div id="ai-assistant-panel" role="dialog" aria-label="Front desk assistant">
+  <div class="ai-header">
+    <div><strong>Front Desk Assistant</strong><br><span>ELITE Sports Medicine</span></div>
+    <button id="ai-close" aria-label="Close chat">&times;</button>
+  </div>
+  <div id="ai-messages" class="ai-messages">
+    <div class="ai-msg disclaimer">This assistant can answer general questions about our practice. It does not provide medical advice — for clinical questions, please call 561-202-8886.</div>
+  </div>
+  <form id="ai-form" class="ai-input-row">
+    <input id="ai-input" type="text" aria-label="Ask the front desk assistant a question" placeholder="Ask about services, locations, booking…" autocomplete="off">
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script src="/assets/js/main.js"></script>
+</body>
+</html>

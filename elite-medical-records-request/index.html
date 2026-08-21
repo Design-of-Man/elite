@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medical Records Request Form | ELITE Sports Medicine</title>
+<meta name="description" content="Request the release of your medical records to Elite Sports Medicine, Attn: Dr. Marc Matarazzo, Palm Beach Gardens, FL.">
+<link rel="canonical" href="https://elitesportsmed.org/elite-medical-records-request/">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Medical Records Request Form | ELITE Sports Medicine">
+<meta property="og:description" content="Request the release of your medical records to Elite Sports Medicine, Attn: Dr. Marc Matarazzo, Palm Beach Gardens, FL.">
+<meta property="og:url" content="https://elitesportsmed.org/elite-medical-records-request/">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/v2.css">
+
+
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="brand">
+      <strong>ELITE Sports Medicine</strong>
+      <span>Matarazzo Orthopedics</span>
+    </a>
+    <nav class="nav-desktop" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/services/">Services</a>
+      <a href="/marc-f-matarazzo/">Dr. Matarazzo</a>
+      <a href="/memberships/">Memberships</a>
+      <a href="/faq/">FAQ</a>
+      <a href="/areas-we-serve/">Locations</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="nav-phone" href="tel:+15612028886">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        561-202-8886
+      </a>
+      <a class="btn btn--gold" href="/schedule-appointment/">Schedule Appointment</a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-nav" aria-label="Mobile">
+  <a href="/">Home</a>
+  <a href="/services/">Services</a>
+  <a href="/marc-f-matarazzo/">Dr. Matarazzo</a>
+  <a href="/memberships/">Memberships</a>
+  <a href="/faq/">FAQ</a>
+  <a href="/areas-we-serve/">Locations</a>
+  <a href="/schedule-appointment/">Schedule Appointment</a>
+  <a class="nav-phone" href="tel:+15612028886">561-202-8886</a>
+</nav>
+
+<main id="main">
+
+  <section class="hero" style="min-height:40vh">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <p class="eyebrow">Patient Forms</p>
+      <h1 data-split-words>Medical Records <em>Request</em></h1>
+      <p class="hero-lede">Authorize the release of your medical records to Elite Sports Medicine, Attn: Dr. Marc Matarazzo.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <form action="/api/form" method="POST" class="form-stack form-stack--wide">
+        <input type="hidden" name="form_type" value="records_request">
+
+        <div class="form-section">
+          <h3>Patient Information</h3>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field"><label for="first_name">First Name</label><input id="first_name" type="text" name="first_name" autocomplete="given-name" required></div>
+            <div class="field"><label for="last_name">Last Name</label><input id="last_name" type="text" name="last_name" autocomplete="family-name" required></div>
+            <div class="field"><label for="dob">Date of Birth</label><input id="dob" type="date" name="date_of_birth" required></div>
+            <div class="field"><label for="phone">Phone Number</label><input id="phone" type="tel" name="phone" autocomplete="tel" required></div>
+            <div class="field"><label for="email">Email Address</label><input id="email" type="email" name="email" autocomplete="email"></div>
+            <div class="field"><label for="alt_phone">Alt Phone</label><input id="alt_phone" type="tel" name="alt_phone"></div>
+          </div>
+          <div class="field" style="margin-top:var(--sp-sm)"><label for="address">Address</label><input id="address" type="text" name="address" autocomplete="street-address"></div>
+          <div class="field" style="margin-top:var(--sp-sm)"><label for="city_state_zip">City / State / Zip</label><input id="city_state_zip" type="text" name="city_state_zip" autocomplete="address-level2"></div>
+        </div>
+
+        <div class="form-section">
+          <h3>Release Records From</h3>
+          <p>Name of the provider or facility currently holding your records.</p>
+          <div class="field"><label for="release_from">Provider or Facility</label><input id="release_from" type="text" name="release_from" required></div>
+        </div>
+
+        <div class="form-section">
+          <h3>Send Records To</h3>
+          <div class="directions-card">
+            <h4>Elite Sports Medicine</h4>
+            <p style="margin:0">Attn: Dr. Marc Matarazzo<br>11380 Prosperity Farms Rd, Suite 204<br>Palm Beach Gardens, FL 33410<br>Phone / Fax: (561) 202-8886</p>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Information to Be Released</h3>
+          <div class="check-grid">
+            <div class="check-item"><input type="checkbox" id="rec_complete" name="records[]" value="Complete Medical Records"><label for="rec_complete">Complete Medical Records</label></div>
+            <div class="check-item"><input type="checkbox" id="rec_imaging" name="records[]" value="Imaging/Radiology Reports"><label for="rec_imaging">Imaging / Radiology Reports</label></div>
+            <div class="check-item"><input type="checkbox" id="rec_notes" name="records[]" value="Progress Notes/Office Visits"><label for="rec_notes">Progress Notes / Office Visits</label></div>
+            <div class="check-item"><input type="checkbox" id="rec_labs" name="records[]" value="Lab Reports"><label for="rec_labs">Lab Reports</label></div>
+          </div>
+          <div class="field"><label for="rec_other">Other</label><input id="rec_other" type="text" name="records_other" placeholder="Describe any other records to release"></div>
+        </div>
+
+        <div class="form-section">
+          <div class="consent-box">
+            <p>I hereby authorize the release of my medical records as specified above to Elite Sports Medicine. This authorization is valid for one year from the date of signature unless revoked in writing. I understand that once information is disclosed pursuant to this authorization, it may be re-disclosed by the recipient and may no longer be protected by federal privacy regulations.</p>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field"><label for="signature">Patient Signature (type full name)</label><input id="signature" type="text" name="patient_signature" required></div>
+            <div class="field"><label for="sig_date">Date</label><input id="sig_date" type="date" name="signature_date" required></div>
+          </div>
+          <div class="field" style="margin-top:var(--sp-sm)"><label for="printed_name">Printed Name</label><input id="printed_name" type="text" name="printed_name" required></div>
+          <div class="field" style="margin-top:var(--sp-sm)"><label for="relationship">If signed by someone other than the patient, relationship</label><input id="relationship" type="text" name="signer_relationship"></div>
+          <div class="grid grid--2" style="gap:var(--sp-sm);margin-top:var(--sp-sm)">
+            <div class="field"><label for="witness">Witness Signature (optional)</label><input id="witness" type="text" name="witness_signature"></div>
+            <div class="field"><label for="witness_date">Witness Date</label><input id="witness_date" type="date" name="witness_date"></div>
+          </div>
+        </div>
+
+        <button class="btn btn--gold" type="submit" style="justify-self:start">Submit Request</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <strong class="footer-brand">ELITE Sports Medicine</strong>
+        <p style="margin-top:var(--sp-sm)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
+        <div class="footer-social" style="margin-top:var(--sp-md)">
+          <a href="https://www.instagram.com/drmarcmatarazzo/" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
+          <a href="https://www.linkedin.com/in/matarazzo/" aria-label="LinkedIn" target="_blank" rel="noopener">in</a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/services/">Services</a></li>
+          <li><a href="/memberships/">Memberships</a></li>
+          <li><a href="/marc-f-matarazzo/">Dr. Matarazzo</a></li>
+          <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/schedule-appointment/">Schedule Appointment</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Port St. Lucie</h4>
+        <ul>
+          <li>1100 SW St. Lucie West Blvd.<br>Ste. 105, Port St. Lucie, FL 34986</li>
+        </ul>
+        <h4 style="margin-top:var(--sp-md)">Palm Beach Gardens</h4>
+        <ul>
+          <li>11380 Prosperity Farms Rd<br>Ste 204, Palm Beach Gardens, FL 33410</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+15612028886">561-202-8886</a></li>
+          <li><a href="mailto:info@elitesportsmed.org">info@elitesportsmed.org</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span class="js-year"></span> Elite Sports Medicine. All rights reserved.</span>
+      <span>Site by <a href="https://tidelinedigital.com">Design of Man</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>document.querySelectorAll(".js-year").forEach(function(el){ el.textContent = new Date().getFullYear(); });</script>
+
+<button id="ai-assistant-launcher" aria-label="Chat with our front desk assistant" aria-expanded="false">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+<div id="ai-assistant-panel" role="dialog" aria-label="Front desk assistant">
+  <div class="ai-header">
+    <div><strong>Front Desk Assistant</strong><br><span>ELITE Sports Medicine</span></div>
+    <button id="ai-close" aria-label="Close chat">&times;</button>
+  </div>
+  <div id="ai-messages" class="ai-messages">
+    <div class="ai-msg disclaimer">This assistant can answer general questions about our practice. It does not provide medical advice — for clinical questions, please call 561-202-8886.</div>
+  </div>
+  <form id="ai-form" class="ai-input-row">
+    <input id="ai-input" type="text" aria-label="Ask the front desk assistant a question" placeholder="Ask about services, locations, booking…" autocomplete="off">
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script src="/assets/js/main.js"></script>
+</body>
+</html>
