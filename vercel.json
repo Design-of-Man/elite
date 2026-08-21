@@ -1,4 +1,31 @@
 {
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/mako-robotic-assisted-knee-replacement-systems", "destination": "/mako-robotic-assisted-knee-replacement-system/", "permanent": true },
+    { "source": "/minimally-invasive-procedure", "destination": "/minimally-invasive-procedures/", "permanent": true },
+    { "source": "/mls-multiwave-laser-therapy", "destination": "/services/mls-multiwave-laser-therapy/", "permanent": true },
+    { "source": "/dolorclast-radial-shockwave-therapy", "destination": "/services/dolorclast-radial-shockwave-therapy/", "permanent": true },
+    { "source": "/orthobiologics-regenerative-orthopedic-therapies", "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/", "permanent": true },
+    { "source": "/meniscus-repair", "destination": "/services/meniscus-repair/", "permanent": true },
+    { "source": "/misha-minimally-invasive-implantable-shock-absorber-implant", "destination": "/services/misha-minimally-invasive-implantable-shock-absorber-implant/", "permanent": true },
+    { "source": "/articular-cartilage-restoration-and-maci-procedures", "destination": "/services/articular-cartilage-restoration-and-maci-procedures/", "permanent": true },
+    { "source": "/laser-therapy", "destination": "/services/laser-therapy/", "permanent": true },
+    { "source": "/expert-orthopedic-surgeon-dr-marc-matarazzo-s-specializations", "destination": "/joint-replacements-shoulder-knee/", "permanent": true },
+    { "source": "/author/marc-f-matarazzo", "destination": "/marc-f-matarazzo/", "permanent": true },
+    { "source": "/author/:slug*", "destination": "/", "permanent": true },
+    { "source": "/category/:slug*", "destination": "/blog/", "permanent": true },
+    { "source": "/:year(19|20\\d{2})/:month(\\d{2})/:day(\\d{2})", "destination": "/blog/", "permanent": true },
+    { "source": "/:year(19|20\\d{2})/:month(\\d{2})", "destination": "/blog/", "permanent": true },
+    { "source": "/sample-page", "destination": "/", "permanent": true },
+    { "source": "/certified", "destination": "/marc-f-matarazzo/", "permanent": true },
+    { "source": "/existing-patient", "destination": "/schedule-appointment/", "permanent": true },
+    { "source": "/new-patient-appointment", "destination": "/schedule-appointment/", "permanent": true },
+    { "source": "/booking-appointment", "destination": "/schedule-appointment/", "permanent": true },
+    { "source": "/concierge-member", "destination": "/memberships/", "permanent": true },
+    { "source": "/testimonials", "destination": "/#testimonials", "permanent": true },
+    { "source": "/contact", "destination": "/schedule-appointment/", "permanent": true },
+    { "source": "/about", "destination": "/marc-f-matarazzo/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
