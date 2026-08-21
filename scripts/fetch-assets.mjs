@@ -3,6 +3,7 @@
 // downloads and unpacks it into assets/sequence/ at deploy time (Vercel build)
 // or on a developer machine: `node scripts/fetch-assets.mjs`.
 import { createWriteStream, existsSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { pipeline } from 'node:stream/promises';
 import { Readable } from 'node:stream';
 import { execFileSync } from 'node:child_process';
@@ -36,6 +37,14 @@ if (!res.ok) {
 mkdirSync(seqDir, { recursive: true });
 const tarPath = path.join(seqDir, 'bundle.tgz');
 await pipeline(Readable.fromWeb(res.body), createWriteStream(tarPath));
+if (manifest.sha256) {
+  const digest = createHash('sha256').update(readFileSync(tarPath)).digest('hex');
+  if (digest !== manifest.sha256) {
+    console.error(`bundle checksum mismatch: expected ${manifest.sha256}, got ${digest}`);
+    process.exit(1);
+  }
+  console.log('bundle sha256 verified');
+}
 execFileSync('tar', ['-xzf', tarPath, '-C', seqDir], { stdio: 'inherit' });
 execFileSync('rm', ['-f', tarPath]);
 const now = readdirSync(framesDir).filter(f => f.endsWith('.webp')).length;
