@@ -1,4 +1,6 @@
 {
+  "buildCommand": "node scripts/fetch-assets.mjs",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)",
