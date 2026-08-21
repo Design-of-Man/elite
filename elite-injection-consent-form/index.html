@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Areas We Serve | ELITE Sports Medicine</title>
-<meta name="description" content="Elite Sports Medicine serves patients across the Treasure Coast and northern Palm Beach County from our Port St. Lucie and Palm Beach Gardens, FL offices.">
-<link rel="canonical" href="https://elitesportsmed.org/areas-we-serve/">
+<title>Injection Consent Form | ELITE Sports Medicine</title>
+<meta name="description" content="Informed consent form for injection procedures at Elite Sports Medicine, Palm Beach Gardens &amp; Port St. Lucie, FL.">
+<link rel="canonical" href="https://elitesportsmed.org/elite-injection-consent-form/">
+<meta name="robots" content="noindex, follow">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Areas We Serve | ELITE Sports Medicine">
-<meta property="og:description" content="Elite Sports Medicine serves patients across the Treasure Coast and northern Palm Beach County from our Port St. Lucie and Palm Beach Gardens, FL offices.">
-<meta property="og:url" content="https://elitesportsmed.org/areas-we-serve/">
+<meta property="og:title" content="Injection Consent Form | ELITE Sports Medicine">
+<meta property="og:description" content="Informed consent form for injection procedures at Elite Sports Medicine, Palm Beach Gardens &amp; Port St. Lucie, FL.">
+<meta property="og:url" content="https://elitesportsmed.org/elite-injection-consent-form/">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,81 +62,69 @@
 
 <main id="main">
 
-  <section class="hero" style="min-height:55vh">
+  <section class="hero" style="min-height:40vh">
     <div class="hero-glow"></div>
     <div class="container">
-      <p class="eyebrow">Areas We Serve</p>
-      <h1 data-split-words>South Florida, <em>covered.</em></h1>
-      <p class="hero-lede">Two locations — Port St. Lucie and Palm Beach Gardens — serving patients across the Treasure Coast and northern Palm Beach County.</p>
-    </div>
-  </section>
-  <section class="section">
-    <div class="container">
-      <div class="grid grid--3 reveal-stagger reveal">
-        
-        <div class="card reveal">
-          <span class="num">~14 miles / 20 min</span>
-          <h3>Stuart, FL</h3>
-          <p>Nearest office: Port St. Lucie</p>
-          <a class="card-link" href="/areas-we-serve/stuart-fl/">Get Directions →</a>
-        </div>
-        <div class="card reveal">
-          <span class="num">~10 miles / 15 min</span>
-          <h3>Fort Pierce, FL</h3>
-          <p>Nearest office: Port St. Lucie</p>
-          <a class="card-link" href="/areas-we-serve/fort-pierce-fl/">Get Directions →</a>
-        </div>
-        <div class="card reveal">
-          <span class="num">~15 miles / 20 min</span>
-          <h3>Jensen Beach, FL</h3>
-          <p>Nearest office: Port St. Lucie</p>
-          <a class="card-link" href="/areas-we-serve/jensen-beach-fl/">Get Directions →</a>
-        </div>
-        <div class="card reveal">
-          <span class="num">~8 miles / 15 min</span>
-          <h3>Jupiter, FL</h3>
-          <p>Nearest office: Palm Beach Gardens</p>
-          <a class="card-link" href="/areas-we-serve/jupiter-fl/">Get Directions →</a>
-        </div>
-        <div class="card reveal">
-          <span class="num">~5 miles / 10 min</span>
-          <h3>North Palm Beach, FL</h3>
-          <p>Nearest office: Palm Beach Gardens</p>
-          <a class="card-link" href="/areas-we-serve/north-palm-beach-fl/">Get Directions →</a>
-        </div>
-        <div class="card reveal">
-          <span class="num">~13 miles / 20 min</span>
-          <h3>West Palm Beach, FL</h3>
-          <p>Nearest office: Palm Beach Gardens</p>
-          <a class="card-link" href="/areas-we-serve/west-palm-beach-fl/">Get Directions →</a>
-        </div>
-      </div>
+      <p class="eyebrow">Patient Forms</p>
+      <h1 data-split-words>Injection Consent <em>Form</em></h1>
+      <p class="hero-lede">Please review and complete before your injection procedure.</p>
     </div>
   </section>
 
-  <section class="section section--paper2">
+  <section class="section">
     <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">MAKO Robotic Knee Surgery</p>
-        <h2>Also serving patients traveling from</h2>
-      </div>
-      <div class="grid grid--3 reveal-stagger reveal">
-        <div class="card reveal">
-          <h3>Miami, FL</h3>
-          <p>MAKO robotic-assisted knee replacement for patients traveling from Miami and South Florida.</p>
-          <a class="card-link" href="/areas-we-serve/mako-knee-surgery-miami-fl/">Learn More →</a>
+      <form action="/api/form" method="POST" class="form-stack form-stack--wide">
+        <input type="hidden" name="form_type" value="injection_consent">
+
+        <div class="form-section">
+          <h3>Patient &amp; Procedure</h3>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field"><label for="patient_name">Patient Name</label><input id="patient_name" type="text" name="patient_name" required></div>
+            <div class="field"><label for="dob">Date of Birth</label><input id="dob" type="date" name="date_of_birth" required></div>
+            <div class="field"><label for="medication">Medication / Injectable Name</label><input id="medication" type="text" name="medication" required></div>
+            <div class="field"><label for="site">Injection Site (e.g., knee, shoulder)</label><input id="site" type="text" name="injection_site" required></div>
+          </div>
         </div>
-        <div class="card reveal">
-          <h3>Naples, FL</h3>
-          <p>MAKO robotic-assisted knee surgery for patients traveling from Naples and the surrounding region.</p>
-          <a class="card-link" href="/areas-we-serve/mako-knee-surgery-naples-fl/">Learn More →</a>
+
+        <div class="form-section">
+          <h3>Potential Risks &amp; Side Effects</h3>
+          <p>Not all-inclusive:</p>
+          <ul class="credential-list">
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Pain or discomfort at the injection site</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Swelling, redness, or bruising</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Infection</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Bleeding</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Allergic reaction</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Temporary increase in pain</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Nerve damage (rare)</span></li>
+          </ul>
+          <div class="check-item">
+            <input type="checkbox" id="ack_discussed" name="ack_discussed" value="yes" required>
+            <label for="ack_discussed">I acknowledge that I have discussed the nature, purpose, and potential risks of the injection with my provider, and had the opportunity to ask questions.</label>
+          </div>
+          <div class="check-item" style="margin-top:0.5rem">
+            <input type="checkbox" id="ack_no_guarantee" name="ack_no_guarantee" value="yes" required>
+            <label for="ack_no_guarantee">I understand that while complications are rare, no guarantees have been made regarding the results of this injection.</label>
+          </div>
         </div>
-        <div class="card reveal">
-          <h3>Fort Lauderdale, FL</h3>
-          <p>MAKO robotic-assisted knee surgery for patients traveling from Fort Lauderdale.</p>
-          <a class="card-link" href="/areas-we-serve/mako-knee-surgery-fort-lauderdale-fl/">Learn More →</a>
+
+        <div class="form-section">
+          <h3>Authorization</h3>
+          <div class="consent-box">
+            <p>I certify that I have read, understood, and agree to the above consent statements. I authorize the medical staff of Elite Sports Medicine to provide evaluation and treatment as deemed necessary, including the administration of injections as indicated.</p>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm)">
+            <div class="field"><label for="signature">Patient / Guardian Signature (type full name)</label><input id="signature" type="text" name="signature" required></div>
+            <div class="field"><label for="printed_name">Printed Name</label><input id="printed_name" type="text" name="printed_name" required></div>
+          </div>
+          <div class="grid grid--2" style="gap:var(--sp-sm);margin-top:var(--sp-sm)">
+            <div class="field"><label for="relationship">Relationship to Patient (if applicable)</label><input id="relationship" type="text" name="signer_relationship"></div>
+            <div class="field"><label for="sig_date">Date</label><input id="sig_date" type="date" name="signature_date" required></div>
+          </div>
         </div>
-      </div>
+
+        <button class="btn btn--gold" type="submit" style="justify-self:start">Submit</button>
+      </form>
     </div>
   </section>
 
