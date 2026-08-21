@@ -1,6 +1,6 @@
 // Vercel serverless function — AI front-desk assistant for Elite Sports Medicine.
-// Keeps the Anthropic API key server-side. Requires ANTHROPIC_API_KEY in the
-// Vercel project's environment variables.
+// Keeps the xAI API key server-side. Requires XAI_API_KEY in the Vercel
+// project's environment variables.
 
 const SYSTEM_PROMPT = `You are the front-desk assistant for Elite Sports Medicine, Dr. Marc F. Matarazzo's orthopedic and sports medicine practice in South Florida.
 
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.XAI_API_KEY;
   if (!apiKey) {
     return res.status(200).json({
       reply: "Our online assistant isn't fully connected yet — please call 561-202-8886 or use the Schedule Appointment page and our team will help right away.",
@@ -48,18 +48,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const upstream = await fetch("https://api.anthropic.com/v1/messages", {
+    const upstream = await fetch("https://api.x.ai/v1/chat/completions", {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
+        authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "claude-sonnet-5",
+        model: "grok-4-fast",
         max_tokens: 300,
-        system: SYSTEM_PROMPT,
-        messages,
+        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
       }),
     });
 
@@ -70,7 +68,7 @@ export default async function handler(req, res) {
     }
 
     const data = await upstream.json();
-    const reply = data?.content?.[0]?.text?.trim() || "I'm not sure how to help with that — please call 561-202-8886.";
+    const reply = data?.choices?.[0]?.message?.content?.trim() || "I'm not sure how to help with that — please call 561-202-8886.";
     return res.status(200).json({ reply });
   } catch {
     return res.status(200).json({
