@@ -18,6 +18,10 @@
      - Measure capped in ch: body 52ch, headlines 16ch
      - Never pure black or pure white
      - Custom easing only, never ease/linear
+
+   PALETTE — cream / navy / teal. Deep navy ink over a cream paper, one teal
+   accent standing in for the old brass. Nothing else in the system changed;
+   every component reads these same tokens, so the swap is contained here.
    ========================================================================== */
 
 /* Duplicate of the <link> in <head>, byte-identical so the browser serves it
@@ -34,28 +38,28 @@
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* -- Colour ------------------------------------------------------------
-     Never pure black, never pure white. Warm ink over warm paper, one brass
-     accent. Every pairing below is measured, ratio noted.                  */
-  --ink: #17140f;          /* 16.45:1 on paper */
-  --ink-2: #241f18;        /* raised surface on dark */
-  --ink-3: #322b21;        /* hairlines on dark */
+     Never pure black, never pure white. Deep navy ink over cream paper, one
+     teal accent. Every pairing below is measured, ratio noted.             */
+  --ink: #10182a;          /* 15.9:1 on paper */
+  --ink-2: #1a2740;        /* raised surface on dark */
+  --ink-3: #283652;        /* hairlines on dark */
 
-  --paper: #f6f2ea;
-  --paper-2: #efe9dd;
-  --paper-3: #e6dece;
+  --paper: #f6f3ec;
+  --paper-2: #efe9db;
+  --paper-3: #e3dac1;
 
-  --brass: #a9793c;        /* 3.43:1 on paper — rules, fills, LARGE type only */
-  --brass-ink: #845c2b;    /* 5.30:1 on paper — small text on paper */
-  --brass-lit: #d9a65f;    /* 8.37:1 on ink   — text over dark imagery */
+  --brass: #2f7d76;        /* 4.39:1 on paper — rules, fills, LARGE type only */
+  --brass-ink: #1f5b56;    /* 7.05:1 on paper — small text on paper */
+  --brass-lit: #6fc9bd;    /* 9.0:1  on ink   — text over dark imagery */
 
-  --body-on-paper: #544c3f;  /* 7.58:1 */
-  --muted-on-paper: #5f5648; /* 6.46:1 */
-  --body-on-ink: #bdb1a0;    /* 8.71:1 */
-  --muted-on-ink: #a89c88;   /* 6.80:1 */
+  --body-on-paper: #4a5468;  /* 6.77:1 */
+  --muted-on-paper: #5b6478; /* 5.27:1 */
+  --body-on-ink: #b7bfcc;    /* 9.48:1 */
+  --muted-on-ink: #8f99ab;   /* 6.11:1 */
 
-  --rule: rgba(23, 20, 15, 0.14);        /* hairline on paper */
-  --rule-strong: rgba(23, 20, 15, 0.26);
-  --rule-on-ink: rgba(246, 242, 234, 0.16);
+  --rule: rgba(16, 24, 42, 0.14);        /* hairline on paper */
+  --rule-strong: rgba(16, 24, 42, 0.26);
+  --rule-on-ink: rgba(246, 243, 236, 0.16);
 
   /* Context-aware pair. Sections flip these two and every component that
      reads them re-colours itself — no per-section overrides needed. */
@@ -386,7 +390,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   transition: opacity var(--dur) var(--ease);
 }
 .site-header.is-scrolled {
-  background: rgba(246, 242, 234, 0.86);
+  background: rgba(246, 243, 236, 0.86);
   backdrop-filter: blur(14px) saturate(1.4);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
   padding-block: 0.7rem;
@@ -556,7 +560,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   width: min(62vw, 780px);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(169, 121, 60, 0.16), rgba(169, 121, 60, 0) 68%);
+  background: radial-gradient(circle, rgba(47, 125, 118, 0.16), rgba(47, 125, 118, 0) 68%);
   pointer-events: none;
   animation: heroDrift 18s var(--ease-inout) infinite alternate;
   will-change: transform;
@@ -702,14 +706,14 @@ strong, b { font-weight: 600; color: var(--fg); }
   height: 100%;
   object-fit: cover;
   border-radius: var(--radius);
-  box-shadow: 0 40px 70px -30px rgba(23, 20, 15, 0.38);
+  box-shadow: 0 40px 70px -30px rgba(16, 24, 42, 0.38);
 }
 /* Caption tag sits on the image, so it uses the over-dark brass. */
 .hero-portrait .tag {
   position: absolute;
   left: 0; bottom: 0;
   padding: var(--sp-sm) var(--sp-md);
-  background: rgba(23, 20, 15, 0.82);
+  background: rgba(16, 24, 42, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   font-family: var(--font-mono);
@@ -829,7 +833,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(120px 120px at 100% 0%, rgba(169, 121, 60, 0.16), transparent 70%);
+  background: radial-gradient(120px 120px at 100% 0%, rgba(47, 125, 118, 0.16), transparent 70%);
   opacity: 0;
   transition: opacity var(--dur) var(--ease);
   pointer-events: none;
@@ -847,7 +851,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 .card:hover {
   transform: translateY(-7px);
   border-color: var(--accent);
-  box-shadow: 0 24px 48px -24px rgba(23, 20, 15, 0.32);
+  box-shadow: 0 24px 48px -24px rgba(16, 24, 42, 0.32);
 }
 .card:hover::before { opacity: 1; }
 .card:hover::after { transform: scaleX(1); }
@@ -867,11 +871,11 @@ strong, b { font-weight: 600; color: var(--fg); }
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 50%;
-  background: rgba(169, 121, 60, 0.12);
+  background: rgba(47, 125, 118, 0.12);
   color: var(--accent-text);
   transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
 }
-.section--dark .icon { background: rgba(217, 166, 95, 0.14); }
+.section--dark .icon { background: rgba(111, 201, 189, 0.14); }
 .card:hover .icon { transform: scale(1.08) rotate(-6deg); background: var(--accent); color: var(--bg); }
 .card .icon svg { width: 22px; height: 22px; }
 
@@ -977,7 +981,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 .quote-track .quote-card:nth-child(even) { transform: rotate(0.6deg); }
 .quote-card:hover {
   transform: rotate(0deg) translateY(-4px);
-  box-shadow: 0 26px 50px -28px rgba(23, 20, 15, 0.3);
+  box-shadow: 0 26px 50px -28px rgba(16, 24, 42, 0.3);
 }
 .quote-card::before {
   content: "\201C";
@@ -1045,7 +1049,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   aspect-ratio: 1;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(217, 166, 95, 0.13), transparent 66%);
+  background: radial-gradient(circle, rgba(111, 201, 189, 0.13), transparent 66%);
   pointer-events: none;
 }
 .cta-band .container { position: relative; z-index: 1; }
@@ -1211,7 +1215,7 @@ input::placeholder, textarea::placeholder {
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--brass-ink);
-  box-shadow: 0 0 0 3px rgba(169, 121, 60, 0.22);
+  box-shadow: 0 0 0 3px rgba(47, 125, 118, 0.22);
 }
 textarea { resize: vertical; min-height: 8rem; }
 
@@ -1462,7 +1466,7 @@ label {
   background: var(--brass);
   color: var(--ink);
   cursor: pointer;
-  box-shadow: 0 14px 34px rgba(23, 20, 15, 0.28);
+  box-shadow: 0 14px 34px rgba(16, 24, 42, 0.28);
   transition: transform var(--dur) var(--ease-quart), background var(--dur-fast);
 }
 #ai-assistant-launcher:hover { transform: scale(1.06); background: var(--brass-ink); color: var(--paper); }
@@ -1478,7 +1482,7 @@ label {
   background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
-  box-shadow: 0 30px 70px -22px rgba(23, 20, 15, 0.42);
+  box-shadow: 0 30px 70px -22px rgba(16, 24, 42, 0.42);
   opacity: 0;
   transform: translate3d(0, 14px, 0) scale(0.98);
   pointer-events: none;
