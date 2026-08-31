@@ -4,58 +4,68 @@
    Self-contained. Drop this file into any site and the whole system comes
    with it: fonts, colour, scale, spacing, motion, components.
 
-   THREE FAMILIES, ONE JOB EACH
-     Display  Instrument Serif (400 + italic) .. headlines; italic is the
-                                                 accent voice
-     Body     DM Sans (300-600) ............... all running text
-     Labels   IBM Plex Mono (400/500) ......... eyebrows, nav, tags, captions
-                                                uppercase, .14-.18em tracking
+   TWO FAMILIES, WEIGHT CARRIES THE CONTRAST
+     Display  Manrope (700, 800 for numerals) . headlines, labels, nav; the
+                                                 accent colour is the accent
+                                                 voice, no italic
+     Body     Inter (400-600) ................. all running text
+     Labels   Manrope (500-600) ............... eyebrows, nav, tags, captions
+                                                uppercase, .04-.08em tracking
 
    The rules that carry the look:
-     - Fluid sizing via clamp(); headlines run to 7rem against an 11px label,
-       a ~10:1 display-to-label ratio
-     - Tight display leading (.96) against generous body leading (1.6)
-     - Measure capped in ch: body 52ch, headlines 16ch
+     - Fluid sizing via clamp(); headlines run 36px -> 64px against a 13px
+       label — grounded, not shouting
+     - Generous heading leading (1.12-1.18) against generous body leading (1.6)
+     - Measure capped in ch: body 60ch, headlines 22ch
      - Never pure black or pure white
      - Custom easing only, never ease/linear
+
+   PALETTE — cream / navy / teal. Deep navy ink over a cream paper, one teal
+   accent standing in for the old brass. Nothing else in the system changed;
+   every component reads these same tokens, so the swap is contained here.
    ========================================================================== */
 
 /* Duplicate of the <link> in <head>, byte-identical so the browser serves it
    from cache. Present so the file works standalone when dropped elsewhere. */
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap");
 
 /* --------------------------------------------------------------------------
    1. TOKENS
    -------------------------------------------------------------------------- */
 :root {
-  /* -- Families ---------------------------------------------------------- */
-  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
-  --font-body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* -- Families ------------------------------------------------------------
+     Two-family system, structural contrast via weight rather than serif/sans
+     novelty: Manrope (600-800) carries headings and labels, Inter (400-600)
+     carries everything meant to be read at length. Both are workhorse,
+     screen-native grotesks — nothing editorial, nothing that competes with
+     the content of a medical practice.                                     */
+  --font-display: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* -- Colour ------------------------------------------------------------
-     Never pure black, never pure white. Warm ink over warm paper, one brass
-     accent. Every pairing below is measured, ratio noted.                  */
-  --ink: #17140f;          /* 16.45:1 on paper */
-  --ink-2: #241f18;        /* raised surface on dark */
-  --ink-3: #322b21;        /* hairlines on dark */
+     Never pure black, never pure white. Deep navy ink over cream paper, one
+     teal accent. Every pairing below is measured, ratio noted.             */
+  --ink: #10182a;          /* 15.9:1 on paper */
+  --ink-2: #1a2740;        /* raised surface on dark */
+  --ink-3: #283652;        /* hairlines on dark */
 
-  --paper: #f6f2ea;
-  --paper-2: #efe9dd;
-  --paper-3: #e6dece;
+  --paper: #f6f3ec;
+  --paper-2: #efe9db;
+  --paper-3: #e3dac1;
 
-  --brass: #a9793c;        /* 3.43:1 on paper — rules, fills, LARGE type only */
-  --brass-ink: #845c2b;    /* 5.30:1 on paper — small text on paper */
-  --brass-lit: #d9a65f;    /* 8.37:1 on ink   — text over dark imagery */
+  --brass: #2f7d76;        /* 4.39:1 on paper — rules, fills, LARGE type only */
+  --brass-ink: #1f5b56;    /* 7.05:1 on paper — small text on paper */
+  --brass-lit: #6fc9bd;    /* 9.0:1  on ink   — text over dark imagery */
 
-  --body-on-paper: #544c3f;  /* 7.58:1 */
-  --muted-on-paper: #5f5648; /* 6.46:1 */
-  --body-on-ink: #bdb1a0;    /* 8.71:1 */
-  --muted-on-ink: #a89c88;   /* 6.80:1 */
+  --body-on-paper: #4a5468;  /* 6.77:1 */
+  --muted-on-paper: #5b6478; /* 5.27:1 */
+  --body-on-ink: #b7bfcc;    /* 9.48:1 */
+  --muted-on-ink: #8f99ab;   /* 6.11:1 */
 
-  --rule: rgba(23, 20, 15, 0.14);        /* hairline on paper */
-  --rule-strong: rgba(23, 20, 15, 0.26);
-  --rule-on-ink: rgba(246, 242, 234, 0.16);
+  --rule: rgba(16, 24, 42, 0.14);        /* hairline on paper */
+  --rule-strong: rgba(16, 24, 42, 0.26);
+  --rule-on-ink: rgba(246, 243, 236, 0.16);
 
   /* Context-aware pair. Sections flip these two and every component that
      reads them re-colours itself — no per-section overrides needed. */
@@ -68,46 +78,50 @@
   --hairline: var(--rule);
 
   /* -- Type scale --------------------------------------------------------
-     Fluid throughout. step-5 is the headline voice: 44px -> 112px.
-     The reading steps (--2 through 3) were raised ~12% over the original
-     spec for legibility; the display ceiling is unchanged, so the
-     display-to-label ratio sits at ~8.9:1 rather than 10:1.               */
-  --step--2: clamp(0.76rem, 0.735rem + 0.11vw, 0.79rem);  /* labels  ~12.6px */
-  --step--1: clamp(0.92rem, 0.88rem + 0.16vw, 1.02rem);   /* captions       */
-  --step-0:  clamp(1.12rem, 1.09rem + 0.16vw, 1.2rem);    /* body    ~19.2px */
-  --step-1:  clamp(1.28rem, 1.2rem + 0.38vw, 1.55rem);    /* lede           */
-  --step-2:  clamp(1.55rem, 1.37rem + 0.86vw, 2.2rem);    /* h3             */
-  --step-3:  clamp(2.2rem, 1.76rem + 2.1vw, 3.7rem);      /* h2             */
-  --step-4:  clamp(2.4rem, 1.85rem + 2.7vw, 4.6rem);      /* feature        */
-  --step-5:  clamp(2.8rem, 2rem + 5.4vw, 7rem);           /* headline       */
+     Fluid throughout, pulled in from the old 44-112px display ceiling to a
+     grounded 36-64px — a bold grotesk at 7rem reads as shouting in a way a
+     thin serif at the same size didn't. Modular ratio ~1.25-1.35 between
+     adjacent levels, consistent instead of arbitrary.                     */
+  --step--2: clamp(0.8rem, 0.78rem + 0.1vw, 0.84rem);     /* labels  ~13.4px */
+  --step--1: clamp(0.92rem, 0.9rem + 0.1vw, 0.98rem);     /* captions       */
+  --step-0:  clamp(1.05rem, 1.02rem + 0.16vw, 1.125rem);  /* body    ~18px  */
+  --step-1:  clamp(1.2rem, 1.13rem + 0.35vw, 1.4rem);     /* lede           */
+  --step-2:  clamp(1.4rem, 1.28rem + 0.6vw, 1.75rem);     /* h3             */
+  --step-3:  clamp(1.85rem, 1.55rem + 1.5vw, 2.6rem);     /* h2             */
+  --step-4:  clamp(2.1rem, 1.7rem + 2vw, 3rem);           /* feature        */
+  --step-5:  clamp(2.25rem, 1.75rem + 2.5vw, 4rem);       /* headline       */
 
-  /* -- Leading & tracking ------------------------------------------------ */
-  --lh-display: 0.96;
-  --lh-heading: 1.05;
+  /* -- Leading & tracking ------------------------------------------------
+     A bold grotesk needs air a thin serif didn't — headings sit at 1.12-1.15
+     rather than the old 0.96, and label tracking drops from a shouty 0.16em
+     to a still-crisp 0.06em.                                              */
+  --lh-display: 1.12;
+  --lh-heading: 1.18;
   --lh-body: 1.6;
   --lh-tight: 1.35;
-  --tr-display: -0.01em;
-  --tr-label: 0.16em;
+  --tr-display: -0.015em;
+  --tr-label: 0.06em;
 
   /* -- Measure ----------------------------------------------------------- */
-  --measure: 52ch;
-  --measure-display: 16ch;
-  --measure-lede: 40ch;
+  --measure: 60ch;
+  --measure-display: 22ch;
+  --measure-lede: 42ch;
 
   /* -- Space -------------------------------------------------------------
      A single scale. Section rhythm is fluid so density scales with the
-     viewport instead of collapsing.                                        */
+     viewport instead of collapsing — pulled in from the old 9-13rem ceiling,
+     which read as vast empty gaps rather than deliberate breathing room.   */
   --sp-3xs: 0.25rem;
   --sp-2xs: 0.5rem;
   --sp-xs: 0.75rem;
   --sp-sm: 1rem;
   --sp-md: 1.5rem;
   --sp-lg: 2.25rem;
-  --sp-xl: 3.5rem;
-  --sp-2xl: 5rem;
-  --sp-section: clamp(5rem, 3.1rem + 7vw, 9rem);
-  --sp-section-lg: clamp(7rem, 4rem + 10.5vw, 13rem);
-  --gutter: clamp(1.25rem, 0.6rem + 3.2vw, 3.5rem);
+  --sp-xl: 3.25rem;
+  --sp-2xl: 4.5rem;
+  --sp-section: clamp(3.5rem, 2.5rem + 4vw, 5.5rem);
+  --sp-section-lg: clamp(4.5rem, 3rem + 5.5vw, 7rem);
+  --gutter: clamp(1.25rem, 0.7rem + 2.6vw, 3rem);
 
   /* -- Structure --------------------------------------------------------- */
   --container: 1280px;
@@ -186,12 +200,13 @@ button { font: inherit; color: inherit; }
    3. TYPOGRAPHY
    -------------------------------------------------------------------------- */
 
-/* Display — Instrument Serif. Tight leading, slight negative tracking, and a
-   measure cap so a headline never runs past 16ch. */
+/* Display — Manrope at 700. Bold grotesk, so leading and tracking both get
+   more room than the old thin serif needed; measure cap keeps a headline
+   from running past 22ch. */
 h1, h2, h3, h4,
 .display {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 700;
   line-height: var(--lh-display);
   letter-spacing: var(--tr-display);
   color: var(--fg);
@@ -201,16 +216,14 @@ h1, h2, h3, h4,
 }
 
 h1 { font-size: var(--step-5); max-width: var(--measure-display); }
-h2 { font-size: var(--step-3); max-width: 18ch; line-height: var(--lh-heading); }
-h3 { font-size: var(--step-2); max-width: 22ch; line-height: var(--lh-heading); }
+h2 { font-size: var(--step-3); max-width: 22ch; line-height: var(--lh-heading); }
+h3 { font-size: var(--step-2); max-width: 26ch; line-height: var(--lh-heading); }
 h4 { font-size: var(--step-1); line-height: var(--lh-heading); }
 
-/* Italic is the accent voice — the one place the display face changes colour. */
+/* Accent voice — no italic on a grotesk; the accent colour alone carries it. */
 h1 em, h2 em, h3 em, .display em {
-  font-style: italic;
+  font-style: normal;
   color: var(--accent);
-  /* Instrument Serif italic sits marginally left; nudge it back optically. */
-  margin-inline-start: 0.02em;
 }
 
 /* Body — DM Sans. Generous leading against the tight display, measure at 52ch. */
@@ -283,6 +296,20 @@ strong, b { font-weight: 600; color: var(--fg); }
 .section--paper2 { background: var(--paper-2); }
 .section--ruled { border-top: 1px solid var(--hairline); }
 
+/* Angled seam — breaks the stack of flat rectangles at a dark/paper join.
+   The clip cuts the corner rather than the whole edge, so it reads as a
+   deliberate cut without eating into the section's own content padding. */
+.section--angled {
+  --angle: clamp(28px, 3.2vw, 64px);
+  clip-path: polygon(0 var(--angle), 100% 0, 100% calc(100% - var(--angle)), 0 100%);
+  margin-block: calc(var(--angle) * -1);
+  padding-block: calc(var(--sp-section) + var(--angle));
+}
+.section--angled.section--tight { padding-block: calc(clamp(3rem, 2rem + 4vw, 5rem) + var(--angle)); }
+@media (max-width: 640px) {
+  .section--angled { --angle: 20px; }
+}
+
 /* Section heading block. Asymmetric by default — centred is the exception. */
 .section-head {
   max-width: 46rem;
@@ -312,6 +339,12 @@ strong, b { font-weight: 600; color: var(--fg); }
 .grid { display: grid; gap: clamp(1.25rem, 0.8rem + 1.6vw, 2rem); }
 .grid--2 { grid-template-columns: repeat(2, 1fr); }
 .grid--3 { grid-template-columns: repeat(3, 1fr); }
+
+/* Sits under a card grid or centred block — a single rhythm value instead of
+   ad hoc inline margins scattered per instance. */
+.section-cta { margin-top: clamp(2.25rem, 1.6rem + 2vw, 3.25rem); }
+.section-head.center + .section-cta,
+.cta-band .section-cta { text-align: center; }
 
 /* Asymmetric split — the narrow column is the media, the wide one reads. */
 .split {
@@ -366,7 +399,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   transition: opacity var(--dur) var(--ease);
 }
 .site-header.is-scrolled {
-  background: rgba(246, 242, 234, 0.86);
+  background: rgba(246, 243, 236, 0.86);
   backdrop-filter: blur(14px) saturate(1.4);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
   padding-block: 0.7rem;
@@ -382,18 +415,18 @@ strong, b { font-weight: 600; color: var(--fg); }
 .brand { display: flex; flex-direction: column; line-height: 1; color: var(--ink); }
 .brand strong {
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(1.15rem, 1rem + 0.55vw, 1.5rem);
-  letter-spacing: 0;
+  font-weight: 700;
+  font-size: clamp(1.1rem, 0.98rem + 0.5vw, 1.4rem);
+  letter-spacing: -0.01em;
   white-space: nowrap;
   color: var(--ink);
 }
 .brand span {
-  margin-top: 0.5em;
+  margin-top: 0.35em;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  font-weight: 400;
-  letter-spacing: 0.24em;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--brass-ink);
@@ -405,8 +438,8 @@ strong, b { font-weight: 600; color: var(--fg); }
   padding-block: 0.4em;
   font-family: var(--font-mono);
   font-size: var(--step--2);
-  font-weight: 400;
-  letter-spacing: 0.14em;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--ink);
@@ -438,7 +471,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
   color: var(--ink);
   white-space: nowrap;
 }
@@ -499,7 +532,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   padding-block: 0.7rem;
   border-bottom: 1px solid var(--rule-on-ink);
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 700;
   font-size: clamp(1.75rem, 1.2rem + 2.8vw, 2.6rem);
   line-height: 1.15;
   color: var(--paper);
@@ -536,7 +569,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   width: min(62vw, 780px);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(169, 121, 60, 0.16), rgba(169, 121, 60, 0) 68%);
+  background: radial-gradient(circle, rgba(47, 125, 118, 0.16), rgba(47, 125, 118, 0) 68%);
   pointer-events: none;
   animation: heroDrift 18s var(--ease-inout) infinite alternate;
   will-change: transform;
@@ -645,7 +678,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 .hero-stats div { display: flex; flex-direction: column; gap: 0.35rem; }
 .hero-stats div strong {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 800;
   font-size: clamp(1.95rem, 1.55rem + 1.35vw, 2.8rem);
   line-height: 1;
   letter-spacing: -0.01em;
@@ -656,7 +689,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 .hero-stats div > span {
   font-family: var(--font-mono);
   font-size: var(--step--2);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted-on-paper);
 }
@@ -664,22 +697,37 @@ strong, b { font-weight: 600; color: var(--fg); }
 .hero-portrait {
   position: relative;
   aspect-ratio: 4 / 5;
-  overflow: hidden;
+  overflow: visible;
   border-radius: var(--radius);
-  background: linear-gradient(160deg, var(--paper-3), var(--paper-2));
 }
-.hero-portrait img { width: 100%; height: 100%; object-fit: cover; }
+/* Offset brass frame sitting behind the photo — the single flourish that
+   turns a cropped rectangle into a composed portrait. */
+.hero-portrait::before {
+  content: "";
+  position: absolute;
+  inset: clamp(14px, 1.6vw, 22px) clamp(-14px, -1.6vw, -22px) clamp(-14px, -1.6vw, -22px) clamp(14px, 1.6vw, 22px);
+  border: 1px solid var(--brass);
+  border-radius: var(--radius);
+  z-index: -1;
+}
+.hero-portrait > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: 0 40px 70px -30px rgba(16, 24, 42, 0.38);
+}
 /* Caption tag sits on the image, so it uses the over-dark brass. */
 .hero-portrait .tag {
   position: absolute;
   left: 0; bottom: 0;
   padding: var(--sp-sm) var(--sp-md);
-  background: rgba(23, 20, 15, 0.82);
+  background: rgba(16, 24, 42, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   font-family: var(--font-mono);
   font-size: var(--step--2);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   line-height: 1.5;
   color: var(--body-on-ink);
@@ -688,7 +736,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   display: block;
   margin-bottom: 0.25em;
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 700;
   font-size: 1.15rem;
   letter-spacing: 0;
   text-transform: none;
@@ -715,7 +763,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   gap: 0.7rem;
   font-family: var(--font-mono);
   font-size: 0.62rem;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted-on-paper);
 }
@@ -749,7 +797,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1;
   cursor: pointer;
@@ -779,6 +827,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   background: var(--bg);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
+  overflow: hidden;
   transition: transform var(--dur) var(--ease),
               border-color var(--dur) var(--ease),
               box-shadow var(--dur) var(--ease);
@@ -787,28 +836,66 @@ strong, b { font-weight: 600; color: var(--fg); }
 .section--paper2 .card { background: var(--paper); }
 .section--dark .card { background: var(--ink-2); border-color: var(--rule-on-ink); }
 
+/* Brass corner wash — dormant until hover, keeps the card from reading as a
+   flat bordered box at rest. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120px 120px at 100% 0%, rgba(47, 125, 118, 0.16), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+  pointer-events: none;
+}
 .card::after {
   content: "";
   position: absolute;
   inset: auto 0 -1px 0;
-  height: 1px;
-  background: var(--accent);
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent 85%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--dur-slow) var(--ease);
 }
-.card:hover { transform: translateY(-5px); }
+.card:hover {
+  transform: translateY(-7px);
+  border-color: var(--accent);
+  box-shadow: 0 24px 48px -24px rgba(16, 24, 42, 0.32);
+}
+.card:hover::before { opacity: 1; }
 .card:hover::after { transform: scaleX(1); }
+
+/* Icon + index numeral row — a real glyph gives each card a distinct visual
+   anchor instead of six identical bordered boxes differing only by copy. */
+.card .card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-md);
+}
+.card .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: rgba(47, 125, 118, 0.12);
+  color: var(--accent-text);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.section--dark .icon { background: rgba(111, 201, 189, 0.14); }
+.card:hover .icon { transform: scale(1.08) rotate(-6deg); background: var(--accent); color: var(--bg); }
+.card .icon svg { width: 22px; height: 22px; }
 
 /* Index numeral — mono, not display. It is a label, so it reads as data. */
 .card .num {
   display: block;
-  margin-bottom: var(--sp-md);
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.18em;
-  color: var(--accent-text);
+  letter-spacing: 0.07em;
+  color: var(--fg-muted);
 }
 .card h3 { font-size: var(--step-2); margin-bottom: 0.5em; }
 .card p { font-size: var(--step-0); color: var(--fg-body); }
@@ -821,7 +908,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--accent-text);
 }
@@ -842,7 +929,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 .stat-band .stat { display: flex; flex-direction: column; gap: 0.4rem; }
 .stat-band .stat strong {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 800;
   font-size: var(--step-3);
   line-height: 1;
   letter-spacing: -0.01em;
@@ -853,7 +940,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 .stat-band .stat > span {
   font-family: var(--font-mono);
   font-size: var(--step--2);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1.5;
   color: var(--fg-muted);
@@ -887,6 +974,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 @media (max-width: 900px) { .quote-track { grid-template-columns: 1fr; } }
 
 .quote-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--sp-md);
@@ -894,20 +982,40 @@ strong, b { font-weight: 600; color: var(--fg); }
   background: var(--paper);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+/* A gentle alternating tilt at rest, straightening on hover — the deck reads
+   as fanned cards rather than three identical boxes in a row. */
+.quote-track .quote-card:nth-child(odd) { transform: rotate(-0.6deg); }
+.quote-track .quote-card:nth-child(even) { transform: rotate(0.6deg); }
+.quote-card:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 0 26px 50px -28px rgba(16, 24, 42, 0.3);
+}
+.quote-card::before {
+  content: "\201C";
+  position: absolute;
+  top: 0.1em;
+  right: 0.5em;
+  font-family: var(--font-display);
+  font-size: 4.5rem;
+  line-height: 1;
+  color: var(--brass);
+  opacity: 0.16;
+  pointer-events: none;
 }
 .quote-card .stars {
   font-size: 0.9rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.08em;
   color: var(--brass);
 }
 .quote-card p {
   margin: 0;
   max-width: none;
   font-family: var(--font-display);
-  font-weight: 400;
-  font-style: italic;
+  font-weight: 500;
   font-size: var(--step-2);
-  line-height: 1.25;
+  line-height: 1.35;
   letter-spacing: -0.005em;
   color: var(--ink);
 }
@@ -918,15 +1026,15 @@ strong, b { font-weight: 600; color: var(--fg); }
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink);
 }
 .quote-card footer span {
   display: block;
   margin-top: 0.4em;
-  font-weight: 400;
-  letter-spacing: 0.12em;
+  font-weight: 500;
+  letter-spacing: 0.05em;
   color: var(--muted-on-paper);
 }
 
@@ -949,7 +1057,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   aspect-ratio: 1;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(217, 166, 95, 0.13), transparent 66%);
+  background: radial-gradient(circle, rgba(111, 201, 189, 0.13), transparent 66%);
   pointer-events: none;
 }
 .cta-band .container { position: relative; z-index: 1; }
@@ -986,7 +1094,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   display: block;
   margin-bottom: var(--sp-sm);
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 700;
   font-size: 1.45rem;
   letter-spacing: 0;
   color: var(--paper);
@@ -997,7 +1105,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--brass-lit);
 }
@@ -1041,7 +1149,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   padding-top: var(--sp-lg);
   font-family: var(--font-mono);
   font-size: var(--step--2);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
   color: var(--muted-on-ink);
 }
 .footer-bottom a { color: var(--brass-lit); }
@@ -1063,7 +1171,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   text-align: left;
   cursor: pointer;
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 700;
   font-size: var(--step-2);
   line-height: var(--lh-heading);
   letter-spacing: var(--tr-display);
@@ -1115,7 +1223,7 @@ input::placeholder, textarea::placeholder {
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--brass-ink);
-  box-shadow: 0 0 0 3px rgba(169, 121, 60, 0.22);
+  box-shadow: 0 0 0 3px rgba(47, 125, 118, 0.22);
 }
 textarea { resize: vertical; min-height: 8rem; }
 
@@ -1133,7 +1241,7 @@ label {
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted-on-paper);
 }
@@ -1208,7 +1316,7 @@ label {
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--muted-on-paper);
   background: var(--paper-2);
@@ -1236,7 +1344,7 @@ label {
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--brass-ink);
 }
@@ -1317,7 +1425,7 @@ label {
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: top var(--dur-fast) var(--ease-quart);
 }
@@ -1366,7 +1474,7 @@ label {
   background: var(--brass);
   color: var(--ink);
   cursor: pointer;
-  box-shadow: 0 14px 34px rgba(23, 20, 15, 0.28);
+  box-shadow: 0 14px 34px rgba(16, 24, 42, 0.28);
   transition: transform var(--dur) var(--ease-quart), background var(--dur-fast);
 }
 #ai-assistant-launcher:hover { transform: scale(1.06); background: var(--brass-ink); color: var(--paper); }
@@ -1382,7 +1490,7 @@ label {
   background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
-  box-shadow: 0 30px 70px -22px rgba(23, 20, 15, 0.42);
+  box-shadow: 0 30px 70px -22px rgba(16, 24, 42, 0.42);
   opacity: 0;
   transform: translate3d(0, 14px, 0) scale(0.98);
   pointer-events: none;
@@ -1405,11 +1513,11 @@ label {
   background: var(--ink);
   color: var(--paper);
 }
-.ai-header strong { font-family: var(--font-display); font-weight: 400; font-size: 1.1rem; }
+.ai-header strong { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
 .ai-header span {
   font-family: var(--font-mono);
   font-size: 0.62rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--brass-lit);
 }
@@ -1460,7 +1568,7 @@ label {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink);
   transition: background var(--dur-fast) var(--ease-quart);
