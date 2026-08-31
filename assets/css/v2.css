@@ -283,6 +283,20 @@ strong, b { font-weight: 600; color: var(--fg); }
 .section--paper2 { background: var(--paper-2); }
 .section--ruled { border-top: 1px solid var(--hairline); }
 
+/* Angled seam — breaks the stack of flat rectangles at a dark/paper join.
+   The clip cuts the corner rather than the whole edge, so it reads as a
+   deliberate cut without eating into the section's own content padding. */
+.section--angled {
+  --angle: clamp(28px, 3.2vw, 64px);
+  clip-path: polygon(0 var(--angle), 100% 0, 100% calc(100% - var(--angle)), 0 100%);
+  margin-block: calc(var(--angle) * -1);
+  padding-block: calc(var(--sp-section) + var(--angle));
+}
+.section--angled.section--tight { padding-block: calc(clamp(3rem, 2rem + 4vw, 5rem) + var(--angle)); }
+@media (max-width: 640px) {
+  .section--angled { --angle: 20px; }
+}
+
 /* Section heading block. Asymmetric by default — centred is the exception. */
 .section-head {
   max-width: 46rem;
@@ -312,6 +326,12 @@ strong, b { font-weight: 600; color: var(--fg); }
 .grid { display: grid; gap: clamp(1.25rem, 0.8rem + 1.6vw, 2rem); }
 .grid--2 { grid-template-columns: repeat(2, 1fr); }
 .grid--3 { grid-template-columns: repeat(3, 1fr); }
+
+/* Sits under a card grid or centred block — a single rhythm value instead of
+   ad hoc inline margins scattered per instance. */
+.section-cta { margin-top: clamp(2.25rem, 1.6rem + 2vw, 3.25rem); }
+.section-head.center + .section-cta,
+.cta-band .section-cta { text-align: center; }
 
 /* Asymmetric split — the narrow column is the media, the wide one reads. */
 .split {
@@ -664,11 +684,26 @@ strong, b { font-weight: 600; color: var(--fg); }
 .hero-portrait {
   position: relative;
   aspect-ratio: 4 / 5;
-  overflow: hidden;
+  overflow: visible;
   border-radius: var(--radius);
-  background: linear-gradient(160deg, var(--paper-3), var(--paper-2));
 }
-.hero-portrait img { width: 100%; height: 100%; object-fit: cover; }
+/* Offset brass frame sitting behind the photo — the single flourish that
+   turns a cropped rectangle into a composed portrait. */
+.hero-portrait::before {
+  content: "";
+  position: absolute;
+  inset: clamp(14px, 1.6vw, 22px) clamp(-14px, -1.6vw, -22px) clamp(-14px, -1.6vw, -22px) clamp(14px, 1.6vw, 22px);
+  border: 1px solid var(--brass);
+  border-radius: var(--radius);
+  z-index: -1;
+}
+.hero-portrait > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: 0 40px 70px -30px rgba(23, 20, 15, 0.38);
+}
 /* Caption tag sits on the image, so it uses the over-dark brass. */
 .hero-portrait .tag {
   position: absolute;
@@ -779,6 +814,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   background: var(--bg);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
+  overflow: hidden;
   transition: transform var(--dur) var(--ease),
               border-color var(--dur) var(--ease),
               box-shadow var(--dur) var(--ease);
@@ -787,28 +823,66 @@ strong, b { font-weight: 600; color: var(--fg); }
 .section--paper2 .card { background: var(--paper); }
 .section--dark .card { background: var(--ink-2); border-color: var(--rule-on-ink); }
 
+/* Brass corner wash — dormant until hover, keeps the card from reading as a
+   flat bordered box at rest. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120px 120px at 100% 0%, rgba(169, 121, 60, 0.16), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+  pointer-events: none;
+}
 .card::after {
   content: "";
   position: absolute;
   inset: auto 0 -1px 0;
-  height: 1px;
-  background: var(--accent);
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent 85%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--dur-slow) var(--ease);
 }
-.card:hover { transform: translateY(-5px); }
+.card:hover {
+  transform: translateY(-7px);
+  border-color: var(--accent);
+  box-shadow: 0 24px 48px -24px rgba(23, 20, 15, 0.32);
+}
+.card:hover::before { opacity: 1; }
 .card:hover::after { transform: scaleX(1); }
+
+/* Icon + index numeral row — a real glyph gives each card a distinct visual
+   anchor instead of six identical bordered boxes differing only by copy. */
+.card .card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-md);
+}
+.card .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: rgba(169, 121, 60, 0.12);
+  color: var(--accent-text);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.section--dark .icon { background: rgba(217, 166, 95, 0.14); }
+.card:hover .icon { transform: scale(1.08) rotate(-6deg); background: var(--accent); color: var(--bg); }
+.card .icon svg { width: 22px; height: 22px; }
 
 /* Index numeral — mono, not display. It is a label, so it reads as data. */
 .card .num {
   display: block;
-  margin-bottom: var(--sp-md);
   font-family: var(--font-mono);
   font-size: var(--step--2);
   font-weight: 500;
   letter-spacing: 0.18em;
-  color: var(--accent-text);
+  color: var(--fg-muted);
 }
 .card h3 { font-size: var(--step-2); margin-bottom: 0.5em; }
 .card p { font-size: var(--step-0); color: var(--fg-body); }
@@ -887,6 +961,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 @media (max-width: 900px) { .quote-track { grid-template-columns: 1fr; } }
 
 .quote-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--sp-md);
@@ -894,6 +969,27 @@ strong, b { font-weight: 600; color: var(--fg); }
   background: var(--paper);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+/* A gentle alternating tilt at rest, straightening on hover — the deck reads
+   as fanned cards rather than three identical boxes in a row. */
+.quote-track .quote-card:nth-child(odd) { transform: rotate(-0.6deg); }
+.quote-track .quote-card:nth-child(even) { transform: rotate(0.6deg); }
+.quote-card:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 0 26px 50px -28px rgba(23, 20, 15, 0.3);
+}
+.quote-card::before {
+  content: "\201C";
+  position: absolute;
+  top: 0.1em;
+  right: 0.5em;
+  font-family: var(--font-display);
+  font-size: 4.5rem;
+  line-height: 1;
+  color: var(--brass);
+  opacity: 0.16;
+  pointer-events: none;
 }
 .quote-card .stars {
   font-size: 0.9rem;

@@ -41,12 +41,31 @@
           }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+      { threshold: 0.01, rootMargin: "0px 0px -10% 0px" }
     );
     revealEls.forEach(function (el, i) {
       el.style.setProperty("--i", el.dataset.i || i % 6);
       io.observe(el);
     });
+    // Safety net: a fast scroll (or an observer callback the browser coalesces
+    // away) can leave a section stranded above the fold, permanently at
+    // opacity:0. Sweep on scroll-end/resize for anything already past the
+    // viewport that never got flagged, and reveal it without ceremony.
+    var sweepTimer = null;
+    function sweep() {
+      revealEls.forEach(function (el) {
+        if (el.classList.contains("is-visible")) return;
+        var r = el.getBoundingClientRect();
+        if (r.bottom < window.innerHeight && r.bottom > -50000) {
+          el.classList.add("is-visible");
+        }
+      });
+    }
+    window.addEventListener("scroll", function () {
+      clearTimeout(sweepTimer);
+      sweepTimer = setTimeout(sweep, 250);
+    }, { passive: true });
+    window.addEventListener("load", sweep);
   } else {
     revealEls.forEach(function (el) { el.classList.add("is-visible"); });
   }
