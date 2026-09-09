@@ -1547,3 +1547,24 @@ label {
 }
 .reg-note p:last-child { margin-bottom: 0; }
 .reg-note strong { color: var(--ink); font-weight: 600; }
+
+/* ── Anatomical diagram ─────────────────────────────────────────────────────
+   Not .split-media: that crops to 4/5 with object-fit:cover, which on a 2:1
+   labelled diagram slices the labels off. A diagram has to be shown whole. */
+.diagram {
+  margin: var(--sp-lg) 0;
+}
+.diagram img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  background: var(--paper-2);
+}
+.diagram figcaption {
+  margin-top: var(--sp-sm);
+  max-width: 62ch;
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--muted-on-paper);
+}
