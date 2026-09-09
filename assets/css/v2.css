@@ -1479,3 +1479,50 @@ label {
   0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
   30% { transform: translateY(-4px); opacity: 1; }
 }
+/* ── Office card ────────────────────────────────────────────────────────────
+   The practice's real NAP, on the office's own page. <address> is the correct
+   element here and browsers italicise it by default, which fights the type
+   system, so it is reset. */
+.office-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: var(--sp-md) 0;
+  padding: var(--sp-md) var(--sp-lg);
+  border-left: 2px solid var(--brass);
+  background: var(--paper-2);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-style: normal;
+}
+.office-card .office-street { font-size: var(--step-1); color: var(--ink); }
+.office-card .office-city { color: var(--body-on-paper); }
+.office-card .office-phone,
+.office-card .office-email {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--brass-ink);
+}
+.office-card .office-phone { margin-top: 0.4rem; }
+.office-note {
+  margin: 0 0 var(--sp-md);
+  font-size: var(--step--1);
+  color: var(--muted-on-paper);
+}
+/* Plain list of destination links — used where "Learn More" anchors would
+   otherwise repeat the same wording down the page. */
+.link-list {
+  margin: var(--sp-md) 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 0.55rem var(--sp-lg);
+}
+.link-list li { padding-left: 1rem; position: relative; }
+.link-list li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.72em;
+  width: 0.4rem; height: 1px;
+  background: var(--brass);
+}
