@@ -1526,3 +1526,59 @@ label {
   width: 0.4rem; height: 1px;
   background: var(--brass);
 }
+
+/* ── Touch targets ──────────────────────────────────────────────────────────
+   Measured at 390px: the assistant's close button was 25x24, its send button
+   and input 43px, the nav toggle 42x31, every .btn 40px, and every checkbox
+   and radio 17x17. Apple's HIG asks 44pt and Material 48dp; WCAG 2.2 AA
+   (2.5.8) sets the floor at 24x24 CSS px. */
+
+/* Buttons carry the 44px floor. Padding is untouched so desktop proportions
+   do not move — this only raises the ones that fell short. */
+.btn { min-height: 44px; }
+
+#ai-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  /* The glyph stays small; the hit area does not. */
+  margin: -0.5rem -0.5rem -0.5rem 0;
+}
+.ai-input-row input,
+.ai-input-row button { min-height: 44px; }
+
+.nav-toggle {
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* A 44px checkbox looks wrong, so the control takes WCAG's 24px minimum and
+   the row around it carries the rest of the target: the label is clickable,
+   so the effective tap area is the whole row. */
+.check-item,
+.check-grid label,
+.consent-box label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  min-height: 44px;
+  padding-block: 0.35rem;
+}
+.check-item input[type="checkbox"],
+.check-item input[type="radio"],
+.check-grid input[type="checkbox"],
+.check-grid input[type="radio"],
+.consent-box input[type="checkbox"],
+.consent-box input[type="radio"],
+.form-section input[type="checkbox"],
+.form-section input[type="radio"] {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin-top: 0.1rem;
+  accent-color: var(--brass-ink);
+}
