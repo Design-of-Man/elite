@@ -334,6 +334,14 @@ strong, b { font-weight: 600; color: var(--fg); }
   transition: transform 1.2s var(--ease);
 }
 .split-media:hover img { transform: scale(1.03); }
+/* Wide figures (diagrams) keep their native ratio instead of the 4:5 slab —
+   cropping an annotated illustration loses its labels. */
+.figure-wide {
+  margin: var(--sp-lg) 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.figure-wide img { display: block; width: 100%; height: auto; }
 
 @media (max-width: 900px) {
   .grid--2, .grid--3 { grid-template-columns: 1fr; }
@@ -1001,7 +1009,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   color: var(--paper);
 }
 
-.footer-grid h4 {
+.footer-grid p.foot-label {
   margin-bottom: var(--sp-md);
   font-family: var(--font-mono);
   font-size: var(--step--2);
