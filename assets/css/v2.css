@@ -593,9 +593,12 @@ strong, b { font-weight: 600; color: var(--fg); }
 .hero-layout .hero-portrait {
   grid-column: 2;
   grid-row: 2;
-  align-self: stretch;
-  aspect-ratio: auto;
-  height: 100%;
+  /* The portrait file is square (head to crossed arms). Matching the box to
+     the image's own ratio shows the whole headshot instead of a letterboxed
+     crop of the face; align-self start keeps the grid row from stretching it. */
+  align-self: start;
+  aspect-ratio: 1 / 1;
+  height: auto;
   min-height: clamp(18rem, 12rem + 12vw, 24rem);
 }
 .hero-layout .hero-stats { margin-top: clamp(1.75rem, 1.2rem + 1.6vw, 2.75rem); }
@@ -606,7 +609,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   .hero-layout .hero-portrait {
     grid-column: 1;
     grid-row: auto;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     height: auto;
     max-width: 26rem;
     margin-inline: auto;
@@ -663,7 +666,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 
 .hero-portrait {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: var(--radius);
   background: linear-gradient(160deg, var(--paper-3), var(--paper-2));
