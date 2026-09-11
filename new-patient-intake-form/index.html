@@ -107,8 +107,8 @@
           </div>
           <div class="grid grid--2" style="gap:var(--sp-sm);margin-top:var(--sp-sm)">
             <div class="field">
-              <label>Marital Status</label>
-              <select name="marital_status">
+              <label for="marital_status">Marital Status</label>
+              <select id="marital_status" name="marital_status">
                 <option>Single</option><option>Married</option><option>Divorced</option><option>Widow</option>
               </select>
             </div>
@@ -131,8 +131,8 @@
           </div>
           <div class="grid grid--2" style="gap:var(--sp-sm)">
             <div class="field">
-              <label>Primary Card Holder</label>
-              <select name="primary_card_holder"><option>Self</option><option>Spouse</option><option>Parent</option><option>Other</option></select>
+              <label for="primary_card_holder">Primary Card Holder</label>
+              <select id="primary_card_holder" name="primary_card_holder"><option>Self</option><option>Spouse</option><option>Parent</option><option>Other</option></select>
             </div>
             <div class="field"><label for="primary_card_holder_other">If Other, specify</label><input id="primary_card_holder_other" type="text" name="primary_card_holder_other"></div>
             <div class="field"><label for="primary_policy_holder">Primary Policy Holder Name</label><input id="primary_policy_holder" type="text" name="primary_policy_holder"></div>
@@ -149,8 +149,8 @@
           </div>
           <div class="grid grid--2" style="gap:var(--sp-sm)">
             <div class="field">
-              <label>Secondary Card Holder</label>
-              <select name="secondary_card_holder"><option>Self</option><option>Spouse</option><option>Parent</option><option>Other</option></select>
+              <label for="secondary_card_holder">Secondary Card Holder</label>
+              <select id="secondary_card_holder" name="secondary_card_holder"><option>Self</option><option>Spouse</option><option>Parent</option><option>Other</option></select>
             </div>
             <div class="field"><label for="secondary_card_holder_other">If Other, specify</label><input id="secondary_card_holder_other" type="text" name="secondary_card_holder_other"></div>
             <div class="field"><label for="secondary_policy_holder">Secondary Policy Holder Name / DOB</label><input id="secondary_policy_holder" type="text" name="secondary_policy_holder"></div>
@@ -183,14 +183,14 @@
             <table class="simple-table">
               <thead><tr><th>Condition</th><th>Mother</th><th>Father</th></tr></thead>
               <tbody>
-                <tr><td>Anesthesia Problems</td><td><input type="text" name="family_anesthesia_mother"></td><td><input type="text" name="family_anesthesia_father"></td></tr>
-                <tr><td>Arthritis</td><td><input type="text" name="family_arthritis_mother"></td><td><input type="text" name="family_arthritis_father"></td></tr>
-                <tr><td>Cancer</td><td><input type="text" name="family_cancer_mother"></td><td><input type="text" name="family_cancer_father"></td></tr>
-                <tr><td>Diabetes</td><td><input type="text" name="family_diabetes_mother"></td><td><input type="text" name="family_diabetes_father"></td></tr>
-                <tr><td>Heart Problems</td><td><input type="text" name="family_heart_mother"></td><td><input type="text" name="family_heart_father"></td></tr>
-                <tr><td>Hypertension</td><td><input type="text" name="family_hypertension_mother"></td><td><input type="text" name="family_hypertension_father"></td></tr>
-                <tr><td>Stroke</td><td><input type="text" name="family_stroke_mother"></td><td><input type="text" name="family_stroke_father"></td></tr>
-                <tr><td>Thyroid Disorder</td><td><input type="text" name="family_thyroid_mother"></td><td><input type="text" name="family_thyroid_father"></td></tr>
+                <tr><td>Anesthesia Problems</td><td><input type="text" name="family_anesthesia_mother" aria-label="Anesthesia Problems — Mother"></td><td><input type="text" name="family_anesthesia_father" aria-label="Anesthesia Problems — Father"></td></tr>
+                <tr><td>Arthritis</td><td><input type="text" name="family_arthritis_mother" aria-label="Arthritis — Mother"></td><td><input type="text" name="family_arthritis_father" aria-label="Arthritis — Father"></td></tr>
+                <tr><td>Cancer</td><td><input type="text" name="family_cancer_mother" aria-label="Cancer — Mother"></td><td><input type="text" name="family_cancer_father" aria-label="Cancer — Father"></td></tr>
+                <tr><td>Diabetes</td><td><input type="text" name="family_diabetes_mother" aria-label="Diabetes — Mother"></td><td><input type="text" name="family_diabetes_father" aria-label="Diabetes — Father"></td></tr>
+                <tr><td>Heart Problems</td><td><input type="text" name="family_heart_mother" aria-label="Heart Problems — Mother"></td><td><input type="text" name="family_heart_father" aria-label="Heart Problems — Father"></td></tr>
+                <tr><td>Hypertension</td><td><input type="text" name="family_hypertension_mother" aria-label="Hypertension — Mother"></td><td><input type="text" name="family_hypertension_father" aria-label="Hypertension — Father"></td></tr>
+                <tr><td>Stroke</td><td><input type="text" name="family_stroke_mother" aria-label="Stroke — Mother"></td><td><input type="text" name="family_stroke_father" aria-label="Stroke — Father"></td></tr>
+                <tr><td>Thyroid Disorder</td><td><input type="text" name="family_thyroid_mother" aria-label="Thyroid Disorder — Mother"></td><td><input type="text" name="family_thyroid_father" aria-label="Thyroid Disorder — Father"></td></tr>
               </tbody>
             </table>
           </div>
@@ -198,16 +198,16 @@
           <h3 style="margin-top:var(--sp-md)">Social History</h3>
           <div class="grid grid--2" style="gap:var(--sp-sm)">
             <div class="field">
-              <label>Do you drink alcohol?</label>
-              <select name="alcohol"><option>No</option><option>Daily</option><option>Weekly</option><option>Infrequently</option><option>Recovering Alcoholic</option></select>
+              <label for="alcohol">Do you drink alcohol?</label>
+              <select id="alcohol" name="alcohol"><option>No</option><option>Daily</option><option>Weekly</option><option>Infrequently</option><option>Recovering Alcoholic</option></select>
             </div>
             <div class="field">
-              <label>Do you smoke?</label>
-              <select name="smoke"><option>No</option><option>Smoke</option><option>Chew</option></select>
+              <label for="smoke">Do you smoke?</label>
+              <select id="smoke" name="smoke"><option>No</option><option>Smoke</option><option>Chew</option></select>
             </div>
             <div class="field">
-              <label>Do you drink caffeine?</label>
-              <select name="caffeine"><option>No</option><option>Daily</option><option>Weekly</option><option>Infrequently</option></select>
+              <label for="caffeine">Do you drink caffeine?</label>
+              <select id="caffeine" name="caffeine"><option>No</option><option>Daily</option><option>Weekly</option><option>Infrequently</option></select>
             </div>
           </div>
 
@@ -217,9 +217,9 @@
             <table class="simple-table">
               <thead><tr><th>Type of Surgery</th><th>Year / Date</th><th>Doctor</th><th>Location</th></tr></thead>
               <tbody>
-                <tr><td><input type="text" name="surgery_1_type"></td><td><input type="text" name="surgery_1_date"></td><td><input type="text" name="surgery_1_doctor"></td><td><input type="text" name="surgery_1_location"></td></tr>
-                <tr><td><input type="text" name="surgery_2_type"></td><td><input type="text" name="surgery_2_date"></td><td><input type="text" name="surgery_2_doctor"></td><td><input type="text" name="surgery_2_location"></td></tr>
-                <tr><td><input type="text" name="surgery_3_type"></td><td><input type="text" name="surgery_3_date"></td><td><input type="text" name="surgery_3_doctor"></td><td><input type="text" name="surgery_3_location"></td></tr>
+                <tr><td><input type="text" name="surgery_1_type" aria-label="Type of Surgery, row 1"></td><td><input type="text" name="surgery_1_date" aria-label="Year / Date, row 1"></td><td><input type="text" name="surgery_1_doctor" aria-label="Doctor, row 1"></td><td><input type="text" name="surgery_1_location" aria-label="Location, row 1"></td></tr>
+                <tr><td><input type="text" name="surgery_2_type" aria-label="Type of Surgery, row 2"></td><td><input type="text" name="surgery_2_date" aria-label="Year / Date, row 2"></td><td><input type="text" name="surgery_2_doctor" aria-label="Doctor, row 2"></td><td><input type="text" name="surgery_2_location" aria-label="Location, row 2"></td></tr>
+                <tr><td><input type="text" name="surgery_3_type" aria-label="Type of Surgery, row 3"></td><td><input type="text" name="surgery_3_date" aria-label="Year / Date, row 3"></td><td><input type="text" name="surgery_3_doctor" aria-label="Doctor, row 3"></td><td><input type="text" name="surgery_3_location" aria-label="Location, row 3"></td></tr>
               </tbody>
             </table>
           </div>
@@ -250,10 +250,10 @@
             <table class="simple-table">
               <thead><tr><th>Medication</th><th>Dosage</th></tr></thead>
               <tbody>
-                <tr><td><input type="text" name="medication_1_name"></td><td><input type="text" name="medication_1_dosage"></td></tr>
-                <tr><td><input type="text" name="medication_2_name"></td><td><input type="text" name="medication_2_dosage"></td></tr>
-                <tr><td><input type="text" name="medication_3_name"></td><td><input type="text" name="medication_3_dosage"></td></tr>
-                <tr><td><input type="text" name="medication_4_name"></td><td><input type="text" name="medication_4_dosage"></td></tr>
+                <tr><td><input type="text" name="medication_1_name" aria-label="Medication, row 1"></td><td><input type="text" name="medication_1_dosage" aria-label="Dosage, row 1"></td></tr>
+                <tr><td><input type="text" name="medication_2_name" aria-label="Medication, row 2"></td><td><input type="text" name="medication_2_dosage" aria-label="Dosage, row 2"></td></tr>
+                <tr><td><input type="text" name="medication_3_name" aria-label="Medication, row 3"></td><td><input type="text" name="medication_3_dosage" aria-label="Dosage, row 3"></td></tr>
+                <tr><td><input type="text" name="medication_4_name" aria-label="Medication, row 4"></td><td><input type="text" name="medication_4_dosage" aria-label="Dosage, row 4"></td></tr>
               </tbody>
             </table>
           </div>

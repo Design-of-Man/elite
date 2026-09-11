@@ -1,8 +1,10 @@
 // Vercel serverless function — patient form intake (medical records request,
-// injection consent, new patient intake). Sends via Resend if RESEND_API_KEY
-// is set in the Vercel project's environment variables; otherwise logs to the
-// function's runtime logs so nothing is silently lost while email delivery is
-// being wired up.
+// injection consent, new patient intake). Sends via Resend when RESEND_API_KEY
+// is set in the Vercel project's environment variables; when it is not, the
+// submission is visibly refused with a 503 and nothing from the body is
+// logged. (An earlier revision of this comment described logging submissions
+// to the runtime logs as a fallback — the code does not do that, and must
+// not: these payloads carry PHI.)
 //
 // NOTE ON PHI: these forms collect protected health information (allergies,
 // medical history, insurance IDs). Email is not a HIPAA-compliant transport

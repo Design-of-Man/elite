@@ -57,24 +57,27 @@
     return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
   }
 
+  // The authored value lives in the HTML, so it is what a crawler, a social
+  // preview, a no-JS visitor or a failed main.js all read. This only animates
+  // from zero up to that value and then restores it verbatim — the number is
+  // never sourced from here.
   function animateCount(el) {
+    var finalText = el.textContent;
     var target = parseFloat(el.dataset.count);
-    if (isNaN(target)) return;
+    if (isNaN(target) || reduceMotion) return;
     var suffix = el.dataset.suffix || "";
     var decimals = el.dataset.count.indexOf(".") > -1 ? el.dataset.count.split(".")[1].length : 0;
-    if (reduceMotion) {
-      el.textContent = target.toFixed(decimals) + suffix;
-      return;
-    }
     var duration = 1400;
     var start = null;
     function tick(ts) {
       if (start === null) start = ts;
       var progress = Math.min((ts - start) / duration, 1);
-      var eased = easeOutExpo(progress);
-      var value = target * eased;
-      el.textContent = value.toFixed(decimals) + suffix;
-      if (progress < 1) requestAnimationFrame(tick);
+      if (progress < 1) {
+        el.textContent = (target * easeOutExpo(progress)).toFixed(decimals) + suffix;
+        requestAnimationFrame(tick);
+      } else {
+        el.textContent = finalText;
+      }
     }
     requestAnimationFrame(tick);
   }
@@ -93,11 +96,9 @@
       { threshold: 0.6 }
     );
     counters.forEach(function (el) { countIo.observe(el); });
-  } else {
-    counters.forEach(function (el) {
-      el.textContent = el.dataset.count + (el.dataset.suffix || "");
-    });
   }
+  // No else-branch: without IntersectionObserver the markup already shows the
+  // correct value, so there is nothing to fill in.
 
   // ---------------- Hero parallax (decorative only, GPU-only transform) ----------------
   if (!reduceMotion) {
