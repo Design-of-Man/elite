@@ -646,6 +646,12 @@ strong, b { font-weight: 600; color: var(--fg); }
   border-top: 1px solid var(--rule);
 }
 .hero-stats div { display: flex; flex-direction: column; gap: 0.35rem; }
+/* Desktop: three equal columns so the band never wraps to a 2+1 row at laptop
+   widths — the mono labels wrap to two lines instead. Mobile keeps the
+   content-sized wrap (stats stack there by design). */
+@media (min-width: 901px) {
+  .hero-stats > div { flex: 1 1 0; min-width: 0; }
+}
 .hero-stats div strong {
   font-family: var(--font-display);
   font-weight: 400;
