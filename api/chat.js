@@ -65,10 +65,42 @@ async function callGrok(messages) {
   return data?.choices?.[0]?.message?.content?.trim() || null;
 }
 
+// Lightweight per-IP rate limit. Vercel may run several instances, so this is
+// a best-effort brake on casual abuse of a public, unauthenticated LLM proxy —
+// not a hard guarantee. Pair it with a spend cap on the upstream API key.
+const RATE_LIMIT_MAX = 12;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const hits = new Map();
+
+function rateLimited(req) {
+  const fwd = req.headers["x-forwarded-for"];
+  const ip = (Array.isArray(fwd) ? fwd[0] : String(fwd || "")).split(",")[0].trim() || "unknown";
+  const now = Date.now();
+
+  for (const [key, stamps] of hits) {
+    const live = stamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+    if (live.length) hits.set(key, live);
+    else hits.delete(key);
+  }
+
+  const recent = hits.get(ip) || [];
+  if (recent.length >= RATE_LIMIT_MAX) return true;
+  recent.push(now);
+  hits.set(ip, recent);
+  return false;
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  if (rateLimited(req)) {
+    res.setHeader("Retry-After", "60");
+    return res.status(429).json({
+      reply: "You've sent a lot of messages in a short time. Please wait a moment, or call 561-202-8886 for immediate help.",
+    });
   }
 
   if (!process.env.ANTHROPIC_API_KEY && !process.env.XAI_API_KEY) {
