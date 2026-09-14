@@ -34,28 +34,40 @@
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* -- Colour ------------------------------------------------------------
-     Never pure black, never pure white. Warm ink over warm paper, one brass
-     accent. Every pairing below is measured, ratio noted.                  */
-  --ink: #17140f;          /* 16.45:1 on paper */
-  --ink-2: #241f18;        /* raised surface on dark */
-  --ink-3: #322b21;        /* hairlines on dark */
+     The brand palette, taken from the practice's live site (Elementor kit):
+     navy #143D63, sky #72CEF3, pale #E5EBFA. Everything below is derived from
+     those three and every pairing is measured, ratio noted against the ground
+     it actually sits on.
 
-  --paper: #f6f2ea;
-  --paper-2: #efe9dd;
-  --paper-3: #e6dece;
+     The --brass* names are historical: they are the accent slots, and 216
+     call sites across the CSS and HTML read them. Renaming buys nothing and
+     risks a lot, so the brand tokens below are the source of truth and the
+     accent slots alias them.                                                */
+  --brand-navy: #143D63;   /* practice navy — dark surfaces and primary text */
+  --brand-sky:  #72CEF3;   /* practice sky  — fills, never small text on paper */
+  --brand-pale: #E5EBFA;   /* practice pale — borders and tints             */
 
-  --brass: #a9793c;        /* 3.43:1 on paper — rules, fills, LARGE type only */
-  --brass-ink: #845c2b;    /* 5.30:1 on paper — small text on paper */
-  --brass-lit: #d9a65f;    /* 8.37:1 on ink   — text over dark imagery */
+  --ink: var(--brand-navy);  /* 10.70:1 on paper */
+  --ink-2: #1B5184;          /* raised surface on navy */
+  --ink-3: #2165A4;          /* hairlines on navy */
+  --ink-deep: #0D2840;       /* the deepest ground, under the footer         */
 
-  --body-on-paper: #544c3f;  /* 7.58:1 */
-  --muted-on-paper: #5f5648; /* 6.46:1 */
-  --body-on-ink: #bdb1a0;    /* 8.71:1 */
-  --muted-on-ink: #a89c88;   /* 6.80:1 */
+  --paper: #f8fafd;
+  --paper-2: #eff4fb;
+  --paper-3: var(--brand-pale);
 
-  --rule: rgba(23, 20, 15, 0.14);        /* hairline on paper */
-  --rule-strong: rgba(23, 20, 15, 0.26);
-  --rule-on-ink: rgba(246, 242, 234, 0.16);
+  --brass: var(--brand-sky); /* FILL slot: 6.31:1 carrying a navy label      */
+  --brass-ink: #0e7aa6;      /* 4.61:1 on paper — small accent text          */
+  --brass-lit: var(--brand-sky); /* 6.31:1 on navy — accent text over dark   */
+
+  --body-on-paper: #1e5b94;  /* 6.74:1 */
+  --muted-on-paper: #2674bd; /* 4.65:1 */
+  --body-on-ink: #becdf2;    /* 7.03:1 */
+  --muted-on-ink: #8ba5e9;   /* 4.61:1 */
+
+  --rule: rgba(20, 61, 99, 0.16);         /* hairline on paper */
+  --rule-strong: rgba(20, 61, 99, 0.30);
+  --rule-on-ink: rgba(229, 235, 250, 0.18);
 
   /* Context-aware pair. Sections flip these two and every component that
      reads them re-colours itself — no per-section overrides needed. */
@@ -63,7 +75,7 @@
   --fg-body: var(--body-on-paper);
   --fg-muted: var(--muted-on-paper);
   --bg: var(--paper);
-  --accent: var(--brass);
+  --accent: var(--brass-ink);   /* 4.61:1 on paper — reads as text and as icons */
   --accent-text: var(--brass-ink);
   --hairline: var(--rule);
 
@@ -412,7 +424,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   transition: opacity var(--dur) var(--ease);
 }
 .site-header.is-scrolled {
-  background: rgba(246, 242, 234, 0.86);
+  background: rgba(248, 250, 253, 0.86);
   backdrop-filter: blur(14px) saturate(1.4);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
   padding-block: 0.7rem;
@@ -498,7 +510,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   padding: var(--sp-xl) var(--gutter) var(--sp-md);
   background: var(--paper);
   border-top: 1px solid var(--hairline);
-  box-shadow: 0 24px 48px -28px rgba(23, 20, 15, 0.4);
+  box-shadow: 0 24px 48px -28px rgba(20, 61, 99, 0.4);
 }
 .nav-mega[hidden] { display: none; }
 .nav-mega-inner {
@@ -678,6 +690,21 @@ strong, b { font-weight: 600; color: var(--fg); }
   color: var(--paper);
 }
 .mobile-nav a:last-of-type { border-bottom: 0; }
+
+/* The Services row opens the submenu, so it is a control — but it sat at 29px
+   because it inherits `font: inherit` rather than the drawer's own link
+   treatment. Match the links beside it and hold the 44px touch minimum. */
+.mobile-nav .m-group-toggle {
+  padding-block: 0.7rem;
+  min-height: 44px;
+  border-bottom: 1px solid var(--rule-on-ink);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 1.2rem + 2.8vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--paper);
+}
+.mobile-nav .m-group-toggle .nav-chev { flex: none; width: 0.5em; height: 0.5em; }
 .mobile-nav .nav-phone {
   margin-top: var(--sp-lg);
   font-family: var(--font-mono);
@@ -698,7 +725,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   padding-top: clamp(6rem, 4.5rem + 3.6vw, 7.75rem);
   padding-bottom: var(--sp-xl);
   background: var(--paper);
-  color: var(--body-on-paper);
+  color: var(--fg-body);
   overflow: clip;
 }
 /* Warm brass wash, top-right. Decorative only — nothing reads on top of it. */
@@ -709,7 +736,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   width: min(62vw, 780px);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(169, 121, 60, 0.16), rgba(169, 121, 60, 0) 68%);
+  background: radial-gradient(circle, rgba(114, 206, 243, 0.16), rgba(114, 206, 243, 0) 68%);
   pointer-events: none;
   animation: heroDrift 18s var(--ease-inout) infinite alternate;
   will-change: transform;
@@ -744,12 +771,369 @@ strong, b { font-weight: 600; color: var(--fg); }
 /* Homepage hero. The headline takes the full measure of the container and the
    portrait becomes a vertical slab beside the supporting copy — the type is
    the image, so nothing is allowed to crop it into a narrow column. */
+
+/* Header over a media hero. It is a sibling of <main>, so it cannot inherit the
+   hero's dark context — body[data-hero="media"] carries that signal instead.
+   Only while un-scrolled: .is-scrolled restores the paper bar and ink text. */
+body[data-hero="media"] .site-header:not(.is-scrolled) {
+  color: var(--paper);
+  /* The header needs contrast against a 230-luma sky. Giving it its own
+     backdrop confines that to the header strip, so the scrim above the
+     footage can be lighter than it otherwise would have to be. */
+  background: linear-gradient(to bottom,
+    rgba(13, 40, 64, 0.88) 0%,
+    rgba(13, 40, 64, 0.62) 55%,
+    rgba(13, 40, 64, 0) 100%);
+}
+body[data-hero="media"] .site-header:not(.is-scrolled) .brand,
+body[data-hero="media"] .site-header:not(.is-scrolled) .brand strong,
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a,
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-mega-toggle,
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-phone {
+  color: var(--paper);
+}
+body[data-hero="media"] .site-header:not(.is-scrolled) .brand span {
+  color: var(--paper);
+  opacity: 0.86;
+}
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-toggle span {
+  background: var(--paper);
+}
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
+  background: var(--brass-lit);
+}
+
+/* --- Scroll-linked section motion ----------------------------------------- */
+/* Media wipes open from the bottom. Only applied once JS has added .wipe, so
+   a no-JS page shows the image outright rather than a clipped sliver. */
+.wipe {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.1s var(--ease);
+}
+.wipe.is-wiped { clip-path: inset(0 0 0 0); }
+.wipe img { transform: scale(1.06); transition: transform 1.4s var(--ease); }
+.wipe.is-wiped img { transform: scale(1); }
+
+/* Section headings settle rather than arrive. */
+.section-head { will-change: transform; }
+
+/* Cards gain depth on approach, not just on hover. */
+.card {
+  transition: transform var(--dur) var(--ease),
+              border-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+}
+.card:hover, .card:focus-within {
+  transform: translate3d(0, -5px, 0);
+  border-color: var(--accent);
+  box-shadow: 0 20px 44px -28px rgba(20, 61, 99, 0.5);
+}
+
+/* The section label sticks while its section passes, so the reader always
+   knows which chapter they are in. Contained, not pinned scroll-jacking. */
+.section-head.center { position: static; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wipe, .wipe.is-wiped { clip-path: none; transition: none; }
+  .wipe img, .wipe.is-wiped img { transform: none; transition: none; }
+  .section-head { transform: none !important; }
+  .card:hover, .card:focus-within { transform: none; }
+}
+
+/* --- Odometer numbers ----------------------------------------------------
+   Each digit is a 0-9 column clipped to one line; the column slides so the
+   right digit lands. Digits stagger, so the number assembles left to right. */
+.odo { display: inline-flex; align-items: baseline; }
+.odo-d {
+  display: inline-block;
+  overflow: hidden;
+  height: 1em;
+  line-height: 1;
+  vertical-align: baseline;
+}
+.odo-strip { display: block; will-change: transform; }
+.odo-strip > span {
+  display: block;
+  height: 1em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Offices and catchment ------------------------------------------------
+   Replaced a 3x2 grid of cards that were roughly 70% empty: a city name, a
+   link, and a lot of nothing. The two real offices carry the weight now and
+   the catchment is one compact row. */
+.offices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: clamp(1rem, 0.6rem + 1.4vw, 1.75rem);
+}
+.office {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: clamp(1.4rem, 1rem + 1.4vw, 2.1rem);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--fg-body);
+  transition: transform var(--dur) var(--ease),
+              border-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+}
+.office:hover, .office:focus-visible {
+  transform: translate3d(0, -4px, 0);
+  border-color: var(--accent);
+  box-shadow: 0 18px 40px -26px rgba(20, 61, 99, 0.55);
+}
+.office-tag {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.office-city {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.1;
+  color: var(--fg);
+}
+.office-addr { font-size: var(--step--1); line-height: 1.5; }
+.office-go {
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.office-go::after { content: "\2192"; display: inline-block; margin-left: 0.5em; transition: transform var(--dur) var(--ease); }
+.office:hover .office-go::after { transform: translate3d(4px, 0, 0); }
+
+.area-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem 0.9rem;
+  margin-top: clamp(1.5rem, 1rem + 1.6vw, 2.5rem);
+  padding-top: var(--sp-md);
+  border-top: 1px solid var(--hairline);
+}
+.area-row-label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.area-row ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.area-row a {
+  display: inline-block;
+  padding: 0.38em 0.85em;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  font-size: var(--step--1);
+  color: var(--fg-body);
+  transition: border-color var(--dur-fast) var(--ease-quart),
+              color var(--dur-fast) var(--ease-quart),
+              transform var(--dur-fast) var(--ease-quart);
+}
+.area-row a:hover, .area-row a:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent-text);
+  transform: translate3d(0, -2px, 0);
+}
+.area-row-all { border-color: var(--accent); color: var(--accent-text); }
+
+/* --- Motion: progress and header recession ------------------------------- */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 300;
+  height: 2px;
+  background: var(--brand-sky);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+
+.site-header { will-change: transform; }
+.site-header.is-receded {
+  transform: translate3d(0, -100%, 0);
+  transition: transform var(--dur) var(--ease-inout),
+              background var(--dur) var(--ease);
+}
+
+/* --- Hero with background footage -----------------------------------------
+   Full-bleed video behind the hero. The poster carries the first paint, so the
+   video is never in the critical path; main.js decides which rendition (or
+   none) to load. .hero--dark already flips every child to the on-ink palette,
+   so nothing here restates component colours. */
+.hero--media {
+  background: var(--ink-deep);
+  align-items: flex-end;
+  /* One screen wherever the copy fits — that is what keeps the sunset sky
+     above it completely untouched. It is a floor, not a cage: locking height
+     and max-height here clipped the eyebrow and the top of the headline clean
+     off a 568px phone, because the copy is bottom-anchored and overflowed
+     upward into `overflow: clip`. Let short screens grow instead. */
+  min-height: 100svh;
+  padding-top: clamp(5.5rem, 4.5rem + 3vw, 7rem);
+}
+/* The copy is anchored low, so the hero no longer needs to clear a portrait
+   column and can sit at exactly one screen. */
+.hero--media .hero-layout { padding-bottom: clamp(3.25rem, 2rem + 4vw, 5.5rem); }
+/* The hairline grid and brass wash read as noise over footage. */
+.hero--media::before { display: none; }
+.hero--media .hero-glow { display: none; }
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-video {
+  width: 100%;
+  /* Headroom for the parallax drift, so the frame never exposes an edge as it
+     moves. Decorative footage only — nothing readable rides on this. */
+  height: 118%;
+  top: -9%;
+  position: absolute;
+  left: 0;
+  object-fit: cover;
+  will-change: transform;
+  /* The poster is the same frame, so an unloaded video is not an empty box. */
+  background: var(--ink) center / cover no-repeat;
+}
+
+/* Two gradients, not one: the horizontal pass protects the copy column, the
+   vertical pass holds the header and the scroll cue. The footage is brightest
+   in the top-left sky, which is exactly where the headline sits. */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  /* A bottom band and nothing else — transparent above 34%, so the top third
+     and a half of the frame carries no overlay at all.
+
+     The values are tuned, not chosen: stepping the whole band down in
+     increments and re-measuring contrast under the actual glyphs, 0.70 of the
+     original is the lightest that still clears AA (headline 3.61, lede 4.98).
+     This sits at 0.74 for a little margin. Sampling every other frame of the
+     clip confirms the poster is as bright as the footage ever gets in the copy
+     region, so the margin holds while it plays. */
+  background-image:
+    linear-gradient(to bottom,
+      rgba(13, 40, 64, 0) 0%,
+      rgba(13, 40, 64, 0) 34%,
+      rgba(13, 40, 64, 0.25) 39%,
+      rgba(13, 40, 64, 0.46) 45%,
+      rgba(13, 40, 64, 0.52) 52%,
+      rgba(13, 40, 64, 0.55) 66%,
+      rgba(13, 40, 64, 0.64) 82%,
+      rgba(13, 40, 64, 0.68) 100%);
+}
+
+/* The location line is small mono text sitting at the very top of the copy,
+   where the band is deliberately still light. Rather than drag the gradient
+   further up the frame for one label, it carries its own chip — the same
+   language as the footage credit. */
+.hero--media .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  align-self: start;
+  width: auto;
+  padding: 0.55em 0.9em;
+  /* The chip wraps to two lines on a phone; the display line-height it
+     inherits sets them almost touching. */
+  line-height: 1.5;
+  border-radius: 1.1em;
+  background: rgba(13, 40, 64, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--paper);
+}
+.hero--media .eyebrow::before { display: none; }
+
+/* Local contrast, so the wash can stay light. A tight shadow plus a wide soft
+   one reads as depth rather than as a glow. */
+.hero--media .hero-intro h1,
+.hero--media .hero-lede,
+.hero--media .hero-stats strong,
+.hero--media .hero-stats span,
+.hero--media .eyebrow {
+  text-shadow: 0 1px 2px rgba(13, 40, 64, 0.55), 0 2px 22px rgba(13, 40, 64, 0.45);
+}
+
+/* Everything that is not the media layer sits above it. */
+.hero--media > .container,
+.hero--media > .scroll-cue { position: relative; z-index: 1; }
+
+.hero-credit {
+  position: absolute;
+  z-index: 2;
+  /* Clears the 58px assistant launcher, which is fixed in this same corner.
+     Anchored to the first viewport, not the foot of the hero: on a short phone
+     the hero grows past one screen and a bottom-anchored credit is stranded
+     below the fold, which is the same trap .scroll-cue documents above. */
+  right: calc(1.5rem + 58px + 0.75rem);
+  top: calc(100svh - 2.9rem);
+  bottom: auto;
+  margin: 0;
+  padding: 0.4em 0.75em;
+  border-radius: 999px;
+  background: rgba(13, 40, 64, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(6px);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+/* Short viewports are the exception: there the copy genuinely does not fit one
+   screen, so the first-screen line falls in the middle of it and the credit
+   lands on a button. Anchor to the foot of the hero instead — it costs a short
+   scroll, which is better than sitting on top of a call to action. Keyed to
+   height, not width: it is the screen being short that causes this. */
+@media (max-height: 700px) {
+  .hero-credit { top: auto; bottom: 0.9rem; }
+}
+
+@media (max-width: 900px) {
+  /* A portrait crop gives the copy proportionally more of the frame, so the
+     ramp has to start earlier than it does on desktop. It still starts at
+     zero: laying 0.58 over the top of the frame — as this rule used to —
+     covered the sunset on exactly the devices most people arrive on, which is
+     the opposite of the point. Measured under the real glyphs below. */
+  .hero-scrim {
+    background-image: linear-gradient(to bottom,
+      rgba(13, 40, 64, 0) 0%,
+      rgba(13, 40, 64, 0) 24%,
+      rgba(13, 40, 64, 0.30) 32%,
+      rgba(13, 40, 64, 0.52) 42%,
+      rgba(13, 40, 64, 0.60) 55%,
+      rgba(13, 40, 64, 0.66) 75%,
+      rgba(13, 40, 64, 0.70) 100%);
+  }
+}
+
 .hero-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
-  column-gap: clamp(2rem, 0.5rem + 4.5vw, 4.5rem);
-  row-gap: clamp(1.75rem, 1rem + 2vw, 3rem);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(1.25rem, 0.8rem + 1.6vw, 2.25rem);
+  align-items: end;
+  width: 100%;
 }
 .hero-intro { grid-column: 1 / -1; }
 /* This headline is long (60 characters). At the full --step-5 ceiling it runs
@@ -761,8 +1145,24 @@ strong, b { font-weight: 600; color: var(--fg); }
   margin-bottom: 0;
   font-size: clamp(2.6rem, 1.9rem + 4.3vw, 5.5rem);
 }
+.hero--media .hero-intro h1 {
+  max-width: 17ch;
+  font-size: clamp(1.9rem, 1.2rem + 2.4vw, 3.3rem);
+  line-height: 1.04;
+}
+.hero--media .hero-lede {
+  max-width: 40ch;
+  font-size: var(--step-0);
+  line-height: 1.45;
+}
+.hero--media .hero-layout { row-gap: clamp(0.75rem, 0.5rem + 0.9vw, 1.2rem); }
+.hero--media .hero-actions { margin-top: clamp(0.5rem, 0.3rem + 0.6vw, 1rem); }
+.hero--media .hero-stats {
+  margin-top: clamp(1.25rem, 0.8rem + 1.4vw, 2rem);
+  padding-top: var(--sp-md);
+}
 .hero-support { grid-column: 1; min-width: 0; }
-.hero-support .hero-lede { max-width: 52ch; }
+.hero-support .hero-lede { max-width: 46ch; }
 .hero-layout .hero-portrait {
   grid-column: 2;
   grid-row: 2;
@@ -793,14 +1193,14 @@ strong, b { font-weight: 600; color: var(--fg); }
 .hero h1 {
   margin-bottom: var(--sp-md);
   max-width: var(--measure-display);
-  color: var(--ink);
+  color: var(--fg);
 }
 .hero-lede {
   max-width: var(--measure-lede);
   font-size: var(--step-1);
   font-weight: 300;
   line-height: 1.5;
-  color: var(--body-on-paper);
+  color: var(--fg-body);
 }
 .hero-actions {
   display: flex;
@@ -856,7 +1256,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   position: absolute;
   left: 0; bottom: 0;
   padding: var(--sp-sm) var(--sp-md);
-  background: rgba(23, 20, 15, 0.82);
+  background: rgba(20, 61, 99, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   font-family: var(--font-mono);
@@ -879,6 +1279,11 @@ strong, b { font-weight: 600; color: var(--fg); }
 
 @media (max-width: 900px) {
   .hero { min-height: auto; }
+  /* ...except the media hero, which is a full-screen frame by design: the
+     footage needs the height, and the credit is anchored to that first screen.
+     Collapsing it to content height put the credit outside the hero's own
+     `overflow: clip` and deleted it from the page on every phone. */
+  .hero--media { min-height: 100svh; }
   .hero-grid { grid-template-columns: 1fr; }
   .hero-portrait { max-width: 26rem; margin-inline: auto; }
 }
@@ -899,7 +1304,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   font-size: 0.62rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--muted-on-paper);
+  color: var(--fg-muted);
 }
 .scroll-cue::after {
   content: "";
@@ -1080,7 +1485,7 @@ strong, b { font-weight: 600; color: var(--fg); }
 .quote-card .stars {
   font-size: 0.9rem;
   letter-spacing: 0.22em;
-  color: var(--brass);
+  color: var(--brass-ink);
 }
 .quote-card p {
   margin: 0;
@@ -1297,9 +1702,25 @@ input::placeholder, textarea::placeholder {
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--brass-ink);
-  box-shadow: 0 0 0 3px rgba(169, 121, 60, 0.22);
+  box-shadow: 0 0 0 3px rgba(114, 206, 243, 0.22);
 }
 textarea { resize: vertical; min-height: 8rem; }
+
+/* A checkbox or radio is a glyph, not a field. The blanket width above is
+   written for text inputs; left to apply here it stretches the control across
+   the full row and shoves its own label past the edge of the screen. Scoped
+   overrides existed for the form-page contexts but not for .form-consent, so
+   the appointment page blew its layout out by 160px on every phone. Fix it
+   once, at the type, rather than per context. */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  flex: none;
+  padding: 0;
+  accent-color: var(--brass-ink);
+}
 
 /* Field stack. Labels are visible mono, not placeholders — a placeholder
    disappears the moment someone starts typing. */
@@ -1461,8 +1882,12 @@ label {
   overflow: hidden;
   vertical-align: top;
   padding-bottom: 0.1em;
+  /* A single word can be wider than a phone's content column — DOLORCLAST at
+     the h1 size is. Without this the mask clips the last few pixels off it
+     instead of letting it break. */
+  max-width: 100%;
 }
-.word { display: inline-block; }
+.word { display: inline-block; max-width: 100%; overflow-wrap: break-word; }
 .js .word {
   display: inline-block;
   transform: translate3d(0, 115%, 0) rotate(3deg);
@@ -1530,6 +1955,10 @@ label {
     scroll-behavior: auto !important;
   }
   .reveal, .js .reveal { opacity: 1; transform: none; }
+  /* Background footage holds still: no drift and no headroom, so the frame
+     sits exactly where the poster did. The header stays put too. */
+  .hero-video { height: 100%; top: 0; transform: none; }
+  .site-header.is-receded { transform: none; }
   .word { transform: none; }
   .hero-glow { animation: none; }
 }
@@ -1550,7 +1979,7 @@ label {
   background: var(--brass);
   color: var(--ink);
   cursor: pointer;
-  box-shadow: 0 14px 34px rgba(23, 20, 15, 0.28);
+  box-shadow: 0 14px 34px rgba(20, 61, 99, 0.28);
   transition: transform var(--dur) var(--ease-quart), background var(--dur-fast);
 }
 #ai-assistant-launcher:hover { transform: scale(1.06); background: var(--brass-ink); color: var(--paper); }
@@ -1566,7 +1995,7 @@ label {
   background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
-  box-shadow: 0 30px 70px -22px rgba(23, 20, 15, 0.42);
+  box-shadow: 0 30px 70px -22px rgba(20, 61, 99, 0.42);
   opacity: 0;
   transform: translate3d(0, 14px, 0) scale(0.98);
   pointer-events: none;
@@ -1794,7 +2223,18 @@ label {
   line-height: 1.55;
   cursor: pointer;
 }
-.form-consent input { margin-top: 0.3em; flex-shrink: 0; }
+.form-consent input { margin-top: 0.15em; flex-shrink: 0; }
+/* This is a sentence someone has to read and agree to, not a field label. The
+   mono/uppercase/tracked treatment above is for two-word labels; applied to 40
+   words of consent copy it ran to eleven shouted lines on a phone. */
+.form-consent,
+.form-consent span {
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--body-on-paper);
+}
 
 .footer-disclaimer p {
   font-size: var(--step--2);

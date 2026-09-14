@@ -29,6 +29,33 @@
     });
   }
 
+  // ---------------- Hero background footage ----------------
+  // The poster is already painted by the time this runs. Load a video only if
+  // motion is welcome and the connection can afford it, and pick the rendition
+  // from the actual pixel width being filled rather than CSS pixels — a 4K file
+  // on a phone is 25MB of someone's data for no visible gain.
+  var heroVideo = document.querySelector(".hero-video");
+  if (heroVideo) {
+    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    var thrifty = !!(conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")));
+
+    if (!reduceMotion && !thrifty) {
+      var pixelWidth = window.innerWidth * (window.devicePixelRatio || 1);
+      var src = pixelWidth >= 2000
+        ? heroVideo.dataset.srcHi
+        : heroVideo.dataset.srcLo;
+
+      if (src) {
+        heroVideo.preload = "auto";
+        heroVideo.src = src;
+        // play() rejects on browsers that block autoplay even when muted; the
+        // poster is a complete fallback, so swallow it rather than logging.
+        var attempt = heroVideo.play();
+        if (attempt && typeof attempt.catch === "function") attempt.catch(function () {});
+      }
+    }
+  }
+
   // ---------------- Services mega-menu ----------------
   // The trigger is a button, so keyboard and pointer share one code path:
   // hover merely calls the same open/close the click does.
@@ -114,35 +141,79 @@
   }
 
   // ---------------- Animated counters ----------------
-  // Custom expo-out easing — matches the CSS --ease token, never linear.
-  function easeOutExpo(t) {
-    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-  }
+
 
   // The authored value lives in the HTML, so it is what a crawler, a social
   // preview, a no-JS visitor or a failed main.js all read. This only animates
   // from zero up to that value and then restores it verbatim — the number is
   // never sourced from here.
-  function animateCount(el) {
+  // Roll the digits up into place rather than ticking a number. The authored
+  // value stays in the HTML and is what a crawler, a social preview, a no-JS
+  // visitor or a failed main.js reads — this only rearranges it into sliding
+  // columns and puts it back verbatim if anything is unexpected.
+  function rollUp(el) {
+    if (el.dataset.rolled) return;
     var finalText = el.textContent;
-    var target = parseFloat(el.dataset.count);
-    if (isNaN(target) || reduceMotion) return;
-    var suffix = el.dataset.suffix || "";
-    var decimals = el.dataset.count.indexOf(".") > -1 ? el.dataset.count.split(".")[1].length : 0;
-    var duration = 1400;
-    var start = null;
-    function tick(ts) {
-      if (start === null) start = ts;
-      var progress = Math.min((ts - start) / duration, 1);
-      if (progress < 1) {
-        el.textContent = (target * easeOutExpo(progress)).toFixed(decimals) + suffix;
-        requestAnimationFrame(tick);
-      } else {
-        el.textContent = finalText;
+    var parts = /^(\D*?)([\d][\d,.]*)(.*)$/.exec(finalText);
+    if (!parts) return;                       // nothing numeric — leave it alone
+    el.dataset.rolled = "1";
+
+    if (reduceMotion) return;                 // authored text, no movement
+
+    var before = parts[1], digits = parts[2], after = parts[3];
+    var frag = document.createElement("span");
+    frag.className = "odo";
+    if (before) frag.appendChild(document.createTextNode(before));
+
+    var strips = [];
+    for (var i = 0; i < digits.length; i++) {
+      var ch = digits.charAt(i);
+      if (ch < "0" || ch > "9") {             // separators ride along statically
+        frag.appendChild(document.createTextNode(ch));
+        continue;
       }
+      var slot = document.createElement("span");
+      slot.className = "odo-d";
+      var strip = document.createElement("span");
+      strip.className = "odo-strip";
+      for (var d = 0; d <= 9; d++) {
+        var cell = document.createElement("span");
+        cell.textContent = String(d);
+        strip.appendChild(cell);
+      }
+      // Start a full turn below so the digit arrives travelling upward.
+      strip.style.transform = "translate3d(0, -" + ((+ch) * 10) + "%, 0)";
+      slot.appendChild(strip);
+      frag.appendChild(slot);
+      strips.push({ strip: strip, value: +ch, index: strips.length });
     }
-    requestAnimationFrame(tick);
+    if (after) frag.appendChild(document.createTextNode(after));
+
+    // Only swap in the animated version once it is built successfully.
+    el.textContent = "";
+    el.appendChild(frag);
+    // The columns contain every digit 0-9, so without this a screen reader
+    // would read "23+" as a run of ten digits twice. role=img + label makes the
+    // element announce the authored value and nothing else.
+    frag.setAttribute("aria-hidden", "true");
+    el.setAttribute("role", "img");
+    el.setAttribute("aria-label", finalText);
+
+    strips.forEach(function (s) {
+      s.strip.style.transition = "none";
+      s.strip.style.transform = "translate3d(0, 0, 0)";
+    });
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        strips.forEach(function (s) {
+          s.strip.style.transition = "transform 1.15s var(--ease)";
+          s.strip.style.transitionDelay = (s.index * 90) + "ms";
+          s.strip.style.transform = "translate3d(0, -" + (s.value * 10) + "%, 0)";
+        });
+      });
+    });
   }
+
 
   var counters = document.querySelectorAll("[data-count]");
   if ("IntersectionObserver" in window && counters.length) {
@@ -150,7 +221,7 @@
       function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            animateCount(entry.target);
+            rollUp(entry.target);
             countIo.unobserve(entry.target);
           }
         });
@@ -161,6 +232,43 @@
   }
   // No else-branch: without IntersectionObserver the markup already shows the
   // correct value, so there is nothing to fill in.
+
+  // ---------------- Scroll progress ----------------
+  // Injected rather than added to 63 pages of markup. Decorative, so it is
+  // aria-hidden and never announced.
+  var progress = document.createElement("div");
+  progress.className = "scroll-progress";
+  progress.setAttribute("aria-hidden", "true");
+  document.body.appendChild(progress);
+
+  // ---------------- Header: recede on the way down, return on the way up ----------------
+  // Gives back the full screen while reading and puts the booking CTA one
+  // gesture away at any depth. Never hides while the mega-menu is open, and
+  // never within the first screen where the hero CTA is still in view.
+  var lastY = window.scrollY;
+  var progressTicking = false;
+
+  function onScrollFrame() {
+    var y = window.scrollY;
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    progress.style.transform = "scaleX(" + (max > 0 ? Math.min(y / max, 1) : 0).toFixed(4) + ")";
+
+    if (header) {
+      var megaOpen = megaPanel && !megaPanel.hidden;
+      var down = y > lastY + 4;
+      var up = y < lastY - 4;
+      if (megaOpen || y < window.innerHeight * 0.9) header.classList.remove("is-receded");
+      else if (down) header.classList.add("is-receded");
+      else if (up) header.classList.remove("is-receded");
+    }
+    lastY = y;
+    progressTicking = false;
+  }
+  document.addEventListener("scroll", function () {
+    if (!progressTicking) { requestAnimationFrame(onScrollFrame); progressTicking = true; }
+  }, { passive: true });
+  onScrollFrame();
 
   // ---------------- Hero parallax (decorative only, GPU-only transform) ----------------
   if (!reduceMotion) {
@@ -189,6 +297,58 @@
         { passive: true }
       );
       updateParallax();
+    }
+  }
+
+  // ---------------- Scroll-linked section motion ----------------
+  // One observer drives everything below. Elements declare what they want with
+  // data attributes rather than each effect owning its own scroll listener.
+  if (!reduceMotion && "IntersectionObserver" in window) {
+
+    // Media panels wipe open instead of fading. clip-path is composited, so
+    // this stays on the GPU like everything else here.
+    var wipes = document.querySelectorAll(".split-media, .figure-wide, .diagram");
+    if (wipes.length) {
+      var wipeIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          e.target.classList.add("is-wiped");
+          wipeIO.unobserve(e.target);
+        });
+      }, { threshold: 0, rootMargin: "0px 0px -12% 0px" });
+      wipes.forEach(function (el) {
+        el.classList.add("wipe");
+        // Anything already at or above the fold is opened immediately. A clipped
+        // element is invisible, so it must never depend on an observer callback
+        // that might not fire for it.
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+          requestAnimationFrame(function () { el.classList.add("is-wiped"); });
+        } else {
+          wipeIO.observe(el);
+        }
+      });
+    }
+
+    // Section headings drift up a little slower than the page, so a section
+    // settles rather than arriving all at once. Decorative only.
+    var drifters = document.querySelectorAll(".section-head");
+    if (drifters.length) {
+      var driftTicking = false;
+      function drift() {
+        var vh = window.innerHeight;
+        drifters.forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          if (r.bottom < 0 || r.top > vh) return;
+          // -1 to 1 across the viewport, eased at the edges
+          var t = (r.top + r.height / 2 - vh / 2) / vh;
+          el.style.transform = "translate3d(0, " + (t * -14).toFixed(2) + "px, 0)";
+        });
+        driftTicking = false;
+      }
+      document.addEventListener("scroll", function () {
+        if (!driftTicking) { requestAnimationFrame(drift); driftTicking = true; }
+      }, { passive: true });
+      drift();
     }
   }
 
