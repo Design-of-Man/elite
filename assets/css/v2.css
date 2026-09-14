@@ -105,8 +105,8 @@
   --sp-lg: 2.25rem;
   --sp-xl: 3.5rem;
   --sp-2xl: 5rem;
-  --sp-section: clamp(5rem, 3.1rem + 7vw, 9rem);
-  --sp-section-lg: clamp(7rem, 4rem + 10.5vw, 13rem);
+  --sp-section: clamp(3.25rem, 2.2rem + 3.6vw, 5.5rem);
+  --sp-section-lg: clamp(4.5rem, 3rem + 5.5vw, 7.5rem);
   --gutter: clamp(1.25rem, 0.6rem + 3.2vw, 3.5rem);
 
   /* -- Structure --------------------------------------------------------- */
@@ -277,7 +277,19 @@ strong, b { font-weight: 600; color: var(--fg); }
   background: var(--bg);
   color: var(--fg-body);
 }
-.section--tight { padding-block: clamp(3rem, 2rem + 4vw, 5rem); }
+/* A section carries its own breathing room above and below. Where two meet,
+   both paddings land in the same gap and it reads as a hole rather than a
+   rhythm — the seam was 2x the interval everywhere. So a seam between two
+   sections on the SAME ground collapses to roughly one interval; a seam where
+   the ground changes keeps the full pair, because the colour change needs the
+   room to land. */
+.section + .section { padding-top: calc(var(--sp-section) * 0.4); }
+.section + .section--dark,
+.section + .section--paper2,
+.section--dark + .section,
+.section--paper2 + .section { padding-top: var(--sp-section); }
+
+.section--tight { padding-block: clamp(2.25rem, 1.5rem + 2.6vw, 3.5rem); }
 .section--vast { padding-block: var(--sp-section-lg); }
 .section--dark { background: var(--ink); }
 .section--paper2 { background: var(--paper-2); }
@@ -302,6 +314,34 @@ strong, b { font-weight: 600; color: var(--fg); }
    Their left edge is pinned to the main grid rather than centred, so the type
    keeps one rag down the whole page instead of stepping inward after the hero. */
 .container--reading { max-width: 47.5rem; }
+.center-block { text-align: center; }
+
+/* Breadcrumbs. Generated from each page's BreadcrumbList so the visible trail
+   and the structured data cannot disagree. */
+.crumbs { margin-bottom: var(--sp-md); }
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.crumbs li { display: inline-flex; align-items: center; gap: 0.5em; }
+.crumbs a, .crumbs span {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.crumbs a { color: var(--muted-on-paper); }
+.crumbs a:hover, .crumbs a:focus-visible { color: var(--brass-ink); }
+.crumbs [aria-current="page"] { color: var(--brass-ink); }
+.crumbs svg { color: var(--hairline-strong, var(--hairline)); flex: none; }
+.section--dark .crumbs a, .hero--dark .crumbs a { color: var(--body-on-ink); }
+
+.center-block .btn { margin-inline: auto; }
 .container--narrow { max-width: 53rem; }
 .container--reading,
 .container--narrow {
@@ -432,6 +472,113 @@ strong, b { font-weight: 600; color: var(--fg); }
 .nav-desktop a:hover::after,
 .nav-desktop a:focus-visible::after { transform: scaleX(1); transform-origin: left; }
 
+/* --- Services mega-menu -------------------------------------------------
+   The trigger is a real <button>, so it works from the keyboard and reports
+   its state; hover only mirrors what click/focus already does. */
+.nav-has-mega { position: static; }
+.nav-mega-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.4em 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.nav-chev { transition: transform var(--dur) var(--ease); }
+.nav-mega-toggle[aria-expanded="true"] .nav-chev { transform: rotate(180deg); }
+
+.nav-mega {
+  position: absolute;
+  inset: 100% 0 auto 0;
+  z-index: 120;
+  padding: var(--sp-xl) var(--gutter) var(--sp-md);
+  background: var(--paper);
+  border-top: 1px solid var(--hairline);
+  box-shadow: 0 24px 48px -28px rgba(23, 20, 15, 0.4);
+}
+.nav-mega[hidden] { display: none; }
+.nav-mega-inner {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-lg);
+  max-width: var(--container);
+  margin-inline: auto;
+}
+.mega-head {
+  margin: 0 0 0.9em;
+  padding-bottom: 0.6em;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-ink);
+}
+.nav-mega ul { margin: 0; padding: 0; list-style: none; }
+.nav-mega li + li { margin-top: 0.55em; }
+.nav-mega a {
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--body-on-paper);
+}
+.nav-mega a:hover, .nav-mega a:focus-visible { color: var(--brass-ink); }
+.nav-mega-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-lg);
+  max-width: var(--container);
+  margin: var(--sp-lg) auto 0;
+  padding-top: var(--sp-md);
+  border-top: 1px solid var(--hairline);
+}
+.nav-mega-foot a {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brass-ink);
+}
+
+/* --- Mobile services group ---------------------------------------------- */
+.m-group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+.m-group-toggle[aria-expanded="true"] .nav-chev { transform: rotate(180deg); }
+.m-group-panel[hidden] { display: none; }
+.m-group-panel {
+  padding: var(--sp-sm) 0 var(--sp-sm) var(--sp-md);
+  border-left: 1px solid var(--hairline);
+  margin-block: var(--sp-sm);
+}
+.m-sub-head {
+  margin: var(--sp-md) 0 0.5em;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-ink);
+}
+.m-group-panel a { display: block; padding-block: 0.42em; font-size: var(--step--1); }
+
+
 .nav-cta { display: flex; align-items: center; gap: clamp(0.75rem, 0.3rem + 1vw, 1.5rem); }
 /* The header CTA must never wrap — a two-line button doubles the header height
    and shoves the hero down. Padding tightens before the label breaks. */
@@ -475,6 +622,26 @@ strong, b { font-weight: 600; color: var(--fg); }
   .nav-desktop { display: none; }
   .nav-cta .btn { display: none; }
   .nav-toggle { display: flex; position: relative; z-index: 101; }
+  /* The desktop gap plus a full-width brand pushed the menu button past the
+     right edge of every phone — it was unreachable, so the menu could not be
+     opened at all. Tighten the gap and let the brand shrink. */
+  .site-header .container { gap: var(--sp-sm); }
+  .brand { min-width: 0; }
+  .brand strong { font-size: clamp(0.95rem, 0.6rem + 1.6vw, 1.25rem); }
+  .brand span { white-space: nowrap; }
+}
+
+@media (max-width: 560px) {
+  /* Brand + full phone number + menu button do not fit together on a phone.
+     The header keeps a one-tap call target (the icon, labelled for screen
+     readers) and the digits stay in the menu and the footer. */
+  .nav-phone-label { display: none; }
+  .nav-phone {
+    justify-content: center;
+    gap: 0;
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 
 /* Mobile nav. Hidden with visibility + inert-style pointer handling, not by
@@ -530,8 +697,8 @@ strong, b { font-weight: 600; color: var(--fg); }
   align-items: center;
   min-height: 100vh;
   min-height: 100svh;
-  padding-top: clamp(6.5rem, 4.5rem + 5vw, 9rem);
-  padding-bottom: var(--sp-2xl);
+  padding-top: clamp(6rem, 4.5rem + 3.6vw, 7.75rem);
+  padding-bottom: var(--sp-xl);
   background: var(--paper);
   color: var(--body-on-paper);
   overflow: clip;
@@ -1280,7 +1447,8 @@ label {
    -------------------------------------------------------------------------- */
 
 /* Scroll reveal */
-.reveal {
+.reveal { opacity: 1; }
+.js .reveal {
   opacity: 0;
   transform: translate3d(0, 26px, 0);
   transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
@@ -1296,7 +1464,8 @@ label {
   vertical-align: top;
   padding-bottom: 0.1em;
 }
-.word {
+.word { display: inline-block; }
+.js .word {
   display: inline-block;
   transform: translate3d(0, 115%, 0) rotate(3deg);
   transition: transform var(--dur-slow) var(--ease);
@@ -1362,7 +1531,7 @@ label {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .reveal { opacity: 1; transform: none; }
+  .reveal, .js .reveal { opacity: 1; transform: none; }
   .word { transform: none; }
   .hero-glow { animation: none; }
 }

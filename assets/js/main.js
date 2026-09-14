@@ -29,6 +29,68 @@
     });
   }
 
+  // ---------------- Services mega-menu ----------------
+  // The trigger is a button, so keyboard and pointer share one code path:
+  // hover merely calls the same open/close the click does.
+  var megaWrap = document.querySelector(".nav-has-mega");
+  var megaBtn = megaWrap && megaWrap.querySelector(".nav-mega-toggle");
+  var megaPanel = megaWrap && megaWrap.querySelector(".nav-mega");
+
+  if (megaBtn && megaPanel) {
+    var hoverCapable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    var closeTimer;
+
+    function setMega(open) {
+      clearTimeout(closeTimer);
+      megaPanel.hidden = !open;
+      megaBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    megaBtn.addEventListener("click", function () {
+      setMega(megaPanel.hidden);
+    });
+
+    if (hoverCapable) {
+      megaWrap.addEventListener("mouseenter", function () { setMega(true); });
+      megaWrap.addEventListener("mouseleave", function () {
+        closeTimer = setTimeout(function () { setMega(false); }, 140);
+      });
+      megaPanel.addEventListener("mouseenter", function () { clearTimeout(closeTimer); });
+      megaPanel.addEventListener("mouseleave", function () {
+        closeTimer = setTimeout(function () { setMega(false); }, 140);
+      });
+    }
+
+    // Escape closes and returns focus to the trigger; a click or a tab landing
+    // outside the menu closes it without stealing focus back.
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !megaPanel.hidden) {
+        setMega(false);
+        megaBtn.focus();
+      }
+    });
+    document.addEventListener("click", function (e) {
+      if (!megaPanel.hidden && !megaWrap.contains(e.target)) setMega(false);
+    });
+    document.addEventListener("focusin", function (e) {
+      if (!megaPanel.hidden && !megaWrap.contains(e.target)) setMega(false);
+    });
+    megaPanel.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", function () { setMega(false); });
+    });
+  }
+
+  // ---------------- Mobile collapsible groups ----------------
+  document.querySelectorAll(".m-group-toggle").forEach(function (btn) {
+    var panel = document.getElementById(btn.getAttribute("aria-controls"));
+    if (!panel) return;
+    btn.addEventListener("click", function () {
+      var open = panel.hidden;
+      panel.hidden = !open;
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  });
+
   // Scroll-reveal via IntersectionObserver — cheap, no scroll-jank library.
   var revealEls = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window && revealEls.length) {
@@ -41,7 +103,7 @@
           }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+      { threshold: 0, rootMargin: "0px 0px -12% 0px" }
     );
     revealEls.forEach(function (el, i) {
       el.style.setProperty("--i", el.dataset.i || i % 6);
