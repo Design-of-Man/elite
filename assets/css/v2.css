@@ -1006,21 +1006,25 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 .hero-scrim {
   position: absolute;
   inset: 0;
-  /* A bottom band, nothing more. The copy was compressed into the lower third
-     (measured: it runs 41%-84% of the hero) so the top third and a half of the
-     frame carries no overlay at all — the sunset, the coastline and the ocean
-     are the untouched footage. The header supplies its own backdrop, so the
-     scrim has no top band either. */
+  /* A bottom band and nothing else — transparent above 34%, so the top third
+     and a half of the frame carries no overlay at all.
+
+     The values are tuned, not chosen: stepping the whole band down in
+     increments and re-measuring contrast under the actual glyphs, 0.70 of the
+     original is the lightest that still clears AA (headline 3.61, lede 4.98).
+     This sits at 0.74 for a little margin. Sampling every other frame of the
+     clip confirms the poster is as bright as the footage ever gets in the copy
+     region, so the margin holds while it plays. */
   background-image:
     linear-gradient(to bottom,
       rgba(13, 40, 64, 0) 0%,
       rgba(13, 40, 64, 0) 34%,
-      rgba(13, 40, 64, 0.34) 39%,
-      rgba(13, 40, 64, 0.62) 45%,
-      rgba(13, 40, 64, 0.70) 52%,
-      rgba(13, 40, 64, 0.74) 66%,
-      rgba(13, 40, 64, 0.86) 82%,
-      rgba(13, 40, 64, 0.92) 100%);
+      rgba(13, 40, 64, 0.25) 39%,
+      rgba(13, 40, 64, 0.46) 45%,
+      rgba(13, 40, 64, 0.52) 52%,
+      rgba(13, 40, 64, 0.55) 66%,
+      rgba(13, 40, 64, 0.64) 82%,
+      rgba(13, 40, 64, 0.68) 100%);
 }
 
 /* The location line is small mono text sitting at the very top of the copy,
