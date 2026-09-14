@@ -690,6 +690,21 @@ strong, b { font-weight: 600; color: var(--fg); }
   color: var(--paper);
 }
 .mobile-nav a:last-of-type { border-bottom: 0; }
+
+/* The Services row opens the submenu, so it is a control — but it sat at 29px
+   because it inherits `font: inherit` rather than the drawer's own link
+   treatment. Match the links beside it and hold the 44px touch minimum. */
+.mobile-nav .m-group-toggle {
+  padding-block: 0.7rem;
+  min-height: 44px;
+  border-bottom: 1px solid var(--rule-on-ink);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 1.2rem + 2.8vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--paper);
+}
+.mobile-nav .m-group-toggle .nav-chev { flex: none; width: 0.5em; height: 0.5em; }
 .mobile-nav .nav-phone {
   margin-top: var(--sp-lg);
   font-family: var(--font-mono);
@@ -966,12 +981,13 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 .hero--media {
   background: var(--ink-deep);
   align-items: flex-end;
-  /* Exactly one screen. The copy lives in the lower half where the gradient
-     is, which is what lets the sunset sky above stay completely untouched. */
+  /* One screen wherever the copy fits — that is what keeps the sunset sky
+     above it completely untouched. It is a floor, not a cage: locking height
+     and max-height here clipped the eyebrow and the top of the headline clean
+     off a 568px phone, because the copy is bottom-anchored and overflowed
+     upward into `overflow: clip`. Let short screens grow instead. */
   min-height: 100svh;
-  height: 100svh;
-  max-height: 100svh;
-  padding-top: 0;
+  padding-top: clamp(5.5rem, 4.5rem + 3vw, 7rem);
 }
 /* The copy is anchored low, so the hero no longer needs to clear a portrait
    column and can sit at exactly one screen. */
@@ -1036,8 +1052,11 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
   align-items: center;
   align-self: start;
   width: auto;
-  padding: 0.42em 0.85em;
-  border-radius: 999px;
+  padding: 0.55em 0.9em;
+  /* The chip wraps to two lines on a phone; the display line-height it
+     inherits sets them almost touching. */
+  line-height: 1.5;
+  border-radius: 1.1em;
   background: rgba(13, 40, 64, 0.72);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -1062,9 +1081,13 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 .hero-credit {
   position: absolute;
   z-index: 2;
+  /* Clears the 58px assistant launcher, which is fixed in this same corner.
+     Anchored to the first viewport, not the foot of the hero: on a short phone
+     the hero grows past one screen and a bottom-anchored credit is stranded
+     below the fold, which is the same trap .scroll-cue documents above. */
   right: calc(1.5rem + 58px + 0.75rem);
-  bottom: clamp(0.9rem, 0.6rem + 0.8vw, 1.6rem);
-  top: auto;
+  top: calc(100svh - 2.9rem);
+  bottom: auto;
   margin: 0;
   padding: 0.4em 0.75em;
   border-radius: 999px;
@@ -1078,14 +1101,30 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
   color: var(--paper);
 }
 
+/* Short viewports are the exception: there the copy genuinely does not fit one
+   screen, so the first-screen line falls in the middle of it and the credit
+   lands on a button. Anchor to the foot of the hero instead — it costs a short
+   scroll, which is better than sitting on top of a call to action. Keyed to
+   height, not width: it is the screen being short that causes this. */
+@media (max-height: 700px) {
+  .hero-credit { top: auto; bottom: 0.9rem; }
+}
+
 @media (max-width: 900px) {
-  /* Portrait phones crop a 16:9 aerial to almost nothing useful; lean further
-     on the scrim so the copy stays the subject. */
+  /* A portrait crop gives the copy proportionally more of the frame, so the
+     ramp has to start earlier than it does on desktop. It still starts at
+     zero: laying 0.58 over the top of the frame — as this rule used to —
+     covered the sunset on exactly the devices most people arrive on, which is
+     the opposite of the point. Measured under the real glyphs below. */
   .hero-scrim {
     background-image: linear-gradient(to bottom,
-      rgba(13, 40, 64, 0.58) 0%,
-      rgba(13, 40, 64, 0.30) 40%,
-      rgba(13, 40, 64, 0.62) 100%);
+      rgba(13, 40, 64, 0) 0%,
+      rgba(13, 40, 64, 0) 24%,
+      rgba(13, 40, 64, 0.30) 32%,
+      rgba(13, 40, 64, 0.52) 42%,
+      rgba(13, 40, 64, 0.60) 55%,
+      rgba(13, 40, 64, 0.66) 75%,
+      rgba(13, 40, 64, 0.70) 100%);
   }
 }
 
@@ -1240,6 +1279,11 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 
 @media (max-width: 900px) {
   .hero { min-height: auto; }
+  /* ...except the media hero, which is a full-screen frame by design: the
+     footage needs the height, and the credit is anchored to that first screen.
+     Collapsing it to content height put the credit outside the hero's own
+     `overflow: clip` and deleted it from the page on every phone. */
+  .hero--media { min-height: 100svh; }
   .hero-grid { grid-template-columns: 1fr; }
   .hero-portrait { max-width: 26rem; margin-inline: auto; }
 }
@@ -1662,6 +1706,22 @@ input:focus, select:focus, textarea:focus {
 }
 textarea { resize: vertical; min-height: 8rem; }
 
+/* A checkbox or radio is a glyph, not a field. The blanket width above is
+   written for text inputs; left to apply here it stretches the control across
+   the full row and shoves its own label past the edge of the screen. Scoped
+   overrides existed for the form-page contexts but not for .form-consent, so
+   the appointment page blew its layout out by 160px on every phone. Fix it
+   once, at the type, rather than per context. */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  flex: none;
+  padding: 0;
+  accent-color: var(--brass-ink);
+}
+
 /* Field stack. Labels are visible mono, not placeholders — a placeholder
    disappears the moment someone starts typing. */
 .form-stack {
@@ -1822,8 +1882,12 @@ label {
   overflow: hidden;
   vertical-align: top;
   padding-bottom: 0.1em;
+  /* A single word can be wider than a phone's content column — DOLORCLAST at
+     the h1 size is. Without this the mask clips the last few pixels off it
+     instead of letting it break. */
+  max-width: 100%;
 }
-.word { display: inline-block; }
+.word { display: inline-block; max-width: 100%; overflow-wrap: break-word; }
 .js .word {
   display: inline-block;
   transform: translate3d(0, 115%, 0) rotate(3deg);
@@ -2159,7 +2223,18 @@ label {
   line-height: 1.55;
   cursor: pointer;
 }
-.form-consent input { margin-top: 0.3em; flex-shrink: 0; }
+.form-consent input { margin-top: 0.15em; flex-shrink: 0; }
+/* This is a sentence someone has to read and agree to, not a field label. The
+   mono/uppercase/tracked treatment above is for two-word labels; applied to 40
+   words of consent copy it ran to eleven shouted lines on a phone. */
+.form-consent,
+.form-consent span {
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--body-on-paper);
+}
 
 .footer-disclaimer p {
   font-size: var(--step--2);
