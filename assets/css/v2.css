@@ -314,7 +314,6 @@ strong, b { font-weight: 600; color: var(--fg); }
    Their left edge is pinned to the main grid rather than centred, so the type
    keeps one rag down the whole page instead of stepping inward after the hero. */
 .container--reading { max-width: 47.5rem; }
-.center-block { text-align: center; }
 
 /* Breadcrumbs. Generated from each page's BreadcrumbList so the visible trail
    and the structured data cannot disagree. */
@@ -341,7 +340,6 @@ strong, b { font-weight: 600; color: var(--fg); }
 .crumbs svg { color: var(--hairline-strong, var(--hairline)); flex: none; }
 .section--dark .crumbs a, .hero--dark .crumbs a { color: var(--body-on-ink); }
 
-.center-block .btn { margin-inline: auto; }
 .container--narrow { max-width: 53rem; }
 .container--reading,
 .container--narrow {
