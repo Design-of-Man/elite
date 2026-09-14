@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/img/dr-matarazzo-portrait.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/img/jupiter-inlet-sunset-poster.jpg" fetchpriority="high">
 <script>document.documentElement.classList.add("js");</script>
 <link rel="stylesheet" href="/assets/css/v2.css?v=hero1">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "MedicalBusiness", "name": "Elite Sports Medicine", "alternateName": "ELITE Sports Medicine", "url": "https://elitesportsmed.org/", "image": "https://elitesportsmed.org/assets/img/og-cover.jpg", "telephone": "+1-561-202-8886", "email": "info@elitesportsmed.org", "priceRange": "$$$", "medicalSpecialty": "Orthopedic", "founder": {"@id": "https://elitesportsmed.org/#physician"}, "department": [{"@type": "MedicalClinic", "name": "Elite Sports Medicine — Port St. Lucie", "address": {"@type": "PostalAddress", "streetAddress": "1100 SW St. Lucie West Blvd., Ste. 105", "addressLocality": "Port St. Lucie", "addressRegion": "FL", "postalCode": "34986", "addressCountry": "US"}, "telephone": "+1-561-202-8886", "@id": "https://elitesportsmed.org/#clinic-port-st-lucie", "parentOrganization": {"@id": "https://elitesportsmed.org/#organization"}, "email": "info@elitesportsmed.org", "url": "https://elitesportsmed.org/areas-we-serve/port-st-lucie-fl/", "geo": {"@type": "GeoCoordinates", "latitude": "27.3175760", "longitude": "-80.3769520"}}, {"@type": "MedicalClinic", "name": "Elite Sports Medicine — Palm Beach Gardens", "address": {"@type": "PostalAddress", "streetAddress": "11380 Prosperity Farms Rd, Ste 204", "addressLocality": "Palm Beach Gardens", "addressRegion": "FL", "postalCode": "33410", "addressCountry": "US"}, "telephone": "+1-561-202-8886", "@id": "https://elitesportsmed.org/#clinic-palm-beach-gardens", "parentOrganization": {"@id": "https://elitesportsmed.org/#organization"}, "email": "info@elitesportsmed.org", "url": "https://elitesportsmed.org/areas-we-serve/palm-beach-gardens-fl/", "geo": {"@type": "GeoCoordinates", "latitude": "26.8442340", "longitude": "-80.0720754"}}], "sameAs": ["https://www.instagram.com/drmarcmatarazzo/", "https://www.linkedin.com/in/matarazzo/"], "@id": "https://elitesportsmed.org/#organization"}</script>
@@ -160,7 +160,7 @@
       <!-- Poster paints immediately; main.js picks the 4K or the 1080p file by
            screen size and connection, and skips video entirely under
            prefers-reduced-motion or Save-Data. -->
-      <video class="hero-video" poster="/assets/img/jupiter-inlet-sunset-poster.jpg"
+      <video class="hero-video" data-parallax="0.12" poster="/assets/img/jupiter-inlet-sunset-poster.jpg"
              muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"
              data-src-hi="/assets/video/jupiter-inlet-sunset-2160p.mp4"
              data-src-lo="/assets/video/jupiter-inlet-sunset-1080p.mp4"></video>
@@ -178,18 +178,6 @@
           <a class="btn btn--gold" href="/schedule-appointment/">Schedule Appointment</a>
           <a class="btn btn--outline" href="/marc-f-matarazzo/">Meet Dr. Matarazzo</a>
         </div>
-        <div class="hero-stats">
-          <div><strong><span data-count="23" data-suffix="+">23+</span></strong><span>Years in practice</span></div>
-          <div><strong><span data-count="2">2</span></strong><span>South Florida locations</span></div>
-          <div><strong>MAKO</strong><span>Robotic-certified surgeon</span></div>
-        </div>
-      </div>
-      <div class="hero-portrait reveal" data-parallax="0.08">
-        <img src="/assets/img/dr-matarazzo-portrait.jpg" alt="Dr. Marc F. Matarazzo, MD, orthopedic surgeon" loading="eager" fetchpriority="high" decoding="async" width="1024" height="1024">
-        <div class="tag">
-          <strong>Former team physician</strong>
-          NY Jets &middot; NY Islanders
-        </div>
       </div>
     </div>
     <div class="scroll-cue">Scroll</div>
@@ -198,10 +186,11 @@
   <section class="section">
     <div class="container">
       <div class="stat-band reveal">
-        <div class="stat"><strong><span>2002</span></strong><span>Serving South Florida since</span></div>
-        <div class="stat"><strong><span data-count="10" data-suffix="+">10+</span></strong><span>Years as team physician, PBSC</span></div>
+        <div class="stat"><strong><span data-count="23" data-suffix="+">23+</span></strong><span>Years in practice, since 2002</span></div>
+        <div class="stat"><strong>MAKO</strong><span>Robotic-certified surgeon</span></div>
         <div class="stat"><strong><span data-count="1" data-suffix="st">1st</span></strong><span>Surgeon in FL to implant MISHA knee</span></div>
-        <div class="stat"><strong><span data-count="2">2</span></strong><span>Fellowship &amp; board certifications</span></div>
+        <div class="stat"><strong>NY</strong><span>Former Jets &amp; Islanders team physician</span></div>
+        <div class="stat"><strong><span data-count="2">2</span></strong><span>South Florida locations</span></div>
       </div>
     </div>
   </section>

@@ -34,28 +34,40 @@
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* -- Colour ------------------------------------------------------------
-     Never pure black, never pure white. Warm ink over warm paper, one brass
-     accent. Every pairing below is measured, ratio noted.                  */
-  --ink: #17140f;          /* 16.45:1 on paper */
-  --ink-2: #241f18;        /* raised surface on dark */
-  --ink-3: #322b21;        /* hairlines on dark */
+     The brand palette, taken from the practice's live site (Elementor kit):
+     navy #143D63, sky #72CEF3, pale #E5EBFA. Everything below is derived from
+     those three and every pairing is measured, ratio noted against the ground
+     it actually sits on.
 
-  --paper: #f6f2ea;
-  --paper-2: #efe9dd;
-  --paper-3: #e6dece;
+     The --brass* names are historical: they are the accent slots, and 216
+     call sites across the CSS and HTML read them. Renaming buys nothing and
+     risks a lot, so the brand tokens below are the source of truth and the
+     accent slots alias them.                                                */
+  --brand-navy: #143D63;   /* practice navy — dark surfaces and primary text */
+  --brand-sky:  #72CEF3;   /* practice sky  — fills, never small text on paper */
+  --brand-pale: #E5EBFA;   /* practice pale — borders and tints             */
 
-  --brass: #a9793c;        /* 3.43:1 on paper — rules, fills, LARGE type only */
-  --brass-ink: #845c2b;    /* 5.30:1 on paper — small text on paper */
-  --brass-lit: #d9a65f;    /* 8.37:1 on ink   — text over dark imagery */
+  --ink: var(--brand-navy);  /* 10.70:1 on paper */
+  --ink-2: #1B5184;          /* raised surface on navy */
+  --ink-3: #2165A4;          /* hairlines on navy */
+  --ink-deep: #0D2840;       /* the deepest ground, under the footer         */
 
-  --body-on-paper: #544c3f;  /* 7.58:1 */
-  --muted-on-paper: #5f5648; /* 6.46:1 */
-  --body-on-ink: #bdb1a0;    /* 8.71:1 */
-  --muted-on-ink: #a89c88;   /* 6.80:1 */
+  --paper: #f8fafd;
+  --paper-2: #eff4fb;
+  --paper-3: var(--brand-pale);
 
-  --rule: rgba(23, 20, 15, 0.14);        /* hairline on paper */
-  --rule-strong: rgba(23, 20, 15, 0.26);
-  --rule-on-ink: rgba(246, 242, 234, 0.16);
+  --brass: var(--brand-sky); /* FILL slot: 6.31:1 carrying a navy label      */
+  --brass-ink: #0e7aa6;      /* 4.61:1 on paper — small accent text          */
+  --brass-lit: var(--brand-sky); /* 6.31:1 on navy — accent text over dark   */
+
+  --body-on-paper: #1e5b94;  /* 6.74:1 */
+  --muted-on-paper: #2674bd; /* 4.65:1 */
+  --body-on-ink: #becdf2;    /* 7.03:1 */
+  --muted-on-ink: #8ba5e9;   /* 4.61:1 */
+
+  --rule: rgba(20, 61, 99, 0.16);         /* hairline on paper */
+  --rule-strong: rgba(20, 61, 99, 0.30);
+  --rule-on-ink: rgba(229, 235, 250, 0.18);
 
   /* Context-aware pair. Sections flip these two and every component that
      reads them re-colours itself — no per-section overrides needed. */
@@ -63,7 +75,7 @@
   --fg-body: var(--body-on-paper);
   --fg-muted: var(--muted-on-paper);
   --bg: var(--paper);
-  --accent: var(--brass);
+  --accent: var(--brass-ink);   /* 4.61:1 on paper — reads as text and as icons */
   --accent-text: var(--brass-ink);
   --hairline: var(--rule);
 
@@ -412,7 +424,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   transition: opacity var(--dur) var(--ease);
 }
 .site-header.is-scrolled {
-  background: rgba(246, 242, 234, 0.86);
+  background: rgba(248, 250, 253, 0.86);
   backdrop-filter: blur(14px) saturate(1.4);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
   padding-block: 0.7rem;
@@ -498,7 +510,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   padding: var(--sp-xl) var(--gutter) var(--sp-md);
   background: var(--paper);
   border-top: 1px solid var(--hairline);
-  box-shadow: 0 24px 48px -28px rgba(23, 20, 15, 0.4);
+  box-shadow: 0 24px 48px -28px rgba(20, 61, 99, 0.4);
 }
 .nav-mega[hidden] { display: none; }
 .nav-mega-inner {
@@ -709,7 +721,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   width: min(62vw, 780px);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(169, 121, 60, 0.16), rgba(169, 121, 60, 0) 68%);
+  background: radial-gradient(circle, rgba(114, 206, 243, 0.16), rgba(114, 206, 243, 0) 68%);
   pointer-events: none;
   animation: heroDrift 18s var(--ease-inout) infinite alternate;
   will-change: transform;
@@ -750,6 +762,13 @@ strong, b { font-weight: 600; color: var(--fg); }
    Only while un-scrolled: .is-scrolled restores the paper bar and ink text. */
 body[data-hero="media"] .site-header:not(.is-scrolled) {
   color: var(--paper);
+  /* The header needs contrast against a 230-luma sky. Giving it its own
+     backdrop confines that to the header strip, so the scrim above the
+     footage can be lighter than it otherwise would have to be. */
+  background: linear-gradient(to bottom,
+    rgba(13, 40, 64, 0.88) 0%,
+    rgba(13, 40, 64, 0.62) 55%,
+    rgba(13, 40, 64, 0) 100%);
 }
 body[data-hero="media"] .site-header:not(.is-scrolled) .brand,
 body[data-hero="media"] .site-header:not(.is-scrolled) .brand strong,
@@ -759,7 +778,8 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-phone {
   color: var(--paper);
 }
 body[data-hero="media"] .site-header:not(.is-scrolled) .brand span {
-  color: var(--brass-lit);
+  color: var(--paper);
+  opacity: 0.86;
 }
 body[data-hero="media"] .site-header:not(.is-scrolled) .nav-toggle span {
   background: var(--paper);
@@ -768,12 +788,43 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
   background: var(--brass-lit);
 }
 
+/* --- Motion: progress and header recession ------------------------------- */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 300;
+  height: 2px;
+  background: var(--brand-sky);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+
+.site-header { will-change: transform; }
+.site-header.is-receded {
+  transform: translate3d(0, -100%, 0);
+  transition: transform var(--dur) var(--ease-inout),
+              background var(--dur) var(--ease);
+}
+
 /* --- Hero with background footage -----------------------------------------
    Full-bleed video behind the hero. The poster carries the first paint, so the
    video is never in the critical path; main.js decides which rendition (or
    none) to load. .hero--dark already flips every child to the on-ink palette,
    so nothing here restates component colours. */
-.hero--media { background: var(--ink); }
+.hero--media {
+  background: var(--ink-deep);
+  align-items: flex-end;
+  /* Exactly one screen. The copy lives in the lower half where the gradient
+     is, which is what lets the sunset sky above stay completely untouched. */
+  min-height: 100svh;
+  height: 100svh;
+  max-height: 100svh;
+  padding-top: 0;
+}
+/* The copy is anchored low, so the hero no longer needs to clear a portrait
+   column and can sit at exactly one screen. */
+.hero--media .hero-layout { padding-bottom: clamp(3.25rem, 2rem + 4vw, 5.5rem); }
 /* The hairline grid and brass wash read as noise over footage. */
 .hero--media::before { display: none; }
 .hero--media .hero-glow { display: none; }
@@ -786,8 +837,14 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 }
 .hero-video {
   width: 100%;
-  height: 100%;
+  /* Headroom for the parallax drift, so the frame never exposes an edge as it
+     moves. Decorative footage only — nothing readable rides on this. */
+  height: 118%;
+  top: -9%;
+  position: absolute;
+  left: 0;
   object-fit: cover;
+  will-change: transform;
   /* The poster is the same frame, so an unloaded video is not an empty box. */
   background: var(--ink) center / cover no-repeat;
 }
@@ -798,9 +855,35 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 .hero-scrim {
   position: absolute;
   inset: 0;
+  /* Not a filter over the frame: a vignette anchored bottom-left where the copy
+     is, plus a band under the fixed header. The ocean, the jetty and most of the
+     sunset sky stay untouched. Stops come from measuring the luminance under the
+     actual glyphs — this footage peaks near 230 luma where the type sits, and no
+     text-shadow rescues white at 1.3:1, so this corner does real work. */
   background-image:
-    linear-gradient(100deg, rgba(23, 20, 15, 0.92) 0%, rgba(23, 20, 15, 0.78) 42%, rgba(23, 20, 15, 0.34) 100%),
-    linear-gradient(to bottom, rgba(23, 20, 15, 0.62) 0%, rgba(23, 20, 15, 0.22) 38%, rgba(23, 20, 15, 0.72) 100%);
+    radial-gradient(142% 126% at 0% 100%,
+      rgba(13, 40, 64, 0.95) 0%,
+      rgba(13, 40, 64, 0.91) 36%,
+      rgba(13, 40, 64, 0.80) 54%,
+      rgba(13, 40, 64, 0.52) 70%,
+      rgba(13, 40, 64, 0) 88%),
+    linear-gradient(to bottom,
+      rgba(13, 40, 64, 0.18) 0%,
+      rgba(13, 40, 64, 0.06) 8%,
+      rgba(13, 40, 64, 0) 16%);
+}
+
+.hero--media .eyebrow { color: var(--paper); }
+.hero--media .eyebrow::before { background: var(--brand-sky); }
+
+/* Local contrast, so the wash can stay light. A tight shadow plus a wide soft
+   one reads as depth rather than as a glow. */
+.hero--media .hero-intro h1,
+.hero--media .hero-lede,
+.hero--media .hero-stats strong,
+.hero--media .hero-stats span,
+.hero--media .eyebrow {
+  text-shadow: 0 1px 2px rgba(13, 40, 64, 0.55), 0 2px 22px rgba(13, 40, 64, 0.45);
 }
 
 /* Everything that is not the media layer sits above it. */
@@ -808,18 +891,16 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 .hero--media > .scroll-cue { position: relative; z-index: 1; }
 
 .hero-credit {
-  /* Anchored to the first viewport, not the foot of the hero: the hero runs
-     taller than the screen, so a bottom-anchored credit is never seen. */
   position: absolute;
   z-index: 2;
   right: calc(1.5rem + 58px + 0.75rem);
-  top: calc(100svh - 3.4rem);
-  bottom: auto;
+  bottom: clamp(0.9rem, 0.6rem + 0.8vw, 1.6rem);
+  top: auto;
   margin: 0;
   padding: 0.4em 0.75em;
   border-radius: 999px;
-  background: rgba(23, 20, 15, 0.72);
-  backdrop-filter: blur(6px);
+  background: rgba(13, 40, 64, 0.88);
+  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(6px);
   font-family: var(--font-mono);
   font-size: var(--step--2);
@@ -832,16 +913,19 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
   /* Portrait phones crop a 16:9 aerial to almost nothing useful; lean further
      on the scrim so the copy stays the subject. */
   .hero-scrim {
-    background-image: linear-gradient(to bottom, rgba(23, 20, 15, 0.88) 0%, rgba(23, 20, 15, 0.7) 45%, rgba(23, 20, 15, 0.9) 100%);
+    background-image: linear-gradient(to bottom,
+      rgba(13, 40, 64, 0.58) 0%,
+      rgba(13, 40, 64, 0.30) 40%,
+      rgba(13, 40, 64, 0.62) 100%);
   }
 }
 
 .hero-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
-  column-gap: clamp(2rem, 0.5rem + 4.5vw, 4.5rem);
-  row-gap: clamp(1.75rem, 1rem + 2vw, 3rem);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(1.25rem, 0.8rem + 1.6vw, 2.25rem);
+  align-items: end;
+  width: 100%;
 }
 .hero-intro { grid-column: 1 / -1; }
 /* This headline is long (60 characters). At the full --step-5 ceiling it runs
@@ -853,8 +937,16 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
   margin-bottom: 0;
   font-size: clamp(2.6rem, 1.9rem + 4.3vw, 5.5rem);
 }
+.hero--media .hero-intro h1 {
+  max-width: 19ch;
+  font-size: clamp(2.2rem, 1.35rem + 2.9vw, 3.9rem);
+}
+.hero--media .hero-stats {
+  margin-top: clamp(1.25rem, 0.8rem + 1.4vw, 2rem);
+  padding-top: var(--sp-md);
+}
 .hero-support { grid-column: 1; min-width: 0; }
-.hero-support .hero-lede { max-width: 52ch; }
+.hero-support .hero-lede { max-width: 46ch; }
 .hero-layout .hero-portrait {
   grid-column: 2;
   grid-row: 2;
@@ -948,7 +1040,7 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
   position: absolute;
   left: 0; bottom: 0;
   padding: var(--sp-sm) var(--sp-md);
-  background: rgba(23, 20, 15, 0.82);
+  background: rgba(20, 61, 99, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   font-family: var(--font-mono);
@@ -1172,7 +1264,7 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 .quote-card .stars {
   font-size: 0.9rem;
   letter-spacing: 0.22em;
-  color: var(--brass);
+  color: var(--brass-ink);
 }
 .quote-card p {
   margin: 0;
@@ -1389,7 +1481,7 @@ input::placeholder, textarea::placeholder {
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--brass-ink);
-  box-shadow: 0 0 0 3px rgba(169, 121, 60, 0.22);
+  box-shadow: 0 0 0 3px rgba(114, 206, 243, 0.22);
 }
 textarea { resize: vertical; min-height: 8rem; }
 
@@ -1622,6 +1714,10 @@ label {
     scroll-behavior: auto !important;
   }
   .reveal, .js .reveal { opacity: 1; transform: none; }
+  /* Background footage holds still: no drift and no headroom, so the frame
+     sits exactly where the poster did. The header stays put too. */
+  .hero-video { height: 100%; top: 0; transform: none; }
+  .site-header.is-receded { transform: none; }
   .word { transform: none; }
   .hero-glow { animation: none; }
 }
@@ -1642,7 +1738,7 @@ label {
   background: var(--brass);
   color: var(--ink);
   cursor: pointer;
-  box-shadow: 0 14px 34px rgba(23, 20, 15, 0.28);
+  box-shadow: 0 14px 34px rgba(20, 61, 99, 0.28);
   transition: transform var(--dur) var(--ease-quart), background var(--dur-fast);
 }
 #ai-assistant-launcher:hover { transform: scale(1.06); background: var(--brass-ink); color: var(--paper); }
@@ -1658,7 +1754,7 @@ label {
   background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
-  box-shadow: 0 30px 70px -22px rgba(23, 20, 15, 0.42);
+  box-shadow: 0 30px 70px -22px rgba(20, 61, 99, 0.42);
   opacity: 0;
   transform: translate3d(0, 14px, 0) scale(0.98);
   pointer-events: none;

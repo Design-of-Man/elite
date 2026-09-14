@@ -189,6 +189,43 @@
   // No else-branch: without IntersectionObserver the markup already shows the
   // correct value, so there is nothing to fill in.
 
+  // ---------------- Scroll progress ----------------
+  // Injected rather than added to 63 pages of markup. Decorative, so it is
+  // aria-hidden and never announced.
+  var progress = document.createElement("div");
+  progress.className = "scroll-progress";
+  progress.setAttribute("aria-hidden", "true");
+  document.body.appendChild(progress);
+
+  // ---------------- Header: recede on the way down, return on the way up ----------------
+  // Gives back the full screen while reading and puts the booking CTA one
+  // gesture away at any depth. Never hides while the mega-menu is open, and
+  // never within the first screen where the hero CTA is still in view.
+  var lastY = window.scrollY;
+  var progressTicking = false;
+
+  function onScrollFrame() {
+    var y = window.scrollY;
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    progress.style.transform = "scaleX(" + (max > 0 ? Math.min(y / max, 1) : 0).toFixed(4) + ")";
+
+    if (header) {
+      var megaOpen = megaPanel && !megaPanel.hidden;
+      var down = y > lastY + 4;
+      var up = y < lastY - 4;
+      if (megaOpen || y < window.innerHeight * 0.9) header.classList.remove("is-receded");
+      else if (down) header.classList.add("is-receded");
+      else if (up) header.classList.remove("is-receded");
+    }
+    lastY = y;
+    progressTicking = false;
+  }
+  document.addEventListener("scroll", function () {
+    if (!progressTicking) { requestAnimationFrame(onScrollFrame); progressTicking = true; }
+  }, { passive: true });
+  onScrollFrame();
+
   // ---------------- Hero parallax (decorative only, GPU-only transform) ----------------
   if (!reduceMotion) {
     var parallaxEls = document.querySelectorAll("[data-parallax]");
