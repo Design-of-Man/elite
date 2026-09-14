@@ -29,6 +29,33 @@
     });
   }
 
+  // ---------------- Hero background footage ----------------
+  // The poster is already painted by the time this runs. Load a video only if
+  // motion is welcome and the connection can afford it, and pick the rendition
+  // from the actual pixel width being filled rather than CSS pixels — a 4K file
+  // on a phone is 25MB of someone's data for no visible gain.
+  var heroVideo = document.querySelector(".hero-video");
+  if (heroVideo) {
+    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    var thrifty = !!(conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")));
+
+    if (!reduceMotion && !thrifty) {
+      var pixelWidth = window.innerWidth * (window.devicePixelRatio || 1);
+      var src = pixelWidth >= 2000
+        ? heroVideo.dataset.srcHi
+        : heroVideo.dataset.srcLo;
+
+      if (src) {
+        heroVideo.preload = "auto";
+        heroVideo.src = src;
+        // play() rejects on browsers that block autoplay even when muted; the
+        // poster is a complete fallback, so swallow it rather than logging.
+        var attempt = heroVideo.play();
+        if (attempt && typeof attempt.catch === "function") attempt.catch(function () {});
+      }
+    }
+  }
+
   // ---------------- Services mega-menu ----------------
   // The trigger is a button, so keyboard and pointer share one code path:
   // hover merely calls the same open/close the click does.

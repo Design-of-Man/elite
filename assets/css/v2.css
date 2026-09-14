@@ -698,7 +698,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   padding-top: clamp(6rem, 4.5rem + 3.6vw, 7.75rem);
   padding-bottom: var(--sp-xl);
   background: var(--paper);
-  color: var(--body-on-paper);
+  color: var(--fg-body);
   overflow: clip;
 }
 /* Warm brass wash, top-right. Decorative only — nothing reads on top of it. */
@@ -744,6 +744,98 @@ strong, b { font-weight: 600; color: var(--fg); }
 /* Homepage hero. The headline takes the full measure of the container and the
    portrait becomes a vertical slab beside the supporting copy — the type is
    the image, so nothing is allowed to crop it into a narrow column. */
+
+/* Header over a media hero. It is a sibling of <main>, so it cannot inherit the
+   hero's dark context — body[data-hero="media"] carries that signal instead.
+   Only while un-scrolled: .is-scrolled restores the paper bar and ink text. */
+body[data-hero="media"] .site-header:not(.is-scrolled) {
+  color: var(--paper);
+}
+body[data-hero="media"] .site-header:not(.is-scrolled) .brand,
+body[data-hero="media"] .site-header:not(.is-scrolled) .brand strong,
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a,
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-mega-toggle,
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-phone {
+  color: var(--paper);
+}
+body[data-hero="media"] .site-header:not(.is-scrolled) .brand span {
+  color: var(--brass-lit);
+}
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-toggle span {
+  background: var(--paper);
+}
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
+  background: var(--brass-lit);
+}
+
+/* --- Hero with background footage -----------------------------------------
+   Full-bleed video behind the hero. The poster carries the first paint, so the
+   video is never in the critical path; main.js decides which rendition (or
+   none) to load. .hero--dark already flips every child to the on-ink palette,
+   so nothing here restates component colours. */
+.hero--media { background: var(--ink); }
+/* The hairline grid and brass wash read as noise over footage. */
+.hero--media::before { display: none; }
+.hero--media .hero-glow { display: none; }
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The poster is the same frame, so an unloaded video is not an empty box. */
+  background: var(--ink) center / cover no-repeat;
+}
+
+/* Two gradients, not one: the horizontal pass protects the copy column, the
+   vertical pass holds the header and the scroll cue. The footage is brightest
+   in the top-left sky, which is exactly where the headline sits. */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(100deg, rgba(23, 20, 15, 0.92) 0%, rgba(23, 20, 15, 0.78) 42%, rgba(23, 20, 15, 0.34) 100%),
+    linear-gradient(to bottom, rgba(23, 20, 15, 0.62) 0%, rgba(23, 20, 15, 0.22) 38%, rgba(23, 20, 15, 0.72) 100%);
+}
+
+/* Everything that is not the media layer sits above it. */
+.hero--media > .container,
+.hero--media > .scroll-cue { position: relative; z-index: 1; }
+
+.hero-credit {
+  /* Anchored to the first viewport, not the foot of the hero: the hero runs
+     taller than the screen, so a bottom-anchored credit is never seen. */
+  position: absolute;
+  z-index: 2;
+  right: calc(1.5rem + 58px + 0.75rem);
+  top: calc(100svh - 3.4rem);
+  bottom: auto;
+  margin: 0;
+  padding: 0.4em 0.75em;
+  border-radius: 999px;
+  background: rgba(23, 20, 15, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+@media (max-width: 900px) {
+  /* Portrait phones crop a 16:9 aerial to almost nothing useful; lean further
+     on the scrim so the copy stays the subject. */
+  .hero-scrim {
+    background-image: linear-gradient(to bottom, rgba(23, 20, 15, 0.88) 0%, rgba(23, 20, 15, 0.7) 45%, rgba(23, 20, 15, 0.9) 100%);
+  }
+}
+
 .hero-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
@@ -793,14 +885,14 @@ strong, b { font-weight: 600; color: var(--fg); }
 .hero h1 {
   margin-bottom: var(--sp-md);
   max-width: var(--measure-display);
-  color: var(--ink);
+  color: var(--fg);
 }
 .hero-lede {
   max-width: var(--measure-lede);
   font-size: var(--step-1);
   font-weight: 300;
   line-height: 1.5;
-  color: var(--body-on-paper);
+  color: var(--fg-body);
 }
 .hero-actions {
   display: flex;
@@ -899,7 +991,7 @@ strong, b { font-weight: 600; color: var(--fg); }
   font-size: 0.62rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--muted-on-paper);
+  color: var(--fg-muted);
 }
 .scroll-cue::after {
   content: "";
