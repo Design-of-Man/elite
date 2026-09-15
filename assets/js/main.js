@@ -37,7 +37,10 @@
   var heroVideo = document.querySelector(".hero-video");
   if (heroVideo) {
     var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    var thrifty = !!(conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")));
+    // 3g is included deliberately: the lo rendition is still 7MB, which is a
+    // real cost on a metered or slow connection and buys nothing the poster
+    // does not already give. Save-Data always wins.
+    var thrifty = !!(conn && (conn.saveData || /(^|-)(2g|3g)$/.test(conn.effectiveType || "")));
 
     if (!reduceMotion && !thrifty) {
       var pixelWidth = window.innerWidth * (window.devicePixelRatio || 1);
