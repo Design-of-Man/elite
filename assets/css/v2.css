@@ -1420,7 +1420,10 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
    -------------------------------------------------------------------------- */
 .stat-band {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* Auto-fit rather than a fixed four: the homepage carries five stats, and a
+     hard four-column track orphaned the fifth onto a row of its own beside
+     three empty cells. This fills the row at any count. */
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
   gap: var(--sp-lg);
   padding-block: clamp(2rem, 1.4rem + 2vw, 3.25rem);
   border-top: 1px solid var(--hairline);
