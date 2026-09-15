@@ -194,6 +194,30 @@ def main():
         if not f.endswith((".css", ".js")):
             flag("orphan-asset", f)
 
+    # /assets/* ships as `immutable, max-age=604800`, so a stale ?v= token means
+    # returning visitors keep the old stylesheet for a week and never see the
+    # change. scripts/stamp-assets.py derives the token from the file's bytes;
+    # this catches forgetting to run it.
+    import hashlib
+    for kind, rel in (("css", "assets/css/v2.css"), ("js", "assets/js/main.js")):
+        f = os.path.join(root, rel)
+        if not os.path.exists(f):
+            continue
+        want = hashlib.sha256(open(f, "rb").read()).hexdigest()[:10]
+        name = os.path.basename(rel)
+        stale = set()
+        for page in pages:
+            for tok in re.findall(re.escape(name) + r"\?v=([a-f0-9]+)",
+                                  open(page, encoding="utf-8",
+                                       errors="replace").read()):
+                if tok != want:
+                    stale.add(os.path.relpath(page, root))
+        if stale:
+            flag("stale-asset-stamp",
+                 f"{name} hashes to {want} but {len(stale)} page(s) still point "
+                 f"at an older token — run scripts/stamp-assets.py "
+                 f"(e.g. {sorted(stale)[0]})")
+
     # Custom properties are resolved by the browser, not by this parser, so a
     # token that is undefined or self-referential fails silently at runtime and
     # every rule reading it drops. Ask a real engine what each one resolves to.
