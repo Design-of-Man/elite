@@ -50,6 +50,7 @@ anything specific to their own care.
 - [Independent medical examinations (IME)](https://elitesportsmed.org/services/independent-medical-examinations/)
 - [Compulsory medical examinations (CME)](https://elitesportsmed.org/services/compulsory-medical-examination/)
 - [Workers' compensation injuries](https://elitesportsmed.org/services/workers-compensation-injuries/)
+- [Personal injury](https://elitesportsmed.org/services/personal-injury/)
 - [Expert medical legal reviews](https://elitesportsmed.org/services/legal-reviews/)
 
 ## Areas served
