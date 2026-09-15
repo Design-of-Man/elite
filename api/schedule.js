@@ -10,10 +10,39 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+// Per-IP brake, matching the chat endpoint. This route is public and turns a
+// POST into mail in the practice's inbox; without it one client can bury real
+// appointment requests under noise. Best-effort across instances, not a
+// guarantee — pair it with provider-side limits.
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const hits = new Map();
+
+function rateLimited(req) {
+  const fwd = req.headers["x-forwarded-for"];
+  const ip = (Array.isArray(fwd) ? fwd[0] : String(fwd || "")).split(",")[0].trim() || "unknown";
+  const now = Date.now();
+  for (const [key, stamps] of hits) {
+    const live = stamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+    if (live.length) hits.set(key, live);
+    else hits.delete(key);
+  }
+  const recent = hits.get(ip) || [];
+  if (recent.length >= RATE_LIMIT_MAX) return true;
+  recent.push(now);
+  hits.set(ip, recent);
+  return false;
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).send("Method not allowed");
+  }
+
+  if (rateLimited(req)) {
+    res.setHeader("Retry-After", "60");
+    return res.status(429).send("Too many requests. Please wait a moment, or call 561-202-8886.");
   }
 
   const body = req.body || {};
