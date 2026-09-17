@@ -52,16 +52,20 @@
   --ink-3: #2165A4;          /* hairlines on navy */
   --ink-deep: #0D2840;       /* the deepest ground, under the footer         */
 
+  /* Small accent text sits on paper, paper-2 and paper-3 alike, so the two
+     accent tokens below are set against paper-3, the darkest of them. Tuned
+     to --paper alone they measured 4.6:1 there but only 4.37:1 on paper-2,
+     failing 1.4.3 on every eyebrow on the site. */
   --paper: #f8fafd;
   --paper-2: #eff4fb;
   --paper-3: var(--brand-pale);
 
   --brass: var(--brand-sky); /* FILL slot: 6.31:1 carrying a navy label      */
-  --brass-ink: #0e7aa6;      /* 4.61:1 on paper — small accent text          */
+  --brass-ink: #0d729c;      /* 4.51:1 on paper-3, the darkest light ground  */
   --brass-lit: var(--brand-sky); /* 6.31:1 on navy — accent text over dark   */
 
   --body-on-paper: #1e5b94;  /* 6.74:1 */
-  --muted-on-paper: #2674bd; /* 4.65:1 */
+  --muted-on-paper: #236db1; /* 4.52:1 on paper-3 */
   --body-on-ink: #becdf2;    /* 7.03:1 */
   --muted-on-ink: #8ba5e9;   /* 4.61:1 */
 
@@ -1824,10 +1828,35 @@ label {
   background: var(--paper-2);
 }
 .simple-table input, .simple-table select { padding: 0.55rem 0.65rem; font-size: var(--step--1); }
+
+/* iOS Safari zooms the viewport when a focused field renders text under 16px,
+   and leaves it zoomed. The compact sizes above are wanted on a wide screen;
+   on a narrow one legibility and the zoom both argue for 16px. */
+@media (max-width: 640px) {
+  .simple-table input,
+  .simple-table select { font-size: 1rem; }
+}
 /* Narrow screens scroll the table inside this wrapper rather than crushing
    the columns; the table keeps a usable minimum width. */
 .table-scroll { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 @media (max-width: 640px) { .simple-table { min-width: 32rem; } }
+
+/* A table wider than the screen scrolls, but nothing on screen says so, and a
+   column the patient never sees is a column they never fill in. */
+.table-hint { display: none; }
+@media (max-width: 640px) {
+  .table-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0 0 0.6rem;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-on-paper);
+  }
+}
 
 .field-note { margin: 0.4rem 0 0; font-size: var(--step--2); color: var(--muted-on-paper); }
 
@@ -2071,6 +2100,8 @@ label {
   border-top: 1px solid var(--rule);
 }
 .ai-input-row input { flex: 1; padding: 0.65rem 0.85rem; font-size: 0.92rem; }
+/* Same 16px floor as the form fields: under it, iOS zooms on focus. */
+@media (max-width: 640px) { .ai-input-row input { font-size: 1rem; } }
 .ai-input-row button {
   padding-inline: 1.1rem;
   background: var(--brass);
