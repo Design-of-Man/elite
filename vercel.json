@@ -8,52 +8,52 @@
     },
     {
       "source": "/services/peptide-therapy/bpc-157/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/cjc-1295/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/ghk-cu/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/ghk-cu",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/ipamorelin/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/kpv/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/kpv",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/mots-c/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/mots-c",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/pt-141/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/tb-500/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/tesamorelin/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/tesamorelin",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
@@ -184,6 +184,51 @@
     {
       "source": "/:year(19\\d{2}|20\\d{2})/",
       "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/ghk-cu/",
+      "destination": "https://regenorthopb.com/services/ghk-cu",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/kpv/",
+      "destination": "https://regenorthopb.com/services/kpv",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/tesamorelin/",
+      "destination": "https://regenorthopb.com/services/tesamorelin",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/mots-c/",
+      "destination": "https://regenorthopb.com/services/mots-c",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/:slug*",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
+      "permanent": true
+    },
+    {
+      "source": "/areas-we-serve/mako-knee-surgery-miami-fl/",
+      "destination": "/services/mako-total-and-partial-knee-replacement/",
+      "permanent": true
+    },
+    {
+      "source": "/areas-we-serve/mako-knee-surgery-naples-fl/",
+      "destination": "/services/mako-total-and-partial-knee-replacement/",
+      "permanent": true
+    },
+    {
+      "source": "/areas-we-serve/mako-knee-surgery-fort-lauderdale-fl/",
+      "destination": "/services/mako-total-and-partial-knee-replacement/",
       "permanent": true
     }
   ],
