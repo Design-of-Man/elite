@@ -787,7 +787,11 @@ body[data-hero="media"] .site-header:not(.is-scrolled) {
 }
 body[data-hero="media"] .site-header:not(.is-scrolled) .brand,
 body[data-hero="media"] .site-header:not(.is-scrolled) .brand strong,
-body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a,
+/* Direct children only. The mega-menu panel lives inside .nav-desktop but
+   renders on its own paper-white background, so a blanket descendant
+   selector painted every panel link white-on-white — the headings are
+   <p> elements, so they stayed visible and the links vanished. */
+body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop > a,
 body[data-hero="media"] .site-header:not(.is-scrolled) .nav-mega-toggle,
 body[data-hero="media"] .site-header:not(.is-scrolled) .nav-phone {
   color: var(--paper);
