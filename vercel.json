@@ -7,6 +7,56 @@
       "permanent": true
     },
     {
+      "source": "/services/peptide-therapy/bpc-157/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/cjc-1295/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/ghk-cu/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/ipamorelin/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/kpv/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/mots-c/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/pt-141/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/tb-500/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/tesamorelin/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/",
+      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "permanent": true
+    },
+    {
       "source": "/minimally-invasive-procedure/",
       "destination": "/minimally-invasive-procedures/",
       "permanent": true

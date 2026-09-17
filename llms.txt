@@ -18,7 +18,7 @@ anything specific to their own care.
 - [Home](https://elitesportsmed.org/): practice overview and credentials.
 - [About Dr. Matarazzo](https://elitesportsmed.org/marc-f-matarazzo/): training, fellowships, team-physician history.
 - [All services](https://elitesportsmed.org/services/): full treatment index.
-- [FAQ](https://elitesportsmed.org/faq/): 45 answers on appointments, insurance, surgery, recovery, MAKO, sports medicine, non-surgical care and peptide therapy.
+- [FAQ](https://elitesportsmed.org/faq/): 40 answers on appointments, insurance, surgery, recovery, MAKO, sports medicine and non-surgical care.
 - [Schedule an appointment](https://elitesportsmed.org/schedule-appointment/): request form and office details.
 - [Second opinions](https://elitesportsmed.org/second-opinions/): independent review before committing to surgery.
 - [Concierge membership](https://elitesportsmed.org/memberships/): priority-access program; not insurance.
@@ -39,7 +39,6 @@ anything specific to their own care.
 
 ## Regenerative and non-surgical
 - [Orthobiologics and regenerative therapies](https://elitesportsmed.org/services/orthobiologics-regenerative-orthopedic-therapies/)
-- [Peptide therapy](https://elitesportsmed.org/services/peptide-therapy/)
 - [Shockwave therapy](https://elitesportsmed.org/services/shockwave-therapy/)
 - [DOLORCLAST radial shockwave therapy](https://elitesportsmed.org/services/dolorclast-radial-shockwave-therapy/)
 - [Laser therapy](https://elitesportsmed.org/services/laser-therapy/)

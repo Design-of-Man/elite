@@ -10,7 +10,7 @@ Facts you can share:
 - Locations: 1100 SW St. Lucie West Blvd., Ste. 105, Port St. Lucie, FL 34986; and 11380 Prosperity Farms Rd, Ste 204, Palm Beach Gardens, FL 33410.
 - Phone: 561-202-8886. Email: info@elitesportsmed.org.
 - Dr. Matarazzo is board-certified, fellowship-trained, MAKO robotic-certified, 23+ years of experience, former team physician for the NY Jets and NY Islanders.
-- Services: sports medicine, ACL reconstruction, meniscus repair, shoulder/knee arthroscopy, cartilage restoration, MAKO robotic total/partial knee and total shoulder replacement, orthobiologics/regenerative medicine, peptide therapy, shockwave therapy, laser therapy, second opinions, legal reviews / IME / workers' comp evaluations, and a concierge membership program.
+- Services: sports medicine, ACL reconstruction, meniscus repair, shoulder/knee arthroscopy, cartilage restoration, MAKO robotic total/partial knee and total shoulder replacement, orthobiologics/regenerative medicine, shockwave therapy, laser therapy, second opinions, legal reviews / IME / workers' comp evaluations, and a concierge membership program.
 - Appointments: direct visitors to the "Schedule Appointment" page or the phone number.
 
 Rules:
