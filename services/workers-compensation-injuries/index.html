@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/assets/css/v2.css?v=768bf70e76">
+<link rel="stylesheet" href="/assets/css/v2.css?v=d733e07876">
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "MedicalProcedure", "name": "Workers' Compensation Injury Treatment", "provider": {"@id": "https://elitesportsmed.org/#physician"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What qualifies as a workers’ compensation injury?", "acceptedAnswer": {"@type": "Answer", "text": "Any injury, strain, or condition that develops as a direct result of work duties may qualify, including sudden trauma or gradual repetitive strain."}}, {"@type": "Question", "name": "Do I need documentation for my evaluation?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Bring any medical records, workplace notes, imaging results, or incident reports to ensure the most accurate assessment."}}, {"@type": "Question", "name": "Will I receive work restrictions or duty recommendations?", "acceptedAnswer": {"@type": "Answer", "text": "If needed, we provide clear written guidance on safe activity levels, temporary restrictions, and recommended rehabilitation progression."}}, {"@type": "Question", "name": "Can you treat my injury and also provide medical documentation?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We provide treatment plans and, when necessary, case documentation to support work and recovery decisions."}}, {"@type": "Question", "name": "How do you determine when I can safely return to work?", "acceptedAnswer": {"@type": "Answer", "text": "Return-to-work readiness is based on: Pain levels Functional movement testing Strength and stability assessments Job-specific physical requirements Our priority is that you return strong, safe, and confident."}}, {"@type": "Question", "name": "Can you provide medical documentation for my workers’ compensation claim?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We provide detailed medical evaluations, treatment documentation, causation opinions when appropriate, and progress reports to support your workers’ compensation case while maintaining medical objectivity."}}, {"@type": "Question", "name": "Can I receive a second opinion for a workers’ compensation injury?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. If you’ve already received a diagnosis or treatment recommendation, we can provide a comprehensive second opinion to help you better understand your condition and treatment options."}}]}</script>
@@ -34,7 +34,10 @@
 <header class="site-header">
   <div class="container">
     <a href="/" class="brand">
-      <strong>ELITE Sports Medicine</strong>
+      <img class="brand-logo brand-logo--on-light" src="/assets/img/logo-elite-on-light.png"
+           alt="ELITE Sports Medicine" width="441" height="161" fetchpriority="high">
+      <img class="brand-logo brand-logo--on-dark" src="/assets/img/logo-elite-on-dark.png"
+           alt="" aria-hidden="true" width="441" height="161">
       <span>Matarazzo Orthopedics</span>
     </a>
     <nav class="nav-desktop" aria-label="Primary">
@@ -238,21 +241,31 @@
         </div></div>
     </div>
   </section>
-  <script>
-  document.querySelectorAll(".faq-q").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      var item = btn.closest(".faq-item");
-      var open = item.classList.toggle("is-open");
-      btn.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-  });
-  </script>
+  
   <section class="section">
     <div class="container">
       <div class="section-head reveal"><p class="eyebrow">Related</p><h2>You may also be interested in</h2></div>
       <div class="grid grid--3 reveal-stagger reveal"><div class="card reveal" style="--i:0"><h3>Personal Injury</h3><a class="card-link" href="/services/personal-injury/">Personal Injury &rarr;</a></div><div class="card reveal" style="--i:1"><h3>Legal Reviews</h3><a class="card-link" href="/services/legal-reviews/">Legal Reviews &rarr;</a></div><div class="card reveal" style="--i:2"><h3>Independent Medical Examinations</h3><a class="card-link" href="/services/independent-medical-examinations/">Independent Medical Examinations &rarr;</a></div></div>
     </div>
   </section>
+  <section class="section section--tight">
+    <div class="container container--reading">
+      <div class="reveal">
+        <p class="eyebrow">Where You&rsquo;d Be Seen</p>
+        <h2>Two South Florida offices</h2>
+        <p>This is offered at both locations &mdash; <a href="/areas-we-serve/port-st-lucie-fl/">Port St.&nbsp;Lucie</a>
+        (1100 SW St. Lucie West Blvd., Ste. 105) and <a href="/areas-we-serve/palm-beach-gardens-fl/">Palm Beach Gardens</a>
+        (11380 Prosperity Farms Rd, Ste 204). Patients travel in from
+        <a href="/areas-we-serve/stuart-fl/">Stuart</a>, <a href="/areas-we-serve/jensen-beach-fl/">Jensen Beach</a>,
+        <a href="/areas-we-serve/fort-pierce-fl/">Fort Pierce</a>, <a href="/areas-we-serve/jupiter-fl/">Jupiter</a>,
+        <a href="/areas-we-serve/north-palm-beach-fl/">North Palm Beach</a> and
+        <a href="/areas-we-serve/west-palm-beach-fl/">West Palm Beach</a> &mdash; see
+        <a href="/areas-we-serve/">every area we serve</a>, or call
+        <a href="tel:+15612028886">561-202-8886</a>.</p>
+      </div>
+    </div>
+  </section>
+
   <section class="cta-band">
     <div class="container reveal">
       <h2>Ready to begin your recovery?</h2>
@@ -268,7 +281,8 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <strong class="footer-brand">ELITE Sports Medicine</strong>
+        <img class="footer-logo" src="/assets/img/logo-elite-on-dark.png"
+             alt="ELITE Sports Medicine" width="441" height="161" loading="lazy">
         <p style="margin-top:var(--sp-sm)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
         <div class="footer-social" style="margin-top:var(--sp-md)">
           <a href="https://www.instagram.com/drmarcmatarazzo/" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
@@ -294,11 +308,11 @@
       <div>
         <p class="foot-label">Port St. Lucie</p>
         <ul>
-          <li>1100 SW St. Lucie West Blvd., Ste. 105<br>Port St. Lucie, FL 34986</li>
+          <li><a href="/areas-we-serve/port-st-lucie-fl/">1100 SW St. Lucie West Blvd., Ste. 105<br>Port St. Lucie, FL 34986</a></li>
         </ul>
         <p class="foot-label" style="margin-top:var(--sp-md)">Palm Beach Gardens</p>
         <ul>
-          <li>11380 Prosperity Farms Rd, Ste 204<br>Palm Beach Gardens, FL 33410</li>
+          <li><a href="/areas-we-serve/palm-beach-gardens-fl/">11380 Prosperity Farms Rd, Ste 204<br>Palm Beach Gardens, FL 33410</a></li>
         </ul>
       </div>
       <div>
@@ -344,7 +358,7 @@
   </form>
 </div>
 
-<script src="/assets/js/main.js?v=3a85ff110b"></script>
+<script src="/assets/js/main.js?v=eae43637ff"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
