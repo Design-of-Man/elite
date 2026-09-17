@@ -207,7 +207,7 @@
       "permanent": true
     },
     {
-      "source": "/peptide-therapy/:slug*",
+      "source": "/peptide-therapy/:slug/",
       "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
@@ -229,6 +229,11 @@
     {
       "source": "/areas-we-serve/mako-knee-surgery-fort-lauderdale-fl/",
       "destination": "/services/mako-total-and-partial-knee-replacement/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/:slug/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     }
   ],
