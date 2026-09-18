@@ -442,6 +442,13 @@ strong, b { font-weight: 600; color: var(--fg); }
 }
 
 .brand { display: flex; flex-direction: column; line-height: 1; color: var(--ink); }
+/* The practice logo is drawn for a dark ground (sky + white on transparent),
+   which is what the old site used. This header is paper, so the mark ships in
+   two grounds and the header shows whichever matches the surface under it. */
+.brand-logo { display: block; width: auto; height: clamp(1.6rem, 1.35rem + 1vw, 2.15rem); }
+.brand-logo--on-dark { display: none; }
+body[data-hero="media"] .site-header:not(.is-scrolled) .brand-logo--on-light { display: none; }
+body[data-hero="media"] .site-header:not(.is-scrolled) .brand-logo--on-dark { display: block; }
 .brand strong {
   font-family: var(--font-display);
   font-weight: 400;
@@ -1580,6 +1587,7 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
 
+.footer-logo { display: block; width: auto; height: 2.2rem; margin-bottom: var(--sp-sm); }
 .footer-brand {
   display: block;
   margin-bottom: var(--sp-sm);

@@ -17,12 +17,14 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://elitesportsmed.org/second-opinions/">
-<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/img/favicon-512.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/assets/css/v2.css?v=768bf70e76">
+<link rel="stylesheet" href="/assets/css/v2.css?v=d733e07876">
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "MedicalProcedure", "name": "Second Opinions for Orthopedic Care", "provider": {"@id": "https://elitesportsmed.org/#physician"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "When should I seek a second opinion?", "acceptedAnswer": {"@type": "Answer", "text": "Whenever you feel pushed, uncertain, or want the alternatives laid out before you commit."}}, {"@type": "Question", "name": "What should I bring to the appointment?", "acceptedAnswer": {"@type": "Answer", "text": "Your scans and films, any reports you have, and a short list of what you have already tried."}}, {"@type": "Question", "name": "Will I offend my original doctor by seeking a second opinion?", "acceptedAnswer": {"@type": "Answer", "text": "No. They are routine, and any good surgeon expects them."}}, {"@type": "Question", "name": "Can I still choose to stay with my original provider?", "acceptedAnswer": {"@type": "Answer", "text": "Of course. Plenty of patients do exactly that, better informed than before."}}, {"@type": "Question", "name": "Do second opinions include reviewing imaging?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — Dr. Matarazzo reads the images himself and talks you through them."}}, {"@type": "Question", "name": "Will a second opinion delay my treatment?", "acceptedAnswer": {"@type": "Answer", "text": "Rarely. Most people are seen quickly, and going in confident tends to be worth the short wait."}}, {"@type": "Question", "name": "How do I schedule a second opinion?", "acceptedAnswer": {"@type": "Answer", "text": "Call the office and we will book you in, then tell you exactly which records to bring so nothing holds the appointment up."}}]}</script>
@@ -34,7 +36,10 @@
 <header class="site-header">
   <div class="container">
     <a href="/" class="brand">
-      <strong>ELITE Sports Medicine</strong>
+      <img class="brand-logo brand-logo--on-light" src="/assets/img/logo-elite-on-light.png"
+           alt="ELITE Sports Medicine" width="441" height="161" fetchpriority="high">
+      <img class="brand-logo brand-logo--on-dark" src="/assets/img/logo-elite-on-dark.png"
+           alt="" aria-hidden="true" width="441" height="161">
       <span>Matarazzo Orthopedics</span>
     </a>
     <nav class="nav-desktop" aria-label="Primary">
@@ -245,15 +250,7 @@ Sometimes that confirms the plan you arrived with. Sometimes it opens a less inv
         </div></div>
     </div>
   </section>
-  <script>
-  document.querySelectorAll(".faq-q").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      var item = btn.closest(".faq-item");
-      var open = item.classList.toggle("is-open");
-      btn.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-  });
-  </script>
+  
   <section class="cta-band">
     <div class="container reveal">
       <h2>Get a second opinion before you decide.</h2>
@@ -269,7 +266,8 @@ Sometimes that confirms the plan you arrived with. Sometimes it opens a less inv
   <div class="container">
     <div class="footer-grid">
       <div>
-        <strong class="footer-brand">ELITE Sports Medicine</strong>
+        <img class="footer-logo" src="/assets/img/logo-elite-on-dark.png"
+             alt="ELITE Sports Medicine" width="441" height="161" loading="lazy">
         <p style="margin-top:var(--sp-sm)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
         <div class="footer-social" style="margin-top:var(--sp-md)">
           <a href="https://www.instagram.com/drmarcmatarazzo/" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
@@ -295,11 +293,11 @@ Sometimes that confirms the plan you arrived with. Sometimes it opens a less inv
       <div>
         <p class="foot-label">Port St. Lucie</p>
         <ul>
-          <li>1100 SW St. Lucie West Blvd., Ste. 105<br>Port St. Lucie, FL 34986</li>
+          <li><a href="/areas-we-serve/port-st-lucie-fl/">1100 SW St. Lucie West Blvd., Ste. 105<br>Port St. Lucie, FL 34986</a></li>
         </ul>
         <p class="foot-label" style="margin-top:var(--sp-md)">Palm Beach Gardens</p>
         <ul>
-          <li>11380 Prosperity Farms Rd, Ste 204<br>Palm Beach Gardens, FL 33410</li>
+          <li><a href="/areas-we-serve/palm-beach-gardens-fl/">11380 Prosperity Farms Rd, Ste 204<br>Palm Beach Gardens, FL 33410</a></li>
         </ul>
       </div>
       <div>
@@ -345,7 +343,7 @@ Sometimes that confirms the plan you arrived with. Sometimes it opens a less inv
   </form>
 </div>
 
-<script src="/assets/js/main.js?v=3a85ff110b"></script>
+<script src="/assets/js/main.js?v=eae43637ff"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
