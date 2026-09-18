@@ -813,6 +813,60 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .brand-logo--on-dark { di
 }
 .hero > .container { position: relative; z-index: 1; }
 
+/* --- Interior (service) hero ---------------------------------------------
+   These were a pale slab carrying a bare h1 and one button: half a screen of
+   near-empty porcelain with nothing to look at and nothing to read. The
+   homepage already owns the photographic hero, so rather than repeat it (and
+   re-download an image the article below already shows), the interior hero
+   goes dark and typographic. The ink block also gives the porcelain article
+   underneath an edge to start against.                                      */
+.hero--dark { background: var(--ink); }
+.hero--service {
+  min-height: 0;
+  padding-top: clamp(8rem, 6rem + 6vw, 11.5rem);
+  padding-bottom: clamp(3.5rem, 2.5rem + 3.5vw, 5.5rem);
+}
+/* The base grid is drawn in --rule, which is tuned for paper and disappears
+   on ink. Redraw it in the dark-context hairline and pull the mask to the
+   headline's corner. */
+.hero--service::before {
+  background-image:
+    linear-gradient(var(--rule-on-ink) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule-on-ink) 1px, transparent 1px);
+  -webkit-mask-image: radial-gradient(circle at 18% 12%, #000, transparent 58%);
+  mask-image: radial-gradient(circle at 18% 12%, #000, transparent 58%);
+  opacity: 0.9;
+}
+.hero--service .crumbs { margin-bottom: var(--sp-lg); }
+.hero--service .crumbs a { color: var(--muted-on-ink); }
+.hero--service .crumbs a:hover,
+.hero--service .crumbs a:focus-visible { color: var(--brass-lit); }
+.hero--service .crumbs [aria-current="page"] { color: var(--body-on-ink); }
+
+/* A short accent rule above the headline, so the h1 starts from something
+   rather than floating in the middle of the block. */
+.hero-rule {
+  width: 3.25rem;
+  height: 2px;
+  background: var(--brass-lit);
+  margin-bottom: var(--sp-md);
+}
+.hero--service h1 { color: var(--paper); margin: 0; }
+.hero--service .hero-lede {
+  margin: var(--sp-md) 0 0;
+  max-width: 46ch;
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--body-on-ink);
+  text-wrap: pretty;
+}
+.hero--service .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: var(--sp-lg);
+}
+
 .hero-grid {
   display: grid;
   grid-template-columns: 1.12fr 0.88fr;
