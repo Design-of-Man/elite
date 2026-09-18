@@ -189,7 +189,9 @@
                visit, NOT clinical history — the on-form notice below asks patients not
                to include medical or insurance detail, and that notice is the mitigation
                for a transport with no BAA. The three PHI forms must never be pointed
-               here; api/form.js exists for those and is a separate decision.
+               here. They are print-and-bring (onsubmit="return false", no action) and
+               transmit nothing, the same way regenorthopb.com and
+               jupiterlaser.com handle patient forms.
                FormSubmit binds activation to the ONE address in the action URL above:
                changing it mints a new activation requirement, and until that link is
                clicked every submission is accepted, answered {"success":"false"} and
