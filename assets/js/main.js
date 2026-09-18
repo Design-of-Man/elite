@@ -107,6 +107,18 @@
     });
   }
 
+  // ---------------- FAQ accordions ----------------
+  // Lived as an inline copy on 27 separate pages, which meant any new page
+  // carrying .faq-q markup silently had no handler at all.
+  document.querySelectorAll(".faq-q").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var item = btn.closest(".faq-item");
+      if (!item) return;
+      var open = item.classList.toggle("is-open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  });
+
   // ---------------- Mobile collapsible groups ----------------
   document.querySelectorAll(".m-group-toggle").forEach(function (btn) {
     var panel = document.getElementById(btn.getAttribute("aria-controls"));
