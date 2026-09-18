@@ -138,15 +138,42 @@
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
+            /* Reveal a stagger group's children together so the per-child
+               transition-delay produces a clean DOM-order cascade. */
+            if (entry.target.classList.contains("reveal-stagger")) {
+              Array.prototype.forEach.call(entry.target.children, function (child) {
+                child.classList.add("is-visible");
+              });
+            }
             io.unobserve(entry.target);
           }
         });
       },
       { threshold: 0, rootMargin: "0px 0px -12% 0px" }
     );
-    revealEls.forEach(function (el, i) {
-      el.style.setProperty("--i", el.dataset.i || i % 6);
-      io.observe(el);
+    revealEls.forEach(function (el) {
+      var parent = el.parentElement;
+      var staggered = parent && parent.classList.contains("reveal-stagger");
+
+      /* The stagger index must come from the element's position among its
+         SIBLINGS. This used to be a page-wide counter (i % 6), which meant
+         the index depended on how many .reveal elements happened to appear
+         earlier in the document -- on the homepage that handed the first
+         service card --i:5, so it faded in last and the grid appeared in the
+         order 2,3,4,5,1. An authored inline --i always wins. */
+      if (!el.style.getPropertyValue("--i")) {
+        el.style.setProperty(
+          "--i",
+          el.dataset.i || (staggered ? Array.prototype.indexOf.call(parent.children, el) : 0)
+        );
+      }
+
+      /* Children of a stagger container are revealed BY that container, not
+         observed one by one. Observing each separately meant cards in the
+         same row crossed the threshold in whatever order the observer
+         reported them, so the cascade was non-deterministic even once the
+         indices were right. */
+      if (!staggered) io.observe(el);
     });
   } else {
     revealEls.forEach(function (el) { el.classList.add("is-visible"); });
