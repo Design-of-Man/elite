@@ -363,6 +363,47 @@ strong, b { font-weight: 600; color: var(--fg); }
   margin-inline-end: auto;
 }
 
+/* Reading column with a sticky figure beside it. The rule above pins a reading
+   column to the container's LEFT edge so body copy lines up under the hero h1.
+   That alignment is the point, but it strands 600px of empty page at 1440 and
+   840px at 1920. Where a page has its own image, it goes there: the column
+   keeps its position and its measure, and the dead space carries the picture.
+   The body column is 40.5rem rather than 47.5 because .container--reading spent
+   two gutters of its 47.5 on padding — this keeps the same line length. */
+.reading-figure {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: grid;
+  grid-template-columns: minmax(0, 40.5rem) minmax(0, 1fr);
+  gap: clamp(2rem, 1rem + 3vw, 4.5rem);
+}
+.reading-figure__body { min-width: 0; }
+/* The aside is the grid item and must STRETCH to the row's full height, because
+   a sticky box can only travel inside its containing block. Sticking the grid
+   item itself does nothing: its area is exactly its own height, so there is no
+   room to move. The frame inside it is what sticks. */
+.reading-figure__aside { min-width: 0; }
+/* Selector is deliberately specific: .split-media sets position:relative and is
+   declared later in this file, so a bare .reading-figure__frame loses the cascade
+   at equal specificity and the figure silently stops sticking. */
+.reading-figure__aside > .reading-figure__frame {
+  position: sticky;
+  top: 6.5rem;
+  margin: 0;
+}
+
+@media (max-width: 62rem) {
+  .reading-figure { grid-template-columns: minmax(0, 1fr); }
+  /* Above the wall of text on a phone, not buried under it. */
+  .reading-figure__aside { order: -1; margin-bottom: var(--sp-lg); }
+  .reading-figure__aside > .reading-figure__frame { position: static; max-width: 26rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reading-figure__aside > .reading-figure__frame { position: static; }
+}
+
 .grid { display: grid; gap: clamp(1.25rem, 0.8rem + 1.6vw, 2rem); }
 .grid--2 { grid-template-columns: repeat(2, 1fr); }
 .grid--3 { grid-template-columns: repeat(3, 1fr); }
