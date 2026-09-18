@@ -97,6 +97,31 @@
       "permanent": true
     },
     {
+      "source": "/workers-compensation-injuries/",
+      "destination": "/services/workers-compensation-injuries/",
+      "permanent": true
+    },
+    {
+      "source": "/acl-reconstruction/",
+      "destination": "/services/acl-reconstruction/",
+      "permanent": true
+    },
+    {
+      "source": "/compulsory-medical-examination/",
+      "destination": "/services/compulsory-medical-examination/",
+      "permanent": true
+    },
+    {
+      "source": "/independent-medical-examinations/",
+      "destination": "/services/independent-medical-examinations/",
+      "permanent": true
+    },
+    {
+      "source": "/legal-reviews/",
+      "destination": "/services/legal-reviews/",
+      "permanent": true
+    },
+    {
       "source": "/expert-orthopedic-surgeon-dr-marc-matarazzo-s-specializations/",
       "destination": "/joint-replacements-shoulder-knee/",
       "permanent": true
