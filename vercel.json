@@ -8,52 +8,52 @@
     },
     {
       "source": "/services/peptide-therapy/bpc-157/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/cjc-1295/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/ghk-cu/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/ghk-cu",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/ipamorelin/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/kpv/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/kpv",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/mots-c/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/mots-c",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/pt-141/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/tb-500/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/tesamorelin/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/tesamorelin",
       "permanent": true
     },
     {
       "source": "/services/peptide-therapy/",
-      "destination": "/services/orthobiologics-regenerative-orthopedic-therapies/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
     },
     {
@@ -94,6 +94,31 @@
     {
       "source": "/laser-therapy/",
       "destination": "/services/laser-therapy/",
+      "permanent": true
+    },
+    {
+      "source": "/workers-compensation-injuries/",
+      "destination": "/services/workers-compensation-injuries/",
+      "permanent": true
+    },
+    {
+      "source": "/acl-reconstruction/",
+      "destination": "/services/acl-reconstruction/",
+      "permanent": true
+    },
+    {
+      "source": "/compulsory-medical-examination/",
+      "destination": "/services/compulsory-medical-examination/",
+      "permanent": true
+    },
+    {
+      "source": "/independent-medical-examinations/",
+      "destination": "/services/independent-medical-examinations/",
+      "permanent": true
+    },
+    {
+      "source": "/legal-reviews/",
+      "destination": "/services/legal-reviews/",
       "permanent": true
     },
     {
@@ -185,6 +210,56 @@
       "source": "/:year(19\\d{2}|20\\d{2})/",
       "destination": "/blog/",
       "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/ghk-cu/",
+      "destination": "https://regenorthopb.com/services/ghk-cu",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/kpv/",
+      "destination": "https://regenorthopb.com/services/kpv",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/tesamorelin/",
+      "destination": "https://regenorthopb.com/services/tesamorelin",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/mots-c/",
+      "destination": "https://regenorthopb.com/services/mots-c",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/:slug/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
+      "permanent": true
+    },
+    {
+      "source": "/peptide-therapy/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
+      "permanent": true
+    },
+    {
+      "source": "/areas-we-serve/mako-knee-surgery-miami-fl/",
+      "destination": "/services/mako-total-and-partial-knee-replacement/",
+      "permanent": true
+    },
+    {
+      "source": "/areas-we-serve/mako-knee-surgery-naples-fl/",
+      "destination": "/services/mako-total-and-partial-knee-replacement/",
+      "permanent": true
+    },
+    {
+      "source": "/areas-we-serve/mako-knee-surgery-fort-lauderdale-fl/",
+      "destination": "/services/mako-total-and-partial-knee-replacement/",
+      "permanent": true
+    },
+    {
+      "source": "/services/peptide-therapy/:slug/",
+      "destination": "https://regenorthopb.com/services/peptide-therapy",
+      "permanent": true
     }
   ],
   "headers": [
@@ -206,6 +281,14 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-src https://maps.google.com; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
         }
       ]
     },
