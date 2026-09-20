@@ -183,7 +183,7 @@
   <section class="section">
     <div class="container split">
       <div class="reveal">
-        <form action="https://formsubmit.co/info@elitesportsmed.org" method="POST" class="form-stack">
+        <form action="https://formsubmit.co/9603b985721c50e3ba9e2e711ff856e6" method="POST" class="form-stack">
           <!-- Appointment requests deliver via FormSubmit, matching regenorthopb.com and
                jupiterlaser.com. This form collects contact details and a reason for
                visit, NOT clinical history — the on-form notice below asks patients not
@@ -196,10 +196,20 @@
                changing it mints a new activation requirement, and until that link is
                clicked every submission is accepted, answered {"success":"false"} and
                dropped. CC addresses need no activation, which is why extras go in _cc.
+               The action was info@elitesportsmed.org until 2026-09-20 and was never
+               activated, so every request from the 2026-09-18 cutover to that date was
+               accepted and dropped. The opaque string in the action URL above is
+               FormSubmit's alias for the activated recipient inbox — it is deliberately
+               NOT a naked email address, so the recipient is not sitting in the public
+               page source for spam harvesters. It is an address alias, not a secret:
+               it only routes to an inbox and grants nothing. Activation is confirmed
+               and info@elitesportsmed.org keeps receiving via _cc, which needs no
+               activation of its own. Do not change the action again without someone
+               standing by to click the new activation email.
                api/schedule.js is left in the repo for a revert. -->
           <input type="hidden" name="_subject" value="[Appointment Request] elitesportsmed.org">
           <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_cc" value="nicholasbkashuba@gmail.com">
+          <input type="hidden" name="_cc" value="info@elitesportsmed.org">
           <input type="hidden" name="_template" value="table">
           <!-- Absolute URL by necessity: FormSubmit redirects the browser here after a
                plain POST. Correct once DNS points at this build; on a preview deploy it
