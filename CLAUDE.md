@@ -34,7 +34,7 @@ manage.
 - Port St. Lucie: 1100 SW St. Lucie West Blvd., Ste. 105, FL 34986
 - Palm Beach Gardens: 11380 Prosperity Farms Rd, Ste 204, FL 33410
 - Socials: instagram.com/drmarcmatarazzo · linkedin.com/in/matarazzo
-- Office hours are **Monday–Friday, 8:00 AM–4:00 PM**, the same at both offices
+- Office hours are **Monday–Friday, 8:30 AM–4:00 PM**, the same at both offices
   (supplied by the practice 2026-09-21). They appear in five places and must be
   changed in all of them together, or the page and the schema disagree: the
   footer Contact column on every page, both office cards on
