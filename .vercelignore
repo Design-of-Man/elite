@@ -1,3 +1,4 @@
 _dev/
 *.md
 !README.md
+!pricing.md
