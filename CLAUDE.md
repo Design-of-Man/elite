@@ -82,6 +82,18 @@ manage.
 - `vercel.json` 301-maps every old WordPress URL (including the peptide pages,
   which now point at regenorthopb.com) — keep them ≥12 months post-launch. It is
   a standalone file; edit it directly.
+- `vercel.json` also sends `X-Robots-Tag: noindex, nofollow` on any host matching
+  `.*\.vercel\.app`. Any such host serving this repo is a duplicate of
+  elitesportsmed.org, and a duplicate is what cost regenorthopb.com 45% of its
+  impressions. Vercel already marks its OWN preview deploys noindex, but a
+  deployment promoted to production on any project does not get that — and this
+  repo is connected to a second, stale Vercel account (`cambo421-1638s-projects`,
+  projects `elite` and `elite-cinematic`) whose builds fail today but would be
+  indexable if they ever succeeded. The rule keys on hostname, so the real domain
+  is untouched; it sits directly after the sitewide header block so the stricter
+  PHI rules still win on those three pages. jupiterlaser.com carries the same
+  guard. Don't drop the `has` and apply it to `/(.*)` unconditionally — that
+  would noindex the live site.
 - IndexNow key file `5b1495cc7c963fae41d9396f8b82b92a.txt` sits at the root. It
   does nothing by itself — ping on change:
   `curl -s "https://api.indexnow.org/indexnow?url=https://elitesportsmed.org/&key=5b1495cc7c963fae41d9396f8b82b92a"`
