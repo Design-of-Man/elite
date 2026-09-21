@@ -515,3 +515,114 @@
     });
   }
 })();
+
+/* ---------------------------------------------------------------- analytics
+   Lead tracking. Vercel Web Analytics counts pageviews on its own; it counts
+   nothing that actually indicates a lead. These are the four moments that do:
+   a call started, an email started, an appointment CTA followed, and a request
+   confirmed sent.
+
+   Both sibling practice sites (regenorthopb.com, jupiterlaser.com) run the
+   same funnel, and the event NAMES match jupiterlaser.com deliberately — one
+   decision about which events count as conversions then applies to every
+   property instead of three bespoke ones.
+
+   Payload is placement and path only. Never a field value, never a service or
+   condition name: attaching "knee pain" to an individual visitor's action is
+   the line where analytics becomes a health-privacy problem.
+
+   gtag is mirrored but not currently loaded here. It is what Google Ads can
+   import as a conversion, so the call is left in place and no-ops until a GA4
+   tag is added rather than needing this file edited again on that day. */
+(function () {
+  "use strict";
+
+  /* The three PHI form pages ship no analytics tag at all, so window.va is
+     already absent there and every call below no-ops. This is a second, hard
+     guard: if a tag is ever added to the site globally, these pages still
+     report nothing. See CLAUDE.md -> "Patient forms — PHI". */
+  var PHI_PATHS = [
+    "/new-patient-intake-form/",
+    "/elite-injection-consent-form/",
+    "/elite-medical-records-request/"
+  ];
+  function isPHIPage() {
+    var p = window.location.pathname;
+    for (var i = 0; i < PHI_PATHS.length; i++) {
+      if (p.indexOf(PHI_PATHS[i]) === 0) return true;
+    }
+    return false;
+  }
+
+  /* Fire-and-forget. A blocked, missing or throwing analytics script must
+     never delay a tel: dial or break a page. */
+  function leadEvent(name, data) {
+    if (isPHIPage()) return;
+    try {
+      if (typeof window.va === "function") {
+        window.va("event", { name: name, data: data || {} });
+      }
+    } catch (err) {}
+    try {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", name, data || {});
+      }
+    } catch (err) {}
+  }
+
+  function placementOf(el) {
+    if (!el || !el.closest) return "body";
+    if (el.closest(".mobile-nav")) return "mobile-nav";
+    if (el.closest(".site-header")) return "header";
+    if (el.closest(".site-footer")) return "footer";
+    if (el.closest(".hero")) return "hero";
+    if (el.closest(".ai-panel, .ai-launcher")) return "assistant";
+    return "body";
+  }
+
+  /* Delegated in the capture phase so it covers every link on every page,
+     including markup added later, and still records the click on a tel: link
+     that navigates away immediately. */
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    var payload = { path: window.location.pathname, location: placementOf(a) };
+
+    if (href.indexOf("tel:") === 0) {
+      leadEvent("call_click", payload);
+      return;
+    }
+    if (href.indexOf("mailto:") === 0) {
+      leadEvent("email_click", payload);
+      return;
+    }
+    if (a.host && a.host !== window.location.host) return;
+    if ((a.pathname || "").replace(/\/+$/, "") === "/schedule-appointment") {
+      leadEvent("appointment_cta", payload);
+    }
+  }, { passive: true, capture: true });
+
+  /* form_submit fires on /thank-you/, not on submit. The appointment form is a
+     plain POST to FormSubmit, which only follows its _next redirect here once
+     the send actually succeeded — so this page IS the confirmed-delivery
+     signal, and counting the submit instead would count sends that failed.
+     Same rule both sibling sites follow: fire on delivery, not intent.
+
+     sessionStorage stops a refresh or a back-navigation from counting the same
+     lead twice; if it is unavailable the event simply fires, since an
+     occasional double beats silently losing the conversion. */
+  if (window.location.pathname.indexOf("/thank-you/") === 0) {
+    var counted = false;
+    try {
+      counted = window.sessionStorage.getItem("esm-thankyou-counted") === "1";
+      window.sessionStorage.setItem("esm-thankyou-counted", "1");
+    } catch (err) {}
+    if (!counted) {
+      leadEvent("form_submit", {
+        path: window.location.pathname,
+        form: "schedule-appointment"
+      });
+    }
+  }
+})();
