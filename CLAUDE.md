@@ -105,7 +105,40 @@ on-page notice promises the form is not submitted online. Consequently:
 
 ## Analytics
 Vercel Web Analytics (`/_vercel/insights/script.js`, cookieless, no consent
-banner) is on every page except the three PHI forms above.
+banner) is on every page except the three PHI forms above. That counts
+pageviews and nothing else, so `main.js` adds the lead funnel on top — the same
+four events, under the same names, as jupiterlaser.com and regenorthopb.com, so
+one decision about what counts as a conversion applies to all three properties:
+
+| Event | Fires when | Payload |
+|---|---|---|
+| `call_click` | any `tel:` link is clicked | `path`, `location` |
+| `email_click` | any `mailto:` link is clicked | `path`, `location` |
+| `appointment_cta` | a link to `/schedule-appointment/` is followed | `path`, `location` |
+| `form_submit` | `/thank-you/` loads | `path`, `form` |
+
+- `location` comes from `placementOf()`: `mobile-nav`, `header`, `footer`,
+  `hero`, `assistant`, `body`. The listener is delegated in the CAPTURE phase so
+  it records a `tel:` click that navigates away immediately, and covers markup
+  added later without each page opting in.
+- **`form_submit` fires on `/thank-you/`, not on submit.** The appointment form
+  is a plain POST to FormSubmit, which only follows its `_next` redirect to that
+  page once the send actually succeeded — so the page IS the confirmed-delivery
+  signal. Counting the submit instead would count sends that failed, which is
+  precisely how jupiterlaser.com reported leads it never received. A
+  sessionStorage flag stops a refresh counting twice.
+- **Payload is placement and path only.** Never a field value, never a service
+  or condition name — attaching "knee pain" to an individual visitor's action is
+  where analytics becomes a health-privacy problem.
+- `leadEvent()` hard-bails on the three PHI paths, on top of those pages having
+  no analytics tag at all. Two independent guards on purpose.
+- `window.gtag` is mirrored but no GA4 tag is loaded here yet. It is what Google
+  Ads imports as a conversion; the call no-ops until a tag is added, so that day
+  needs no code change.
+
+Verified in Chromium (2026-09-21): all four events fire with correct placements,
+the PHI page stays silent, `/thank-you/` counts once and not on reload, and the
+page throws nothing when no analytics script is present at all.
 
 ## Facts discipline
 All claims, credentials, prices and reviews come from the practice's own
