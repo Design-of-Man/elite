@@ -34,10 +34,15 @@ manage.
 - Port St. Lucie: 1100 SW St. Lucie West Blvd., Ste. 105, FL 34986
 - Palm Beach Gardens: 11380 Prosperity Farms Rd, Ste 204, FL 33410
 - Socials: instagram.com/drmarcmatarazzo · linkedin.com/in/matarazzo
-- The practice does NOT publish office hours anywhere on the site. That is why
-  the organization node has no `openingHoursSpecification` — do not add one from
-  a guess. If the practice supplies hours, add them to the node AND to a visible
-  page in the same change.
+- Office hours are **Monday–Friday, 8:00 AM–4:00 PM**, the same at both offices
+  (supplied by the practice 2026-09-21). They appear in five places and must be
+  changed in all of them together, or the page and the schema disagree: the
+  footer Contact column on every page, both office cards on
+  `/schedule-appointment/`, the `office-note` line on each `/areas-we-serve/`
+  office page, `llms.txt`, and `openingHoursSpecification` on the organization
+  node plus both `department` nodes plus each location page's `MedicalClinic`
+  node. Whatever is on the Google Business Profile has to match exactly — a
+  mismatch there is what Google surfaces, not what the page says.
 - No prices are published, including membership tiers. See `/pricing.md`.
 
 ## SEO — keep maximized
