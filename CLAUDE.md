@@ -15,6 +15,18 @@ manage.
   after adding a page, or after changing any page's `<title>`, description or
   `og:image`. It is idempotent; a run with nothing to do prints `0 page(s)`.
 
+  **Never run it in a shallow clone.** It derives `datePublished`/`dateModified`
+  and `<lastmod>` from the last commit that touched each file, so with no history
+  (`git clone --depth 1`) it silently falls back to today and stamps today's date
+  on every page — including rewriting `datePublished` on pages published months
+  ago, which is a false claim about when the content appeared. Observed
+  2026-09-23: a run in a depth-1 clone rewrote 46 pages plus `sitemap.xml`, and
+  moved `/faq/` `datePublished` from 2026-08-19 to 2026-09-23. A normal-looking
+  "46 page(s) updated" on a run you expected to be a no-op is the symptom.
+  Before running it: `git rev-parse --is-shallow-repository` must print `false`
+  (deepen with `git fetch --depth=1000 origin main`), and afterwards check
+  `git status` names only the files you meant to change.
+
 ## Page anatomy (keep consistent — the scripts depend on it)
 - Every page has exactly one `</head>`. Two location pages shipped without one
   for a while and silently missed every head-level injection.
