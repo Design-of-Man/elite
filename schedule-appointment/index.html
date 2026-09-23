@@ -212,7 +212,18 @@
                api/schedule.js is left in the repo for a revert. -->
           <input type="hidden" name="_subject" value="[Appointment Request] elitesportsmed.org">
           <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_cc" value="info@elitesportsmed.org">
+          <!-- matarazzomd@gmail.com added 2026-09-23 at Nick's request: appointment
+               requests were being forwarded to Dr. Matarazzo by hand, and a CC does
+               that automatically. A CC needs no activation of its own, so this does
+               not disturb the activated alias in the action URL above.
+               TRADE-OFF, on the record: the action URL is deliberately an opaque
+               alias so no recipient address sits in public page source for spam
+               harvesters. _cc has no such alias, so this line publishes a personal
+               address on a public page. info@elitesportsmed.org was already public
+               (it is on every page); this gmail was not. The alternative that
+               publishes nothing is a server-side forward from info@ to the doctor,
+               configured in the mailbox rather than here. -->
+          <input type="hidden" name="_cc" value="info@elitesportsmed.org,matarazzomd@gmail.com">
           <input type="hidden" name="_template" value="table">
           <!-- Absolute URL by necessity: FormSubmit redirects the browser here after a
                plain POST. Correct once DNS points at this build; on a preview deploy it
