@@ -555,13 +555,24 @@
   }
 
   /* Fire-and-forget. A blocked, missing or throwing analytics script must
-     never delay a tel: dial or break a page. */
+     never delay a tel: dial or break a page.
+
+     The insights script is `defer`, so it has not run yet when this file
+     executes — window.va does not exist during page load. Queue into
+     window.vaq instead (the script drains it on load, the same stub Vercel's
+     own snippet installs). Without this, form_submit on /thank-you/ — the one
+     event fired at load rather than on a click — was silently dropped:
+     2026-09-20..28 logged 3 real leads and 0 form_submit events. If no script
+     ever loads, the queue is simply never read. */
   function leadEvent(name, data) {
     if (isPHIPage()) return;
     try {
-      if (typeof window.va === "function") {
-        window.va("event", { name: name, data: data || {} });
+      if (typeof window.va !== "function") {
+        window.va = function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
       }
+      window.va("event", { name: name, data: data || {} });
     } catch (err) {}
     try {
       if (typeof window.gtag === "function") {
