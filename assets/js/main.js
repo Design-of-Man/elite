@@ -614,6 +614,61 @@
     }
   }, { passive: true, capture: true });
 
+  /* Spam LABELLING on the appointment form, never spam blocking — a missed
+     real lead costs far more than a read spam email. jupiterlaser.com runs
+     the same rule and found its form_submit count ran ~2x real leads because
+     cold-pitch and crypto spam typed into the page was counted as a lead.
+
+     On submit this (a) marks the request as having come through the page
+     (verified: yes — a bot POSTing straight to FormSubmit skips this script
+     and arrives without it), (b) lists anything suspicious in a `flags`
+     field and prefixes the subject so the inbox sorts itself, and (c) if
+     flagged, tells /thank-you/ not to count this one as a lead. Nothing here
+     stops the send. Flags look at the typed text only to decide the label;
+     none of it is sent to analytics. */
+  var apptForm = document.querySelector('form[action^="https://formsubmit.co/"]');
+  if (apptForm) {
+    var formLoadedAt = Date.now();
+    var SPAM_WORDS = /\b(seo|backlinks?|guest post|link building|bitcoin|crypto|coinbase|nft|virtual assistant|va services|web design services)\b/i;
+    var setField = function (name, value) {
+      var el = apptForm.querySelector('input[name="' + name + '"]');
+      if (!el) {
+        el = document.createElement("input");
+        el.type = "hidden";
+        el.name = name;
+        apptForm.appendChild(el);
+      }
+      el.value = value;
+    };
+    apptForm.addEventListener("submit", function () {
+      try {
+        var val = function (n) {
+          var el = apptForm.elements[n];
+          return el ? String(el.value || "") : "";
+        };
+        var flags = [];
+        if ((Date.now() - formLoadedAt) / 1000 < 4) flags.push("filled in under 4s");
+        var digits = val("phone").replace(/\D/g, "");
+        if (!(digits.length === 10 || (digits.length === 11 && digits.charAt(0) === "1"))) {
+          flags.push("phone not a 10-digit US number");
+        }
+        var typed = [val("first_name"), val("last_name"), val("message")].join(" ");
+        if (/https?:\/\/|www\./i.test(typed)) flags.push("contains a link");
+        if (SPAM_WORDS.test(typed)) flags.push("matches cold-pitch/crypto spam language");
+
+        setField("verified", "yes");
+        setField("flags", flags.length ? flags.join("; ") : "none");
+        if (flags.length) {
+          var subj = apptForm.querySelector('input[name="_subject"]');
+          if (subj && subj.value.indexOf("[Possible spam]") !== 0) {
+            subj.value = "[Possible spam] " + subj.value;
+          }
+        }
+        window.sessionStorage.setItem("esm-lead-flagged", flags.length ? "1" : "0");
+      } catch (err) {}
+    });
+  }
+
   /* form_submit fires on /thank-you/, not on submit. The appointment form is a
      plain POST to FormSubmit, which only follows its _next redirect here once
      the send actually succeeded — so this page IS the confirmed-delivery
@@ -625,11 +680,14 @@
      occasional double beats silently losing the conversion. */
   if (window.location.pathname.indexOf("/thank-you/") === 0) {
     var counted = false;
+    var flagged = false;
     try {
       counted = window.sessionStorage.getItem("esm-thankyou-counted") === "1";
       window.sessionStorage.setItem("esm-thankyou-counted", "1");
+      flagged = window.sessionStorage.getItem("esm-lead-flagged") === "1";
+      window.sessionStorage.removeItem("esm-lead-flagged");
     } catch (err) {}
-    if (!counted) {
+    if (!counted && !flagged) {
       leadEvent("form_submit", {
         path: window.location.pathname,
         form: "schedule-appointment"
