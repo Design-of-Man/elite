@@ -10,7 +10,7 @@ pages drifts unless a script owns it. Two things qualify:
      engines have to guess that they belong to the same practice.
   2. <lastmod> in sitemap.xml. It used to be one frozen date stamped on every
      URL, which is a signal Google learns to discount. Dates now come from the
-     last commit that touched the file.
+     last commit that changed the page outside the seo:graph block.
 
 The graph block is delimited by the seo:graph markers and rewritten in place,
 so running this repeatedly is a no-op until a page's title, description or
