@@ -36,10 +36,9 @@ shell and refreshes the cards between the `blog:posts` markers on `/blog/`) and
 next run re-renders it from its JSON. To change a post, edit its JSON. Agency posts carry
 no physician byline on purpose (see the header of `scripts/blog.py`).
 
-`seo.py` ignores commits whose subject is exactly `Update schema and sitemap` when dating
-pages, because those commits only rewrite its own output. Use that subject when you commit a
-schema-only run by hand, and only then: a commit that also changes page content must use a
-different subject, or that change won't count as a modification.
+Blog posts are dated without `--follow` in `seo.py`: a new post shares its shell with
+every other page, so git would otherwise read it as a copy and give it another page's
+history.
 
 ## Page anatomy (keep consistent — the scripts depend on it)
 - Every page has exactly one `</head>`. Two location pages shipped without one
@@ -91,8 +90,10 @@ different subject, or that change won't count as a modification.
   minimally-invasive-procedures, joint-replacements-shoulder-knee, the MAKO page
   and second-opinions) get `MedicalWebPage` + a `MedicalAudience`. That list is
   `CLINICAL_PREFIXES` in `scripts/seo.py`; add new clinical pages to it.
-- `<lastmod>` comes from the last commit that touched the file, not a sitewide
-  constant — a frozen date on every URL is noise Google learns to discount. Known
+- `<lastmod>` comes from the last commit that changed the file outside the
+  `seo:graph` block, not a sitewide constant. Commits that only carry `seo.py`'s
+  own output don't count; before 2026-10-05 they did, so committing a run
+  re-dated every page to that day on the next run — a frozen date on every URL is noise Google learns to discount. Known
   and harmless: the build that introduces a change still emits the previous date;
   the next run after committing picks up the new one. Don't stamp today's date.
 - `robots.txt` names the AI crawlers (GPTBot, ClaudeBot, PerplexityBot,
