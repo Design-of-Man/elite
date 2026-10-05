@@ -27,6 +27,20 @@ manage.
   (deepen with `git fetch --depth=1000 origin main`), and afterwards check
   `git status` names only the files you meant to change.
 
+## Blog posts — the one generated part of the site
+Posts are published from the agency portal (JARVIS, Design-of-Man/ClientPortal), which
+commits ONE file, `_posts/{slug}.json`, and nothing else. `.github/workflows/rebuild.yml`
+then runs `scripts/blog.py` (renders `blog/{slug}/index.html` from `blog/index.html`'s
+shell and refreshes the cards between the `blog:posts` markers on `/blog/`) and
+`scripts/seo.py`, as two commits, page first. Don't hand-edit a `blog/{slug}/` page: the
+next run re-renders it from its JSON. To change a post, edit its JSON. Agency posts carry
+no physician byline on purpose (see the header of `scripts/blog.py`).
+
+`seo.py` ignores commits whose subject is exactly `Update schema and sitemap` when dating
+pages, because those commits only rewrite its own output. Use that subject when you commit a
+schema-only run by hand, and only then: a commit that also changes page content must use a
+different subject, or that change won't count as a modification.
+
 ## Page anatomy (keep consistent — the scripts depend on it)
 - Every page has exactly one `</head>`. Two location pages shipped without one
   for a while and silently missed every head-level injection.

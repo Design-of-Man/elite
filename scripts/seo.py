@@ -48,11 +48,30 @@ CLINICAL_PREFIXES = (
 )
 
 
+# Commits that only rewrite what this script owns (the schema block and the
+# sitemap) are not content changes, and must not count as one. Without this,
+# committing this script's own output moves every touched page's last-commit
+# date, so the next run on a later day rewrites dateModified on all of them
+# again, and so on: each run would re-stamp pages nobody edited. The rebuild
+# Action (.github/workflows/rebuild.yml) commits seo.py output under exactly
+# this subject; use it when committing a schema-only run by hand too.
+SEO_ONLY_SUBJECT = "Update schema and sitemap"
+
+
 def git_dates(rel):
-    """(first commit date, last commit date) for a file, ISO yyyy-mm-dd."""
+    """(first commit date, last content commit date) for a file, yyyy-mm-dd."""
+    # --follow tracks renames, which is right for a page that moved. It is wrong
+    # for a blog post rendered by blog.py: the page shell is ~95% identical to
+    # every other page, so git reports a new post as a COPY of some existing page
+    # and hands it that page's whole history — a post published today would get
+    # a datePublished months earlier. Posts are never renamed (the slug is the
+    # URL), so they are dated from their own commits only.
+    follow = [] if rel.startswith("blog/") and rel != "blog/index.html" else ["--follow"]
     try:
         out = subprocess.run(
-            ["git", "log", "--follow", "--format=%ad", "--date=short", "--", rel],
+            ["git", "log", *follow, "--invert-grep",
+             f"--grep=^{SEO_ONLY_SUBJECT}$", "--format=%ad", "--date=short",
+             "--", rel],
             cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
     except (subprocess.CalledProcessError, FileNotFoundError):
         return FALLBACK_DATE, FALLBACK_DATE
