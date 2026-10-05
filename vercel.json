@@ -356,6 +356,15 @@
       ]
     },
     {
+      "source": "/_posts/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
       "source": "/pricing.md",
       "headers": [
         {

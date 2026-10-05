@@ -67,8 +67,15 @@ def git_dates(rel):
     carries dateModified) made the next run re-date every page to the day of
     that commit, and the run after that again, forever.
     """
+    # --follow tracks renames, which is right for a page that moved. It is wrong
+    # for a blog post rendered by scripts/blog.py: the page shell is ~95%
+    # identical to every other page, so git reports a new post as a COPY of an
+    # existing page and hands it that page's whole history (in testing, a post
+    # published 2026-10-07 got datePublished 2026-08-19). Posts are never
+    # renamed (the slug is the URL), so they are dated from their own commits.
+    follow = [] if rel.startswith("blog/") and rel != "blog/index.html" else ["--follow"]
     try:
-        log = git("log", "--follow", "--format=%H %ad", "--date=short",
+        log = git("log", *follow, "--format=%H %ad", "--date=short",
                   "--name-only", "--", rel).split("\n")
     except (subprocess.CalledProcessError, FileNotFoundError):
         return FALLBACK_DATE, FALLBACK_DATE
