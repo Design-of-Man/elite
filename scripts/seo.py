@@ -10,7 +10,7 @@ pages drifts unless a script owns it. Two things qualify:
      engines have to guess that they belong to the same practice.
   2. <lastmod> in sitemap.xml. It used to be one frozen date stamped on every
      URL, which is a signal Google learns to discount. Dates now come from the
-     last commit that touched the file.
+     last commit that changed the page outside the seo:graph block.
 
 The graph block is delimited by the seo:graph markers and rewritten in place,
 so running this repeatedly is a no-op until a page's title, description or
@@ -48,17 +48,55 @@ CLINICAL_PREFIXES = (
 )
 
 
+def without_graph(doc):
+    """The page minus the block this script writes, so its own output never
+    counts as an edit to the page."""
+    return re.sub(re.escape(START) + r".*?" + re.escape(END), "", doc, flags=re.S)
+
+
+def git(*args):
+    return subprocess.run(["git", *args], cwd=ROOT, capture_output=True,
+                          text=True, check=True).stdout
+
+
 def git_dates(rel):
-    """(first commit date, last commit date) for a file, ISO yyyy-mm-dd."""
+    """(first commit date, last content-change date) for a file, yyyy-mm-dd.
+
+    The modified date skips commits whose only change to the file was inside
+    the seo:graph block. Without that, committing this script's output (which
+    carries dateModified) made the next run re-date every page to the day of
+    that commit, and the run after that again, forever.
+    """
     try:
-        out = subprocess.run(
-            ["git", "log", "--follow", "--format=%ad", "--date=short", "--", rel],
-            cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
+        log = git("log", "--follow", "--format=%H %ad", "--date=short",
+                  "--name-only", "--", rel).split("\n")
     except (subprocess.CalledProcessError, FileNotFoundError):
         return FALLBACK_DATE, FALLBACK_DATE
-    if not out:
+    # Entries come as "<sha> <date>", blank line, "<path at that commit>".
+    commits = []
+    for i, line in enumerate(log):
+        parts = line.split()
+        if len(parts) == 2 and len(parts[0]) == 40:
+            path = next((p for p in log[i + 1:] if p.strip()), rel)
+            commits.append((parts[0], parts[1], path))
+    if not commits:
         return FALLBACK_DATE, FALLBACK_DATE
-    return out[-1], out[0]
+    published = commits[-1][1]
+
+    def content(sha, path):
+        try:
+            return without_graph(git("show", f"{sha}:{path}"))
+        except subprocess.CalledProcessError:
+            return None
+
+    newer = content(commits[0][0], commits[0][2])
+    for i, (_, date, _) in enumerate(commits):
+        older = (content(commits[i + 1][0], commits[i + 1][2])
+                 if i + 1 < len(commits) else None)
+        if newer != older:
+            return published, date
+        newer = older
+    return published, published
 
 
 def meta(doc, pattern):
