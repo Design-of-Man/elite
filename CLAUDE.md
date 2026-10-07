@@ -107,6 +107,9 @@ history.
 - DELIBERATE: no `aggregateRating` in our own schema (Google guideline), and no
   `reviewedBy`/`lastReviewed` on MedicalWebPage — both assert a named clinician
   signed off on the page, and that sign-off does not exist on record.
+  One exception: a condition guide whose slug is in `REVIEWED` in
+  `scripts/conditions.py` carries both, because that entry records the date
+  Dr. Matarazzo actually read it (see "Condition guides" below).
 - `vercel.json` 301-maps every old WordPress URL (including the peptide pages,
   which now point at regenorthopb.com) — keep them ≥12 months post-launch. It is
   a standalone file; edit it directly.
@@ -139,6 +142,8 @@ in `scripts/conditions.py` with the date Dr. Matarazzo read it. That entry write
 `<!-- reviewed: YYYY-MM-DD -->` marker, and seo.py emits reviewedBy + lastReviewed ONLY on pages
 carrying it. Never add a slug on his behalf. The hub itself is noindex until one guide is live.
 The rebuild Action does not run conditions.py; run it locally (never in a shallow clone).
+When the first guide goes live, link `/conditions/` from the nav or footer on every page; until
+then the hub has no inbound link by design.
 
 ## Patient forms — PHI (do not regress)
 `/new-patient-intake-form/`, `/elite-injection-consent-form/` and

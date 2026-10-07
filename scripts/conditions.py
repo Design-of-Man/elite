@@ -100,10 +100,10 @@ def head_for(shell_head, *, title, desc, url, robots, crumbs, extra_ld, reviewed
     bc = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]}
     h = sub_once(r'<script type="application/ld\+json">\{"@context": "https://schema.org", "@type": "BreadcrumbList".*?</script>',
-                 f'<script type="application/ld+json">{json.dumps(bc, ensure_ascii=False)}</script>', h, "BreadcrumbList")
+                 f'<script type="application/ld+json">{ld_json(bc)}</script>', h, "BreadcrumbList")
     h = re.sub(r"<!-- seo:graph -->.*?<!-- /seo:graph -->\n?", "", h, flags=re.S)
     marker = f"<!-- reviewed: {reviewed} -->\n" if reviewed else ""
-    ld = "".join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in extra_ld)
+    ld = "".join(f'<script type="application/ld+json">{ld_json(x)}</script>\n' for x in extra_ld)
     return h.replace("</head>", marker + ld + "</head>", 1)
 
 
@@ -134,8 +134,23 @@ def hero(title, lede, crumbs):
   </section>"""
 
 
-def what_heading(name):
-    """Question-shaped H2 that reads naturally: 'What is an ACL tear?', 'About MCL, PCL and LCL ...'."""
+# Names that do not fit "What is X?" get a hand-written question.
+HEADINGS = {
+    "knee-ligament-injuries": "What are MCL, PCL and LCL injuries?",
+    "shoulder-impingement": "What are shoulder impingement and bursitis?",
+    "shoulder-labral-tear": "What are a labral tear and shoulder instability?",
+}
+
+
+def ld_json(obj):
+    """JSON for a script tag; '</' escaped so content text can never close the tag."""
+    return json.dumps(obj, ensure_ascii=False).replace("</", "<\\/")
+
+
+def what_heading(name, slug=""):
+    """Question-shaped H2: 'What is an ACL tear?'."""
+    if slug in HEADINGS:
+        return HEADINGS[slug]
     base = name.split(" (")[0]
     if " and " in base or "," in base or base.endswith("Injuries"):
         return f"About {base}"
@@ -165,7 +180,7 @@ def render(shell_head, shell_tail, d, cta, live_slugs):
     if sch.get("associatedAnatomy"):
         cond["associatedAnatomy"] = {"@type": "AnatomicalStructure", "name": sch["associatedAnatomy"]}
     if sch.get("icd10"):
-        cond["code"] = {"@type": "MedicalCode", "codeValue": sch["icd10"], "codingSystem": "ICD-10"}
+        cond["code"] = {"@type": "MedicalCode", "codeValue": sch["icd10"], "codingSystem": "ICD-10-CM"}
     faq = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in d["faqs"]]}
     crumbs = [("Home", f"{SITE}/"), ("Conditions", f"{SITE}/conditions/"), (d["name"], url)]
@@ -186,7 +201,7 @@ def render(shell_head, shell_tail, d, cta, live_slugs):
         </div>""" for f in d["faqs"])
     related = [(p, lbl) for p, lbl in d.get("procedure_links", [])]
     related += [(f"/conditions/{s}/", DETAILS[s]["name"]) for s in live_slugs if s != slug and DETAILS[s]["hub"] == d["hub"]][:3]
-    cards = "".join(f'<div class="card reveal" style="--i:{i}"><h3>{esc(lbl)}</h3><a class="card-link" href="{p}">{esc(lbl)} &rarr;</a></div>'
+    cards = "".join(f'<div class="card reveal" style="--i:{i}"><h3>{esc(lbl)}</h3><a class="card-link" href="{p}">Learn more &rarr;</a></div>'
                     for i, (p, lbl) in enumerate(related))
     sources = "".join(f'<li><a href="{esc(s["url"])}" rel="noopener">{esc(s["title"])}</a>, {esc(s.get("publisher", ""))}</li>'
                       for s in d["sources"])
@@ -195,7 +210,7 @@ def render(shell_head, shell_tail, d, cta, live_slugs):
   <section class="section">
     <div class="container container--reading">
       {review_line}{aka}
-      <h2>{esc(what_heading(d["name"]))}</h2>
+      <h2>{esc(what_heading(d["name"], slug))}</h2>
       {paras}
       <h2 style="margin-top:var(--sp-lg)">What are the symptoms?</h2>
       {tick_list(d["symptoms"])}

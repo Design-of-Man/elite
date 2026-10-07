@@ -141,7 +141,7 @@
       "reverse total shoulder replacement"
     ],
     "associatedAnatomy": "glenohumeral joint",
-    "icd10": "M19.01"
+    "icd10": null
   },
   "sources": [
     {
@@ -181,6 +181,7 @@
     "Hyaluronic acid injection is cited to Johns Hopkins only; for the shoulder this is off-label in the US. Confirm whether the practice offers it or remove.",
     "Orthobiologics linked and described cautiously per brief; no efficacy claim made.",
     "Cleveland Clinic shoulder arthritis page returned 404; not used.",
-    "Fact-check 2026-10-07: 911 line aligned with MedlinePlus wording. M19.01 is a non-billable header for primary shoulder OA only; the page also covers RA, posttraumatic, cuff tear arthropathy and AVN, so consider null. Hyaluronic acid remains attributed to Johns Hopkins only."
+    "Fact-check 2026-10-07: 911 line aligned with MedlinePlus wording. M19.01 is a non-billable header for primary shoulder OA only; the page also covers RA, posttraumatic, cuff tear arthropathy and AVN, so consider null. Hyaluronic acid remains attributed to Johns Hopkins only.",
+    "Please confirm each sentence that describes what you do, since it is written in your name: Dr. Matarazzo matches the step to how much the joint has changed on X-ray, the condition of your rotator cuff, and how much the shoulder is limiting you. | Dr. Matarazzo asks where the pain sits, how long it has been building, what makes it worse, and whether you have had a shoulder injury, a rotator cuff problem or an inflammatory condition."
   ]
 }

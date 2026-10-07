@@ -74,7 +74,7 @@ def git_dates(rel):
     # existing page and hands it that page's whole history (in testing, a post
     # published 2026-10-07 got datePublished 2026-08-19). Posts are never
     # renamed (the slug is the URL), so they are dated from their own commits.
-    follow = [] if rel.startswith("blog/") and rel != "blog/index.html" else ["--follow"]
+    follow = [] if (rel.startswith("blog/") and rel != "blog/index.html") or rel.startswith("conditions/") else ["--follow"]
     try:
         log = git("log", *follow, "--format=%H %ad", "--date=short",
                   "--name-only", "--", rel).split("\n")

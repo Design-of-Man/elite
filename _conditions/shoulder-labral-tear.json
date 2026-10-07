@@ -173,6 +173,7 @@
     "Biceps tenodesis (a common SLAP alternative in older patients) and Latarjet/bone-block procedures intentionally omitted (not listed practice procedures).",
     "Cleveland Clinic and Johns Hopkins labral tear pages could not be read (rate limit / 404).",
     "Bracing statement from AAOS labral tear page ('bracing for instability'); confirm the practice uses it.",
-    "Fact-check 2026-10-07: ICD-10 set to null. S43.43- is 'Superior glenoid labrum lesion' (SLAP) only and does not fit a page covering Bankart and posterior tears; no single verified code covers all labral tears. If one code must show, choose per section (S43.43- for SLAP). The ICD10Data source was removed with it."
+    "Fact-check 2026-10-07: ICD-10 set to null. S43.43- is 'Superior glenoid labrum lesion' (SLAP) only and does not fit a page covering Bankart and posterior tears; no single verified code covers all labral tears. If one code must show, choose per section (S43.43- for SLAP). The ICD10Data source was removed with it.",
+    "Please confirm each sentence that describes what you do, since it is written in your name: Dr. Matarazzo weighs your age, your sport and how many times the shoulder has come out when helping you choose between the two. | Dr. Matarazzo asks how the problem began, whether the shoulder has ever come out of place and how often, and what sports or work you do."
   ]
 }

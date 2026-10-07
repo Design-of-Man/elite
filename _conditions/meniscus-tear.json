@@ -168,6 +168,7 @@
     "ICD-10 left null: acute tears code under S83.2- (laterality, meniscus and tear pattern specific) and old tears under M23.2-. Please supply the code you want shown.",
     "The JOSPT 2018 meniscus and articular cartilage CPG could not be fetched (403), so the therapy section relies on AAOS and Mayo patient pages. Consider adding its exercise recommendations.",
     "Recovery ranges (3 to 6 weeks meniscectomy, 3 to 6 months repair) are from OrthoInfo; confirm they match your post-op protocols.",
-    "Fact-check 2026-10-07: Mayo Clinic says repair is 'sometimes possible, especially in children and younger adults', not that it is 'more successful' in younger patients; corrected. Older-adult FAQ softened to match OrthoInfo."
+    "Fact-check 2026-10-07: Mayo Clinic says repair is 'sometimes possible, especially in children and younger adults', not that it is 'more successful' in younger patients; corrected. Older-adult FAQ softened to match OrthoInfo.",
+    "Please confirm each sentence that describes what you do, since it is written in your name: Dr. Matarazzo looks at the tear's type and location, your age and activity level, and whether the knee mechanically locks. | Lucie, from rest and rehab to arthroscopic meniscus repair, with board-certified surgeon Dr. Matarazzo. | Dr. Matarazzo will ask how the injury happened, whether you felt a pop and whether the knee catches or locks."
   ]
 }

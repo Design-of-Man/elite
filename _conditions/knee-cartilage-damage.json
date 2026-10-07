@@ -40,7 +40,7 @@
     "Focal cartilage injuries are different from the widespread thinning of osteoarthritis. They usually involve one area and often follow a knee injury. The American Academy of Orthopaedic Surgeons (AAOS) notes that cartilage damage is often found while a doctor is treating a related injury, such as a meniscus or ligament tear. According to the AAOS, the best candidates for restoration procedures are usually young adults with a single injury."
   ],
   "symptoms": [
-    "Knee pain during or after activity, especially weight bearing",
+    "Knee pain during or after activity, especially weight-bearing",
     "Swelling that comes and goes, often after exercise",
     "Stiffness or difficulty moving the knee smoothly",
     "Catching, clicking or grinding as the knee bends",
@@ -125,7 +125,7 @@
   ],
   "schema": {
     "signOrSymptom": [
-      "knee pain with weight bearing",
+      "knee pain with weight-bearing",
       "recurrent knee swelling",
       "catching or grinding in the knee",
       "knee stiffness"
@@ -180,6 +180,7 @@
     "ICD-10 left null: options include S83.3- (tear of articular cartilage of knee, current) and M94.26- (chondromalacia, knee) with laterality. Please choose.",
     "Self-care tip to avoid deep squats and jumping is a cautious general tip, not a quoted source statement.",
     "Orthobiologics described per brief: developing evidence, no cartilage regrowth.",
-    "Fact-check 2026-10-07: the injection method previously said steroids may interfere with repair 'so timing matters'; Mayo Clinic's page says corticosteroids are inadvisable for cartilage lesions, so the text now says that. 'Twisting or pivoting' mechanism removed (not in fetched sources)."
+    "Fact-check 2026-10-07: the injection method previously said steroids may interfere with repair 'so timing matters'; Mayo Clinic's page says corticosteroids are inadvisable for cartilage lesions, so the text now says that. 'Twisting or pivoting' mechanism removed (not in fetched sources).",
+    "Please confirm each sentence that describes what you do, since it is written in your name: Dr. Matarazzo considers the size and location of the defect, your age, weight, leg alignment and activity goals, and whether other injuries need treatment at the same time. | Lucie, from rehab and injections to MACI restoration, with board-certified Dr. Matarazzo. | Dr. Matarazzo will ask about past injuries, earlier knee surgeries and which activities bring on pain or swelling."
   ]
 }
