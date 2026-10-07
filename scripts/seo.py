@@ -45,6 +45,7 @@ CLINICAL_PREFIXES = (
     "joint-replacements-shoulder-knee/",
     "mako-robotic-assisted-knee-replacement-system/",
     "second-opinions/",
+    "conditions/",
 )
 
 
@@ -140,6 +141,13 @@ def graph_for(rel, doc):
     }
     if clinical:
         page["audience"] = {"@type": "MedicalAudience", "audienceType": "Patient"}
+    # reviewedBy/lastReviewed ONLY where a page carries the marker that
+    # scripts/conditions.py writes for a guide Dr. Matarazzo has actually read
+    # (its REVIEWED dict). Every other page still omits both, per CLAUDE.md.
+    rv = re.search(r"<!-- reviewed: (\d{4}-\d{2}-\d{2}) -->", doc)
+    if rv:
+        page["reviewedBy"] = {"@id": f"{SITE}/#physician"}
+        page["lastReviewed"] = rv.group(1)
     # The hero heading and lede are what a voice assistant should read back.
     # If .hero h1 / .hero-lede are ever renamed, update these selectors.
     if '"hero-lede"' in doc:
