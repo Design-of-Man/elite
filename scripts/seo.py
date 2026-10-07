@@ -45,6 +45,7 @@ CLINICAL_PREFIXES = (
     "joint-replacements-shoulder-knee/",
     "mako-robotic-assisted-knee-replacement-system/",
     "second-opinions/",
+    "conditions/",
 )
 
 
@@ -73,7 +74,7 @@ def git_dates(rel):
     # existing page and hands it that page's whole history (in testing, a post
     # published 2026-10-07 got datePublished 2026-08-19). Posts are never
     # renamed (the slug is the URL), so they are dated from their own commits.
-    follow = [] if rel.startswith("blog/") and rel != "blog/index.html" else ["--follow"]
+    follow = [] if (rel.startswith("blog/") and rel != "blog/index.html") or rel.startswith("conditions/") else ["--follow"]
     try:
         log = git("log", *follow, "--format=%H %ad", "--date=short",
                   "--name-only", "--", rel).split("\n")
@@ -140,6 +141,13 @@ def graph_for(rel, doc):
     }
     if clinical:
         page["audience"] = {"@type": "MedicalAudience", "audienceType": "Patient"}
+    # reviewedBy/lastReviewed ONLY where a page carries the marker that
+    # scripts/conditions.py writes for a guide Dr. Matarazzo has actually read
+    # (its REVIEWED dict). Every other page still omits both, per CLAUDE.md.
+    rv = re.search(r"<!-- reviewed: (\d{4}-\d{2}-\d{2}) -->", doc)
+    if rv:
+        page["reviewedBy"] = {"@id": f"{SITE}/#physician"}
+        page["lastReviewed"] = rv.group(1)
     # The hero heading and lede are what a voice assistant should read back.
     # If .hero h1 / .hero-lede are ever renamed, update these selectors.
     if '"hero-lede"' in doc:
