@@ -20,16 +20,18 @@ these values:
 | Hours (both) | Monday–Friday, 8:30 AM–4:00 PM |
 | Website | https://elitesportsmed.org/ |
 
-- **No RegenOrtho Palm Beach** on any of his profiles: no name, no 833-783-6561,
-  no peptide, IV or med-spa services. This was decided 2026-10-12. RegenOrtho keeps
-  its own listings.
+- **No RegenOrtho Palm Beach** on any of his profiles: no RegenOrtho name and no
+  833-783-6561. This was decided 2026-10-12. RegenOrtho keeps its own listings.
+  Peptide therapy is one of Elite's own services (Dr. Matarazzo, 2026-10-12), so it
+  may appear on his profiles under the Elite name.
 - Remove every old practice: Center for Bone & Joint Surgery, Orthopedic Center of
   Palm Beach County, CHRISTUS Trinity Clinic (Longview, TX), Optimal Wellness &
   Longevity Institute, and the Boca Raton Ortho Florida offices.
-- **Open question for the practice:** is 108 Intracoastal Pointe Dr, Ste 200,
-  Jupiter a current office? It is the primary address on both NPI records, and a
-  2025 fictitious-name notice for "Elite Sports Medicine" (ORTHO MFM LLC) uses it.
-  If it is not current, remove it everywhere below.
+- **Jupiter is closed** (confirmed 2026-10-12). Remove 108 Intracoastal Pointe Dr,
+  Ste 200, Jupiter from every listing below. It is the primary address on both NPI
+  records, and a 2025 fictitious-name notice for "Elite Sports Medicine" (ORTHO MFM
+  LLC) uses it. If ORTHO MFM LLC's registered address is still Jupiter, update it on
+  Sunbiz too.
 - Fax: several listings give 561-202-8886 as the fax. Give a real fax line, or none.
 
 ## Google Business Profile
@@ -48,14 +50,13 @@ Name, address, phone, hours and categories match the table above.
 - Rewrote both descriptions. The Port St. Lucie one ended in a garbled sentence.
 
 **Still to do:** these edits were blocked in the session and are ready to apply.
-- Palm Beach Gardens services: remove **"Peptide Therapy"**, which is a RegenOrtho
-  service.
 - Both profiles: set the services list to the site's services. That is ACL
   reconstruction, meniscus repair, knee ligament reconstruction, patellar
   dislocation surgery, cartilage restoration and MACI, shoulder and knee surgery,
   MAKO knee replacement, total knee replacement, total shoulder replacement, the
   MISHA Knee System, orthobiologics, shockwave therapy, laser therapy, sports
-  medicine, second opinions, IMEs, and workers' comp.
+  medicine, second opinions, IMEs, workers' comp, and peptide therapy (already on
+  Palm Beach Gardens; keep it).
 - Both profiles: add an appointment link to https://elitesportsmed.org/schedule-appointment/.
 - Port St. Lucie: add the Instagram and LinkedIn links, which Palm Beach Gardens
   already has.
@@ -93,6 +94,9 @@ Google-generated or owned by the former employer.
   practitioner, not a separate business, unless there is:
   - a permanent Elite sign at the suite and on the building directory;
   - Elite staff during the posted hours.
+
+  The practice confirmed on 2026-10-12 that both suites have their own Elite sign.
+  Film it in any verification video.
 - **Palm Beach Gardens Ste 204.** Three orthopedic listings already sit here: Elite,
   RegenOrtho Palm Beach, and Dr. David Buzas (561-624-4800). Keeping RegenOrtho off
   Elite's listings helps Google see Elite as its own practice.
@@ -146,9 +150,9 @@ Google-generated or owned by the former employer.
 | 9 | Insurer directories | Ultimate Health Plans 2027 directory and Humana list Center for Bone & Joint Surgery addresses | Billing → each plan's provider relations |
 | 10 | FL Dept of Health (ME85839) | Primary address correct (Palm Beach Gardens). Stale secondary offices in Fort Lauderdale and West Palm Beach; stale privileges (JFK, Bethesda) | Dr. Matarazzo through the MQA practitioner profile |
 | 11 | Jupiter Medical Center find-a-physician | Jupiter address only; fax = phone | Jupiter Medical Center's medical staff office |
-| 12 | Stryker / Mako surgeon finder | Adds "108 Intracoastal Point Dr" (misspelled) | Stryker rep, if Jupiter isn't current |
+| 12 | Stryker / Mako surgeon finder | Adds "108 Intracoastal Point Dr" (misspelled) | Stryker rep: remove Jupiter |
 | 13 | marcmatarazzomd.com (old Wix site) | Jupiter address; footer phone **561-202-8889**; no Palm Beach Gardens | Whoever holds the Wix account: 301 the whole domain to elitesportsmed.org |
-| 14 | Instagram / LinkedIn bios | "Jupiter + Port St. Lucie" | Change to "Palm Beach Gardens + Port St. Lucie" unless Jupiter is current |
+| 14 | Instagram / LinkedIn bios | "Jupiter + Port St. Lucie" | Change to "Palm Beach Gardens + Port St. Lucie" |
 | 15 | YellowPages, MapQuest, docspot, npidb, mycarecost | Copies of NPPES (Jupiter) | Clear up on their own after NPPES is fixed |
 | 16 | portstluciehealth.com | Elite listing shows 8–5. Practitioner listing at the old Center for Bone & Joint Surgery address. | Mirror of Google: follows the Google fixes |
 
