@@ -38,7 +38,11 @@ no physician byline on purpose (see the header of `scripts/blog.py`).
 
 Blog posts are dated without `--follow` in `seo.py`: a new post shares its shell with
 every other page, so git would otherwise read it as a copy and give it another page's
-history.
+history. The same thing happens to any page hand-built from another page's
+shell, so `seo.py` also stops a page's history at the first commit where git says it
+was a copy of a page that still exists (a true rename leaves the old path gone). Fixed
+2026-10-12; that run moved `datePublished` on 10 older pages, `/accessibility/` among
+them, from a borrowed 2026-08-19 to the day each file was really first committed.
 
 ## Page anatomy (keep consistent — the scripts depend on it)
 - Every page has exactly one `</head>`. Two location pages shipped without one
