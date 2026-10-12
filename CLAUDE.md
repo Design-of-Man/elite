@@ -86,7 +86,7 @@ history.
   page links back to it through the `WebSite`/`WebPage` nodes `seo.py` emits —
   that is what tells search engines the per-page procedure nodes belong to one
   practice. Never duplicate the org node onto another page.
-- Clinical pages (everything under `/services/`, plus regenerative-treatments,
+- Clinical pages (everything under `/services/` and `/conditions/`, plus regenerative-treatments,
   minimally-invasive-procedures, joint-replacements-shoulder-knee, the MAKO page
   and second-opinions) get `MedicalWebPage` + a `MedicalAudience`. That list is
   `CLINICAL_PREFIXES` in `scripts/seo.py`; add new clinical pages to it.
