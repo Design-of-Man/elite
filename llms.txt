@@ -31,20 +31,30 @@ anything specific to their own care.
 - [Patellar dislocation surgery](https://elitesportsmed.org/services/patellar-dislocation-surgery/)
 - [Cartilage restoration and MACI](https://elitesportsmed.org/services/articular-cartilage-restoration-and-maci-procedures/)
 - [Shoulder and knee surgery](https://elitesportsmed.org/services/shoulder-and-knee-surgery/)
+- [Rotator cuff tear treatment and repair](https://elitesportsmed.org/services/rotator-cuff-repair/)
 
 ## Joint replacement
 - [MAKO total and partial knee replacement](https://elitesportsmed.org/services/mako-total-and-partial-knee-replacement/)
+- [Partial knee replacement](https://elitesportsmed.org/services/partial-knee-replacement/)
 - [Total knee replacement](https://elitesportsmed.org/services/total-knee-replacement/)
 - [Total shoulder replacement](https://elitesportsmed.org/services/total-shoulder-replacement-surgery-elite-sports-medicine/)
+- [Reverse shoulder replacement](https://elitesportsmed.org/services/reverse-shoulder-replacement/)
 - [MISHA Knee System](https://elitesportsmed.org/services/misha-minimally-invasive-implantable-shock-absorber-implant/)
 
 ## Regenerative and non-surgical
 - [Orthobiologics and regenerative therapies](https://elitesportsmed.org/services/orthobiologics-regenerative-orthopedic-therapies/)
+- [PRP injections](https://elitesportsmed.org/services/prp-injections/): typically self-pay and not FDA-approved for any condition; offered only after a physician evaluation.
 - [Shockwave therapy](https://elitesportsmed.org/services/shockwave-therapy/)
 - [DOLORCLAST radial shockwave therapy](https://elitesportsmed.org/services/dolorclast-radial-shockwave-therapy/)
 - [Laser therapy](https://elitesportsmed.org/services/laser-therapy/)
 - [MLS multiwave laser therapy](https://elitesportsmed.org/services/mls-multiwave-laser-therapy/)
 - [Sports medicine](https://elitesportsmed.org/services/sports-medicine/)
+
+## Conditions
+- [Conditions we treat](https://elitesportsmed.org/conditions/)
+- [Knee arthritis](https://elitesportsmed.org/conditions/knee-arthritis/): every option from non-surgical care and PRP to MISHA and MAKO partial or total replacement.
+- [Meniscus tear](https://elitesportsmed.org/conditions/meniscus-tear/)
+- [ACL tear](https://elitesportsmed.org/conditions/acl-tear/)
 
 ## Evaluations and legal
 - [Independent medical examinations (IME)](https://elitesportsmed.org/services/independent-medical-examinations/)

@@ -45,6 +45,7 @@ CLINICAL_PREFIXES = (
     "joint-replacements-shoulder-knee/",
     "mako-robotic-assisted-knee-replacement-system/",
     "second-opinions/",
+    "conditions/",
 )
 
 
@@ -86,6 +87,16 @@ def git_dates(rel):
         if len(parts) == 2 and len(parts[0]) == 40:
             path = next((p for p in log[i + 1:] if p.strip()), rel)
             commits.append((parts[0], parts[1], path))
+    # The blog exemption above does not cover a new page hand-built from another
+    # page's shell: /conditions/ pages built from a service page came out dated
+    # to the day that service page was published. A rename leaves the old path
+    # gone from the tree; a "copy" leaves it still tracked. So history stops at
+    # the first commit whose path is some other page that still exists.
+    tracked = set(git("ls-files").split("\n"))
+    for i, (_, _, path) in enumerate(commits):
+        if path != rel and path in tracked:
+            commits = commits[:i]
+            break
     if not commits:
         return FALLBACK_DATE, FALLBACK_DATE
     published = commits[-1][1]
