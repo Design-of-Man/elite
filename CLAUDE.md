@@ -70,6 +70,13 @@ history.
   node. Whatever is on the Google Business Profile has to match exactly — a
   mismatch there is what Google surfaces, not what the page says.
 - No prices are published, including membership tiers. See `/pricing.md`.
+- NPI 1083678452 (individual) · FL license ME85839. Carried as `identifier` on the
+  `#physician` node.
+- His directory and map profiles (Google, Apple, Bing, Healthgrades, Doximity, Zocdoc…)
+  show ELITE only — never RegenOrtho Palm Beach's name, phone or services, even though
+  it shares the Palm Beach Gardens suite (decided 2026-10-12). The site's own
+  sister-practice links are separate and stay. Listing-by-listing status and fixes:
+  `docs/LISTINGS-AUDIT.md`.
 
 ## SEO — keep maximized
 - Canonical host is `https://elitesportsmed.org` — non-www, trailing slash

@@ -498,16 +498,6 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .brand-logo--on-dark { di
   white-space: nowrap;
   color: var(--ink);
 }
-.brand span {
-  margin-top: 0.5em;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  font-weight: 400;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--brass-ink);
-}
 
 .nav-desktop { display: flex; align-items: center; gap: clamp(1rem, 0.2rem + 1.5vw, 1.9rem); }
 .nav-desktop a {
@@ -690,7 +680,6 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .brand-logo--on-dark { di
   .site-header .container { gap: var(--sp-sm); }
   .brand { min-width: 0; }
   .brand strong { font-size: clamp(0.95rem, 0.6rem + 1.6vw, 1.25rem); }
-  .brand span { white-space: nowrap; }
 }
 
 @media (max-width: 560px) {
@@ -901,10 +890,6 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop > a,
 body[data-hero="media"] .site-header:not(.is-scrolled) .nav-mega-toggle,
 body[data-hero="media"] .site-header:not(.is-scrolled) .nav-phone {
   color: var(--paper);
-}
-body[data-hero="media"] .site-header:not(.is-scrolled) .brand span {
-  color: var(--paper);
-  opacity: 0.86;
 }
 body[data-hero="media"] .site-header:not(.is-scrolled) .nav-toggle span {
   background: var(--paper);
@@ -2251,7 +2236,8 @@ label {
 .office-card .office-street { font-size: var(--step-1); color: var(--ink); }
 .office-card .office-city { color: var(--body-on-paper); }
 .office-card .office-phone,
-.office-card .office-email {
+.office-card .office-email,
+.office-card .office-map {
   font-family: var(--font-mono);
   font-size: var(--step--1);
   color: var(--brass-ink);
