@@ -70,6 +70,8 @@ history.
   node. Whatever is on the Google Business Profile has to match exactly — a
   mismatch there is what Google surfaces, not what the page says.
 - No prices are published, including membership tiers. See `/pricing.md`.
+- Legal entity: MF Matarazzo MD LLC d/b/a Elite Sports Medicine (EIN is not kept in the
+  repo).
 - NPI 1083678452 (individual) · FL license ME85839. Carried as `identifier` on the
   `#physician` node.
 - His directory and map profiles (Google, Apple, Bing, Healthgrades, Doximity, Zocdoc…)

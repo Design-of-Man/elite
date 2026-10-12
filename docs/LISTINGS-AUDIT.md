@@ -14,6 +14,7 @@ these values:
 |---|---|
 | Practice name | Elite Sports Medicine |
 | Physician | Marc F. Matarazzo, MD · NPI 1083678452 · FL license ME85839 |
+| Legal entity | MF Matarazzo MD LLC d/b/a Elite Sports Medicine (EIN on file with Nick, kept out of the repo) |
 | Phone | 561-202-8886 |
 | Port St. Lucie | 1100 SW St. Lucie West Blvd., Ste. 105, Port St. Lucie, FL 34986 |
 | Palm Beach Gardens | 11380 Prosperity Farms Rd, Ste 204, Palm Beach Gardens, FL 33410 |
@@ -117,10 +118,14 @@ Google-generated or owned by the former employer.
 - **Organization verification needs two methods.** The easiest pair is the
   practice's EIN plus a DNS TXT record on elitesportsmed.org, which we can add once
   Apple issues it.
-- **The documents must name the entity behind "Elite Sports Medicine".** NPPES says
-  Ortho Florida, LLC dba Elite Sports Medicine. A 2025 notice says ORTHO MFM LLC.
-  Use the entity that actually holds the EIN, and include the Sunbiz fictitious-name
-  registration so the name matches.
+- **The legal entity is MF Matarazzo MD LLC d/b/a Elite Sports Medicine** (confirmed
+  2026-10-12). Use its EIN as Apple's Business ID. The DBA must match on Sunbiz:
+  - The only public fictitious-name filing found, a 2025 notice, registers "Elite
+    Sports Medicine" to **ORTHO MFM LLC** at the closed Jupiter address.
+  - If Sunbiz still shows that, file or renew the fictitious name under MF Matarazzo
+    MD LLC at a current office, or Apple's documents won't line up.
+- **DNS for elitesportsmed.org is hosted at Wix** (ns14/ns15.wixdns.net), not Vercel.
+  Apple's TXT record has to be added in that Wix account.
 - If the place shows **Request Transfer**, another organization manages it. Request
   the transfer and attach a business license or utility bill that shows the suite
   address.
@@ -139,7 +144,7 @@ Google-generated or owned by the former employer.
 | # | Source | What is wrong | Who fixes it |
 |---|---|---|---|
 | 1 | NPPES, individual NPI 1083678452 | Primary location is Jupiter; Palm Beach Gardens missing; fax = phone | Dr. Matarazzo at nppes.cms.hhs.gov. Many directories copy from here, so fix it first. |
-| 1b | NPPES, Elite organization NPIs 1518755255 and 1356139000 | Jupiter primary; no Palm Beach Gardens | The authorized official on the record (Ortho Florida, LLC) |
+| 1b | NPPES, organization NPIs 1518755255 and 1356139000 | Both belong to **Ortho Florida, LLC** (not MF Matarazzo MD LLC) with "Elite Sports Medicine" as a DBA; one has Jupiter as primary; no Palm Beach Gardens. MF Matarazzo MD LLC has **no organization NPI** of its own. | Ask Dr. Matarazzo which entity bills insurance. Medicare lists the facility as Ortho Florida, LLC. If MF Matarazzo MD LLC bills, it needs its own Type 2 NPI, and Ortho Florida's authorized official removes the Elite DBA. If Ortho Florida bills, only the Jupiter address comes off. |
 | 2 | Medicare Care Compare | Palm Beach Gardens phone is **561-624-4800** (Dr. Buzas's listing); two Boca Raton addresses | Billing, through PECOS |
 | 3 | Zocdoc (zocdoc.com/doctor/marc-matarazzo-md-27002) | Entirely Orthopedic Center of Palm Beach County: Lake Worth, Boynton, Wellington, old phones, old bio | Zocdoc provider support |
 | 4 | Vitals (vitals.com/doctors/marc-matarazzo-n60qd2) | Headline says **Longview, TX**; CHRISTUS and Center for Bone & Joint Surgery offices; no Elite | Claim the profile |
