@@ -74,6 +74,17 @@ them, from a borrowed 2026-08-19 to the day each file was really first committed
   node. Whatever is on the Google Business Profile has to match exactly — a
   mismatch there is what Google surfaces, not what the page says.
 - No prices are published, including membership tiers. See `/pricing.md`.
+- Legal entity: MF Matarazzo MD LLC d/b/a Elite Sports Medicine (EIN is not kept in the
+  repo).
+- NPI 1083678452 (individual) · FL license ME85839. Carried as `identifier` on the
+  `#physician` node.
+- His directory and map profiles (Google, Apple, Bing, Healthgrades, Doximity, Zocdoc…)
+  show ELITE only — never RegenOrtho Palm Beach's name or phone, even though it shares
+  the Palm Beach Gardens suite (decided 2026-10-12). Peptide therapy is an Elite service
+  too (Dr. Matarazzo, 2026-10-12). The Jupiter office (108 Intracoastal Pointe Dr) is
+  closed — it should appear nowhere. The site's own
+  sister-practice links are separate and stay. Listing-by-listing status and fixes:
+  `docs/LISTINGS-AUDIT.md`.
 
 ## SEO — keep maximized
 - Canonical host is `https://elitesportsmed.org` — non-www, trailing slash
