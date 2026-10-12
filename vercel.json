@@ -260,6 +260,91 @@
       "source": "/services/peptide-therapy/:slug/",
       "destination": "https://regenorthopb.com/services/peptide-therapy",
       "permanent": true
+    },
+    {
+      "source": "/knee-ligaments-reconstructions/",
+      "destination": "/services/knee-ligaments-reconstructions/",
+      "permanent": true
+    },
+    {
+      "source": "/mako-total-and-partial-knee-replacement/",
+      "destination": "/services/mako-total-and-partial-knee-replacement/",
+      "permanent": true
+    },
+    {
+      "source": "/patellar-dislocation-surgery/",
+      "destination": "/services/patellar-dislocation-surgery/",
+      "permanent": true
+    },
+    {
+      "source": "/personal-injury/",
+      "destination": "/services/personal-injury/",
+      "permanent": true
+    },
+    {
+      "source": "/shockwave-therapy/",
+      "destination": "/services/shockwave-therapy/",
+      "permanent": true
+    },
+    {
+      "source": "/shoulder-and-knee-surgery/",
+      "destination": "/services/shoulder-and-knee-surgery/",
+      "permanent": true
+    },
+    {
+      "source": "/sports-medicine/",
+      "destination": "/services/sports-medicine/",
+      "permanent": true
+    },
+    {
+      "source": "/total-knee-replacement/",
+      "destination": "/services/total-knee-replacement/",
+      "permanent": true
+    },
+    {
+      "source": "/total-shoulder-replacement-surgery-elite-sports-medicine/",
+      "destination": "/services/total-shoulder-replacement-surgery-elite-sports-medicine/",
+      "permanent": true
+    },
+    {
+      "source": "/ligament-reconstructions-of-the-knee/",
+      "destination": "/services/knee-ligaments-reconstructions/",
+      "permanent": true
+    },
+    {
+      "source": "/total-shoulder-replacement/",
+      "destination": "/services/total-shoulder-replacement-surgery-elite-sports-medicine/",
+      "permanent": true
+    },
+    {
+      "source": "/booking-calendar/",
+      "destination": "/schedule-appointment/",
+      "permanent": true
+    },
+    {
+      "source": "/booking-calendar/:slug/",
+      "destination": "/schedule-appointment/",
+      "permanent": true
+    },
+    {
+      "source": "/service-page/",
+      "destination": "/schedule-appointment/",
+      "permanent": true
+    },
+    {
+      "source": "/service-page/:slug/",
+      "destination": "/schedule-appointment/",
+      "permanent": true
+    },
+    {
+      "source": "/book-online/",
+      "destination": "/schedule-appointment/",
+      "permanent": true
+    },
+    {
+      "source": "/book-online/:slug/",
+      "destination": "/schedule-appointment/",
+      "permanent": true
     }
   ],
   "headers": [
