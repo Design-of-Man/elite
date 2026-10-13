@@ -1,6 +1,19 @@
 # Peptide migration — elitesportsmed.org → regenorthopb.com
 
-**Status: built, not cut over. Blocked on two approvals — see "Before cutover".**
+**Status: LIVE. Clinical sign-off on the four RegenOrtho pages is still outstanding —
+see "Open items".** (Updated 2026-10-13.)
+
+- The redirects were committed 2026-09-17 (`c3d7d7c`, `a9bc769`) and took effect
+  when the domain moved to Vercel, which was serving it by 2026-09-21. Checked
+  2026-10-13: every peptide URL in the map returns a permanent redirect (308,
+  Vercel's `permanent: true`) to its RegenOrtho destination, and the destinations
+  return 200.
+- Nick confirmed on 2026-10-13 that the redirects stay. Keep them. Restoring the
+  Elite pages now would make Google re-sort the same rankings a second time and
+  split the cluster across two of the owner's domains.
+- Peptide therapy is still an Elite service (Dr. Matarazzo, 2026-10-12), so it can
+  stay on his listings under the Elite name (`docs/LISTINGS-AUDIT.md`). The pages
+  and the search rankings live on RegenOrtho.
 
 Prepared 2026-09-17 from Search Console data for the 28 days to 2026-09-14
 (the first full period after the Aug 17/18 takeovers).
@@ -83,30 +96,49 @@ alone carried 205 impressions in the window. The four specific rules sit
 
 ---
 
-## Before cutover
+## Open items
 
-### 1. Clinical sign-off — required
+### 1. Clinical sign-off — still outstanding
 
 The four pages are new medical content on RegenOrtho. Facts are carried over
 from Elite's published pages (which are hedged throughout: "may be considered
 to support", "has been studied for"), and the wording is ours. But per
 `regenortho/CLAUDE.md`, medical copy does not ship without the practice
-approving it. **Nobody has approved these yet.**
+approving it. **They went live without that approval, and as of 2026-10-13 the
+practice still has not approved them.** That covers the copy and the `$249/month`
+figure on each page. Until it lands, treat the four pages as unapproved: get the
+practice to review them, and make any wording changes they ask for on the
+RegenOrtho pages. Do not remove the redirects to work around it.
 
-Moving a service line between two of the owner's brands is also a positioning
-decision, not a build decision. The practice confirms it, not us.
+Moving the service line between brands was the other decision this section
+waited on. Nick settled that on 2026-10-13: the redirects stay.
 
 ### 2. Copyright — see `docs/CONTENT-PROVENANCE.md`
 
-Fifteen other pages in this rebuild are 76–93% verbatim copies of the live
-site's body copy. That is a separate and larger issue than the peptide work,
-and it gates the whole cutover, not just this migration.
+Fifteen other pages in this rebuild are 76–93% verbatim copies of the old
+site's body copy. That is separate from, and larger than, the peptide work, and
+it is tracked in that file, not here.
 
-### 3. We do not control the cutover
+### 3. DNS cutover — done
 
-`elitesportsmed.org` resolves to 160.153.0.85 (GoDaddy) behind Cloudflare, and
-the account has not been transferred. DNS has to move before any of this takes
-effect. Until then these redirects are inert.
+When this was written, `elitesportsmed.org` still pointed at GoDaddy and the
+redirects did nothing. The domain now serves from Vercel (see Status), so the
+redirects are live.
+
+---
+
+## Early results (Search Console, to 2026-10-10)
+
+| | Sep 13–26 | Sep 27 – Oct 10 |
+|---|---|---|
+| Elite peptide URLs — clicks / impressions | 33 / 3,351 | 17 / 1,000 |
+| RegenOrtho's four destinations — clicks / impressions | 0 / 109 | 5 / 717 |
+
+Elite's `/services/peptide-therapy/ghk-cu/` fell from 1,625 impressions to 4, so
+Google has processed that redirect. The RegenOrtho pages rank around positions
+8–12 so far (GHK-Cu 9.8, KPV 8.1, MOTS-c 9.9, Tesamorelin 11.6, 28 days to
+2026-10-10). That is on track for the 4–8 week settle below; the end of that
+range is mid-November.
 
 ---
 
