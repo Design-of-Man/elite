@@ -108,10 +108,17 @@ def git_dates(rel):
         return FALLBACK_DATE, FALLBACK_DATE
     # Entries come as "<sha> <date>", blank line, "<path at that commit>".
     commits = []
+    header = re.compile(r"^[0-9a-f]{40} \d{4}-\d{2}-\d{2}$")
     for i, line in enumerate(log):
         parts = line.split()
         if len(parts) == 2 and len(parts[0]) == 40:
             path = next((p for p in log[i + 1:] if p.strip()), rel)
+            # A merge commit lists no file names, so the next non-empty line is
+            # the NEXT commit's header. Taking that as a path made content()
+            # fail, read as "changed", and dated the page to the merge (every
+            # merged PR re-dated the pages it carried). Reuse the last path.
+            if header.match(path):
+                path = commits[-1][2] if commits else rel
             commits.append((parts[0], parts[1], path))
     # The blog exemption above does not cover a new page hand-built from another
     # page's shell: /conditions/ pages built from a service page came out dated
