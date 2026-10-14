@@ -37,8 +37,12 @@ Of 196 clicks in the window:
 Four peptide pages carry **37% of the site's organic clicks**. Every surgical
 service page combined carries 2.6%.
 
-**But it is not patient traffic.** GHK-Cu converts 0.72% from position 6.8 —
-that is wrong-intent traffic, not underperformance. Roughly a third of Elite's
+**But it is most likely not patient traffic.** GHK-Cu got 30 clicks from 4,150
+impressions, a 0.72% click-through rate, despite ranking at position 6.8 on page
+one. That points to people searching for something the page doesn't offer, not
+to a weak page. That 0.72% is the share of searchers who clicked, not a patient
+conversion rate. Nothing we track shows whether any peptide visitor booked, so
+"wrong-intent" is an inference, not a measurement. Roughly a third of Elite's
 impressions come from outside the US (Germany 269 impressions → 0 clicks,
 Italy 212 → 0, Singapore 266 → 0, Canada 517 → 1). People searching "ghk-cu"
 want a compound, a dose or a supplier, not a consult on PGA Boulevard.
