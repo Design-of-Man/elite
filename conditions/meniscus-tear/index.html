@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/assets/css/v2.css?v=5a34b84d4f">
+<link rel="stylesheet" href="/assets/css/v2.css?v=64156d03ad">
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "MedicalCondition", "name": "Meniscus tear", "alternateName": ["Torn meniscus", "Meniscal tear"], "associatedAnatomy": {"@type": "AnatomicalStructure", "name": "Meniscus of the knee"}, "signOrSymptom": [{"@type": "MedicalSymptom", "name": "Pain along the joint line"}, {"@type": "MedicalSymptom", "name": "Swelling"}, {"@type": "MedicalSymptom", "name": "Catching or locking"}, {"@type": "MedicalSymptom", "name": "Knee giving way"}, {"@type": "MedicalSymptom", "name": "Unable to fully straighten the knee"}], "possibleTreatment": [{"@type": "MedicalTherapy", "name": "Physical therapy"}, {"@type": "MedicalProcedure", "name": "Arthroscopic meniscus repair"}, {"@type": "MedicalProcedure", "name": "Partial meniscectomy"}], "url": "https://elitesportsmed.org/conditions/meniscus-tear/"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a meniscus tear heal on its own?", "acceptedAnswer": {"@type": "Answer", "text": "Some can. Small tears on the outer rim, which has a blood supply, sometimes heal with rest and rehabilitation. Tears in the inner portion, and larger or complex tears, generally do not."}}, {"@type": "Question", "name": "Can I walk on a torn meniscus?", "acceptedAnswer": {"@type": "Answer", "text": "Often, yes. Many people keep walking on a torn meniscus. A knee that locks, will not straighten or keeps swelling should be examined rather than walked through."}}, {"@type": "Question", "name": "Do I need an MRI for a meniscus tear?", "acceptedAnswer": {"@type": "Answer", "text": "Usually. The exam suggests a tear, and an MRI shows where it is and what pattern it has, which decides the treatment."}}, {"@type": "Question", "name": "What is the difference between meniscus repair and a trim?", "acceptedAnswer": {"@type": "Answer", "text": "A repair stitches the tear so the meniscus heals and is kept. A trim, or partial meniscectomy, removes the damaged part. A repair asks more of the recovery but protects the knee in the long run."}}, {"@type": "Question", "name": "How long is recovery after meniscus surgery?", "acceptedAnswer": {"@type": "Answer", "text": "A trim is usually a matter of weeks. After a repair, running and pivoting sport tends to come back between three and six months, decided by testing rather than a date."}}, {"@type": "Question", "name": "What happens if a meniscus tear is not treated?", "acceptedAnswer": {"@type": "Answer", "text": "Some settle. Others keep catching or swelling, and a knee that loses its cushioning tends to wear faster, so arthritis can arrive sooner."}}]}</script>
@@ -38,7 +38,7 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="/" class="brand">
+    <a href="/" class="brand" aria-label="ELITE Sports Medicine home">
       <img class="brand-logo brand-logo--on-light" src="/assets/img/logo-elite-on-light.png"
            alt="ELITE Sports Medicine" width="441" height="161" fetchpriority="high">
       <img class="brand-logo brand-logo--on-dark" src="/assets/img/logo-elite-on-dark.png"
@@ -298,8 +298,8 @@
              alt="ELITE Sports Medicine" width="441" height="161" loading="lazy">
         <p style="margin-top:var(--sp-sm)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
         <div class="footer-social" style="margin-top:var(--sp-md)">
-          <a href="https://www.instagram.com/drmarcmatarazzo/" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
-          <a href="https://www.linkedin.com/in/matarazzo/" aria-label="LinkedIn" target="_blank" rel="noopener">in</a>
+          <a href="https://www.instagram.com/drmarcmatarazzo/" target="_blank" rel="noopener">IG<span class="visually-hidden"> (Instagram)</span></a>
+          <a href="https://www.linkedin.com/in/matarazzo/" target="_blank" rel="noopener">in<span class="visually-hidden"> (LinkedIn)</span></a>
         </div>
       </div>
       <div>
@@ -309,6 +309,7 @@
           <li><a href="/memberships/">Memberships</a></li>
           <li><a href="/marc-f-matarazzo/">Dr. Matarazzo</a></li>
           <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/orthopedic-glossary/">Patient Glossary</a></li>
           <li><a href="/schedule-appointment/">Schedule Appointment</a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="/areas-we-serve/">Areas We Serve</a></li>
@@ -372,7 +373,7 @@
     <button id="ai-close" aria-label="Close chat">&times;</button>
   </div>
   <div id="ai-messages" class="ai-messages">
-    <div class="ai-msg disclaimer">This assistant can answer general questions about our practice. It does not provide medical advice — for clinical questions, please call 561-202-8886.</div>
+    <div class="ai-msg disclaimer">This assistant can answer general questions about our practice. It does not provide medical advice. For clinical questions, please call 561-202-8886.</div>
   </div>
   <form id="ai-form" class="ai-input-row">
     <input id="ai-input" type="text" aria-label="Ask the front desk assistant a question" placeholder="Ask about services, locations, booking…" autocomplete="off">

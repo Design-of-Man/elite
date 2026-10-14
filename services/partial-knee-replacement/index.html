@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/assets/css/v2.css?v=5a34b84d4f">
+<link rel="stylesheet" href="/assets/css/v2.css?v=64156d03ad">
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "MedicalProcedure", "name": "Partial Knee Replacement", "alternateName": ["Unicompartmental knee replacement", "Partial knee arthroplasty", "MAKO partial knee replacement"], "procedureType": "https://schema.org/SurgicalProcedure", "bodyLocation": "Knee", "url": "https://elitesportsmed.org/services/partial-knee-replacement/", "provider": {"@id": "https://elitesportsmed.org/#physician"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Am I a candidate for a partial knee replacement?", "acceptedAnswer": {"@type": "Answer", "text": "Possibly, if your arthritis is confined to one compartment of the knee, your ligaments are stable and non-surgical treatment has stopped working. An exam and imaging decide it."}}, {"@type": "Question", "name": "Is a partial knee replacement better than a total?", "acceptedAnswer": {"@type": "Answer", "text": "Neither is better in general. A partial keeps more of your own knee and usually recovers faster. A total is the right operation when the wear is spread across the joint, and it carries a lower chance of a second operation later."}}, {"@type": "Question", "name": "How long is recovery after a partial knee replacement?", "acceptedAnswer": {"@type": "Answer", "text": "Usually shorter than after a total knee replacement. Most people walk with support on the day of surgery, and activity comes back in stages on a rehabilitation plan."}}, {"@type": "Question", "name": "Is it done with the MAKO robot?", "acceptedAnswer": {"@type": "Answer", "text": "Dr. Matarazzo is MAKO-certified and performs MAKO partial knee replacements. He performs the operation himself; the robotic arm holds him to a plan built from your own anatomy."}}, {"@type": "Question", "name": "What happens if arthritis spreads to the rest of the knee later?", "acceptedAnswer": {"@type": "Answer", "text": "A partial knee replacement can be converted to a total knee replacement if the rest of the joint wears out later."}}, {"@type": "Question", "name": "Will my insurance cover it?", "acceptedAnswer": {"@type": "Answer", "text": "Coverage depends on your plan. Once a treatment plan is set, our staff verify your benefits with your carrier and walk you through what is covered before you commit."}}]}</script>
@@ -38,7 +38,7 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="/" class="brand">
+    <a href="/" class="brand" aria-label="ELITE Sports Medicine home">
       <img class="brand-logo brand-logo--on-light" src="/assets/img/logo-elite-on-light.png"
            alt="ELITE Sports Medicine" width="441" height="161" fetchpriority="high">
       <img class="brand-logo brand-logo--on-dark" src="/assets/img/logo-elite-on-dark.png"
@@ -310,8 +310,8 @@
              alt="ELITE Sports Medicine" width="441" height="161" loading="lazy">
         <p style="margin-top:var(--sp-sm)">Board-certified orthopedic &amp; sports medicine care for Port St. Lucie, Palm Beach Gardens, and all of South Florida.</p>
         <div class="footer-social" style="margin-top:var(--sp-md)">
-          <a href="https://www.instagram.com/drmarcmatarazzo/" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
-          <a href="https://www.linkedin.com/in/matarazzo/" aria-label="LinkedIn" target="_blank" rel="noopener">in</a>
+          <a href="https://www.instagram.com/drmarcmatarazzo/" target="_blank" rel="noopener">IG<span class="visually-hidden"> (Instagram)</span></a>
+          <a href="https://www.linkedin.com/in/matarazzo/" target="_blank" rel="noopener">in<span class="visually-hidden"> (LinkedIn)</span></a>
         </div>
       </div>
       <div>
@@ -321,6 +321,7 @@
           <li><a href="/memberships/">Memberships</a></li>
           <li><a href="/marc-f-matarazzo/">Dr. Matarazzo</a></li>
           <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/orthopedic-glossary/">Patient Glossary</a></li>
           <li><a href="/schedule-appointment/">Schedule Appointment</a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="/areas-we-serve/">Areas We Serve</a></li>
@@ -384,7 +385,7 @@
     <button id="ai-close" aria-label="Close chat">&times;</button>
   </div>
   <div id="ai-messages" class="ai-messages">
-    <div class="ai-msg disclaimer">This assistant can answer general questions about our practice. It does not provide medical advice — for clinical questions, please call 561-202-8886.</div>
+    <div class="ai-msg disclaimer">This assistant can answer general questions about our practice. It does not provide medical advice. For clinical questions, please call 561-202-8886.</div>
   </div>
   <form id="ai-form" class="ai-input-row">
     <input id="ai-input" type="text" aria-label="Ask the front desk assistant a question" placeholder="Ask about services, locations, booking…" autocomplete="off">
