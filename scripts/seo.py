@@ -10,7 +10,9 @@ pages drifts unless a script owns it. Two things qualify:
      engines have to guess that they belong to the same practice.
   2. <lastmod> in sitemap.xml. It used to be one frozen date stamped on every
      URL, which is a signal Google learns to discount. Dates now come from the
-     last commit that changed the page outside the seo:graph block.
+     last commit that changed the page's own content (see page_content()):
+     its <main>, title, description, og:image or hand-written JSON-LD. Edits
+     to the shared header, footer or asset cache-busters do not re-date it.
 
 The graph block is delimited by the seo:graph markers and rewritten in place,
 so running this repeatedly is a no-op until a page's title, description or
@@ -53,6 +55,30 @@ def without_graph(doc):
     """The page minus the block this script writes, so its own output never
     counts as an edit to the page."""
     return re.sub(re.escape(START) + r".*?" + re.escape(END), "", doc, flags=re.S)
+
+
+def page_content(doc):
+    """What a page says, as opposed to the chrome every page shares.
+
+    Dating on the whole file made every sitewide edit (a footer link, the
+    header logo, the assistant's disclaimer, an asset cache-buster restamped
+    by stamp-assets.py) re-date all 64 URLs to the same day: on 2026-10-14
+    every <lastmod> in sitemap.xml read 2026-10-12 for exactly that reason.
+    A page's date now moves only when its own <main>, title, description,
+    og:image or hand-written JSON-LD changes. Files without a <main> fall back
+    to the whole document.
+    """
+    doc = without_graph(doc)
+    main = re.search(r"<main\b.*?</main>", doc, flags=re.S)
+    if not main:
+        return doc
+    head = doc.split("</head>", 1)[0]
+    keep = re.findall(r"<title>.*?</title>"
+                      r'|<meta name="description" content=".*?">'
+                      r'|<meta property="og:image" content=".*?">'
+                      r'|<script type="application/ld\+json">.*?</script>',
+                      head, flags=re.S)
+    return "\n".join(keep) + "\n" + main.group(0)
 
 
 def git(*args):
@@ -103,7 +129,7 @@ def git_dates(rel):
 
     def content(sha, path):
         try:
-            return without_graph(git("show", f"{sha}:{path}"))
+            return page_content(git("show", f"{sha}:{path}"))
         except subprocess.CalledProcessError:
             return None
 
