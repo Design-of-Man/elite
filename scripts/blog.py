@@ -18,8 +18,15 @@ SOURCE FORMAT, one file per post:
       "title": "Broken Shoulder ...",              # plain text
       "date": "2026-10-05",                        # YYYY-MM-DD, shown to readers
       "description": "One or two sentences ...",   # meta description + card text
-      "body_html": "<h2>...</h2>\n\n<p>...</p>"    # the article body, no <h1>
+      "body_html": "<h2>...</h2>\n\n<p>...</p>",   # the article body, no <h1>
+      "seo_title": "Short Keyword-Led Title | Elite"  # OPTIONAL, see below
     }
+
+"title" is the article headline: the <h1>, the breadcrumb and the /blog/ card.
+By default the <title> tag is "{title} | Elite Sports Medicine". A headline
+long enough to read well as an <h1> makes a title tag search engines cut off,
+so an optional "seo_title" replaces the WHOLE <title> (and og:title) text; it
+must be 60 characters or fewer, keyword first, and differ from the headline.
 
 WHAT IT WRITES, and nothing else:
   - blog/{slug}/index.html for every post. The page shell (everything outside
@@ -103,6 +110,14 @@ def load_posts():
         for key in ("slug", "title", "date", "description", "body_html"):
             if not isinstance(post.get(key), str) or not post[key].strip():
                 raise BuildError(f"{path.relative_to(ROOT)}: missing or empty '{key}'")
+        seo_title = post.get("seo_title")
+        if seo_title is not None:
+            if not isinstance(seo_title, str) or not seo_title.strip():
+                raise BuildError(f"{path.relative_to(ROOT)}: 'seo_title' is present but empty")
+            if len(seo_title) > 60:
+                raise BuildError(f"{path.relative_to(ROOT)}: 'seo_title' is {len(seo_title)} characters; keep it to 60")
+            if seo_title.strip() == post["title"].strip():
+                raise BuildError(f"{path.relative_to(ROOT)}: 'seo_title' repeats the headline; drop it or make it differ")
         if not SLUG.match(post["slug"]):
             raise BuildError(f"{path.relative_to(ROOT)}: slug '{post['slug']}' is not a-z0-9 and hyphens")
         if path.stem != post["slug"]:
@@ -129,7 +144,7 @@ def cta_band():
 
 def render_post(shell_head, shell_tail, post, cta):
     url = f"{SITE}/blog/{post['slug']}/"
-    title = esc(f"{post['title']} | Elite Sports Medicine")
+    title = esc(post.get("seo_title") or f"{post['title']} | Elite Sports Medicine")
     desc = esc(post["description"])
     crumbs = json.dumps({
         "@context": "https://schema.org",

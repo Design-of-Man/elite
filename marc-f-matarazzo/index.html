@@ -29,16 +29,21 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Physician",
+  "@type": ["Physician", "Person"],
   "@id": "https://elitesportsmed.org/#physician",
   "name": "Marc F. Matarazzo, MD",
   "url": "https://elitesportsmed.org/marc-f-matarazzo/",
   "image": "https://elitesportsmed.org/assets/img/dr-matarazzo-portrait.jpg",
   "medicalSpecialty": [
-    "Orthopedic Surgery",
-    "Sports Medicine"
+    "https://schema.org/Musculoskeletal",
+    "https://schema.org/Surgical"
   ],
-  "alumniOf": "Lewis Katz School of Medicine at Temple University",
+  "knowsAbout": [
+    "Orthopedic surgery",
+    "Sports medicine"
+  ],
+  "address": [{"@type": "PostalAddress", "streetAddress": "1100 SW St. Lucie West Blvd., Ste. 105", "addressLocality": "Port St. Lucie", "addressRegion": "FL", "postalCode": "34986", "addressCountry": "US"}, {"@type": "PostalAddress", "streetAddress": "11380 Prosperity Farms Rd, Ste 204", "addressLocality": "Palm Beach Gardens", "addressRegion": "FL", "postalCode": "33410", "addressCountry": "US"}],
+  "alumniOf": {"@type": "CollegeOrUniversity", "name": "Lewis Katz School of Medicine at Temple University"},
   "worksFor": {
     "@id": "https://elitesportsmed.org/#organization"
   },
