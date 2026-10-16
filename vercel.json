@@ -2,6 +2,16 @@
   "trailingSlash": true,
   "redirects": [
     {
+      "source": "/review/",
+      "destination": "https://search.google.com/local/writereview?placeid=ChIJCWO6rq7t3ogRjK3N1aL5VUw",
+      "statusCode": 302
+    },
+    {
+      "source": "/review-palm-beach-gardens/",
+      "destination": "https://search.google.com/local/writereview?placeid=ChIJySYcSJor34gRFzgHnWlQD78",
+      "statusCode": 302
+    },
+    {
       "source": "/mako-robotic-assisted-knee-replacement-systems/",
       "destination": "/mako-robotic-assisted-knee-replacement-system/",
       "permanent": true
