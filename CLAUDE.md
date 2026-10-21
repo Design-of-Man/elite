@@ -102,8 +102,8 @@ them, from a borrowed 2026-08-19 to the day each file was really first committed
   that is what tells search engines the per-page procedure nodes belong to one
   practice. Never duplicate the org node onto another page.
 - Clinical pages (everything under `/services/` and `/conditions/`, plus regenerative-treatments,
-  minimally-invasive-procedures, joint-replacements-shoulder-knee, the MAKO page
-  and second-opinions) get `MedicalWebPage` + a `MedicalAudience`. That list is
+  minimally-invasive-procedures, joint-replacements-shoulder-knee and
+  second-opinions) get `MedicalWebPage` + a `MedicalAudience`. That list is
   `CLINICAL_PREFIXES` in `scripts/seo.py`; add new clinical pages to it.
 - `<lastmod>` comes from the last commit that changed the file outside the
   `seo:graph` block, not a sitewide constant. Commits that only carry `seo.py`'s
@@ -122,6 +122,10 @@ them, from a borrowed 2026-08-19 to the day each file was really first committed
 - DELIBERATE: no `aggregateRating` in our own schema (Google guideline), and no
   `reviewedBy`/`lastReviewed` on MedicalWebPage — both assert a named clinician
   signed off on the page, and that sign-off does not exist on record.
+- There is ONE MAKO page: `/services/mako-total-and-partial-knee-replacement/`. The old
+  root post `/mako-robotic-assisted-knee-replacement-system/` competed with it for the same
+  searches, so its copy was folded in verbatim and it 301s there (2026-10-21). Don't
+  recreate a second MAKO page.
 - `vercel.json` 301-maps every old WordPress URL (including the peptide pages,
   which now point at regenorthopb.com) — keep them ≥12 months post-launch. It is
   a standalone file; edit it directly.

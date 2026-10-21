@@ -2,8 +2,13 @@
   "trailingSlash": true,
   "redirects": [
     {
+      "source": "/mako-robotic-assisted-knee-replacement-system/",
+      "destination": "/services/mako-total-and-partial-knee-replacement/",
+      "permanent": true
+    },
+    {
       "source": "/mako-robotic-assisted-knee-replacement-systems/",
-      "destination": "/mako-robotic-assisted-knee-replacement-system/",
+      "destination": "/services/mako-total-and-partial-knee-replacement/",
       "permanent": true
     },
     {
