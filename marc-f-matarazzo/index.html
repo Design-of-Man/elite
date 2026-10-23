@@ -29,16 +29,21 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Physician",
+  "@type": ["Physician", "Person"],
   "@id": "https://elitesportsmed.org/#physician",
   "name": "Marc F. Matarazzo, MD",
   "url": "https://elitesportsmed.org/marc-f-matarazzo/",
   "image": "https://elitesportsmed.org/assets/img/dr-matarazzo-portrait.jpg",
   "medicalSpecialty": [
-    "Orthopedic Surgery",
-    "Sports Medicine"
+    "https://schema.org/Musculoskeletal",
+    "https://schema.org/Surgical"
   ],
-  "alumniOf": "Lewis Katz School of Medicine at Temple University",
+  "knowsAbout": [
+    "Orthopedic surgery",
+    "Sports medicine"
+  ],
+  "address": [{"@type": "PostalAddress", "streetAddress": "1100 SW St. Lucie West Blvd., Ste. 105", "addressLocality": "Port St. Lucie", "addressRegion": "FL", "postalCode": "34986", "addressCountry": "US"}, {"@type": "PostalAddress", "streetAddress": "11380 Prosperity Farms Rd, Ste 204", "addressLocality": "Palm Beach Gardens", "addressRegion": "FL", "postalCode": "33410", "addressCountry": "US"}],
+  "alumniOf": {"@type": "CollegeOrUniversity", "name": "Lewis Katz School of Medicine at Temple University"},
   "worksFor": {
     "@id": "https://elitesportsmed.org/#organization"
   },
@@ -90,8 +95,11 @@
 </script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://elitesportsmed.org/"}, {"@type": "ListItem", "position": 2, "name": "Marc F. Matarazzo, MD", "item": "https://elitesportsmed.org/marc-f-matarazzo/"}]}</script>
 <!-- seo:graph -->
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://elitesportsmed.org/#website", "url": "https://elitesportsmed.org/", "name": "Elite Sports Medicine", "inLanguage": "en-US", "publisher": {"@id": "https://elitesportsmed.org/#organization"}}, {"@type": "WebPage", "@id": "https://elitesportsmed.org/marc-f-matarazzo/#webpage", "url": "https://elitesportsmed.org/marc-f-matarazzo/", "name": "Dr. Marc Matarazzo, MD | Orthopedic Surgeon & Sports Medicine", "description": "Dr. Marc F. Matarazzo, MD, board-certified orthopedic surgeon and former NY Jets/NY Islanders assistant team physician. Port St. Lucie and Palm Beach Gardens, FL.", "inLanguage": "en-US", "isPartOf": {"@id": "https://elitesportsmed.org/#website"}, "about": {"@id": "https://elitesportsmed.org/#organization"}, "primaryImageOfPage": {"@type": "ImageObject", "url": "https://elitesportsmed.org/assets/img/og-cover.jpg"}, "datePublished": "2026-08-19", "dateModified": "2026-10-16", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".hero h1", ".hero-lede"]}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://elitesportsmed.org/#website", "url": "https://elitesportsmed.org/", "name": "Elite Sports Medicine", "inLanguage": "en-US", "publisher": {"@id": "https://elitesportsmed.org/#organization"}}, {"@type": "WebPage", "@id": "https://elitesportsmed.org/marc-f-matarazzo/#webpage", "url": "https://elitesportsmed.org/marc-f-matarazzo/", "name": "Dr. Marc Matarazzo, MD | Orthopedic Surgeon & Sports Medicine", "description": "Dr. Marc F. Matarazzo, MD, board-certified orthopedic surgeon and former NY Jets/NY Islanders assistant team physician. Port St. Lucie and Palm Beach Gardens, FL.", "inLanguage": "en-US", "isPartOf": {"@id": "https://elitesportsmed.org/#website"}, "about": {"@id": "https://elitesportsmed.org/#organization"}, "primaryImageOfPage": {"@type": "ImageObject", "url": "https://elitesportsmed.org/assets/img/og-cover.jpg"}, "datePublished": "2026-08-19", "dateModified": "2026-10-23", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".hero h1", ".hero-lede"]}}]}</script>
 <!-- /seo:graph -->
+<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -331,6 +339,24 @@
           <h3>Fellow, AAOS</h3>
           <p>Fellow of the American Academy of Orthopedic Surgeons and active member of the American Orthopedic Society for Sports Medicine. Presenting nationally and internationally on sports medicine since 1999.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container container--reading">
+      <div class="reveal">
+        <p class="eyebrow">Where You&rsquo;d Be Seen</p>
+        <h2>Where Dr. Matarazzo sees patients</h2>
+        <p>Dr. Matarazzo sees patients at both offices &mdash; our <a href="/areas-we-serve/port-st-lucie-fl/">orthopedic office in Port St.&nbsp;Lucie</a>
+        (1100 SW St. Lucie West Blvd., Ste. 105) and our <a href="/areas-we-serve/palm-beach-gardens-fl/">orthopedic office in Palm Beach Gardens</a>
+        (11380 Prosperity Farms Rd, Ste 204). Patients travel in from
+        <a href="/areas-we-serve/stuart-fl/">Stuart</a>, <a href="/areas-we-serve/jensen-beach-fl/">Jensen Beach</a>,
+        <a href="/areas-we-serve/fort-pierce-fl/">Fort Pierce</a>, <a href="/areas-we-serve/jupiter-fl/">Jupiter</a>,
+        <a href="/areas-we-serve/north-palm-beach-fl/">North Palm Beach</a> and
+        <a href="/areas-we-serve/west-palm-beach-fl/">West Palm Beach</a> &mdash; see
+        <a href="/areas-we-serve/">every area we serve</a>, or call
+        <a href="tel:+15612028886">561-202-8886</a>.</p>
       </div>
     </div>
   </section>

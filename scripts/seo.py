@@ -43,7 +43,6 @@ CLINICAL_PREFIXES = (
     "regenerative-treatments/",
     "minimally-invasive-procedures/",
     "joint-replacements-shoulder-knee/",
-    "mako-robotic-assisted-knee-replacement-system/",
     "second-opinions/",
     "conditions/",
 )
