@@ -191,9 +191,15 @@ one decision about what counts as a conversion applies to all three properties:
   where analytics becomes a health-privacy problem.
 - `leadEvent()` hard-bails on the three PHI paths, on top of those pages having
   no analytics tag at all. Two independent guards on purpose.
-- `window.gtag` is mirrored but no GA4 tag is loaded here yet. It is what Google
-  Ads imports as a conversion; the call no-ops until a tag is added, so that day
-  needs no code change.
+- GA4 (`G-1HSFDBS6Q8`, property "elitesportsmed.org" in the "Elite Sports
+  Medicine" GA account) is loaded in `<head>` on every page that carries the
+  Vercel tag, added 2026-10-23. The gtag stub is defined in `<head>`, before
+  `main.js` runs, so `form_submit` fired at load on `/thank-you/` reaches GA4.
+  It is NOT on the three PHI pages; any new page needs the snippet copied too
+  (blog posts inherit it from `blog/index.html`'s shell). The CSP in vercel.json
+  allows `googletagmanager.com` / `google-analytics.com` for this. `form_submit`
+  is the GA4 key event; GA4's own Enhanced Measurement form tracking is turned
+  off so it can't count sends that failed.
 
 Verified in Chromium (2026-09-21): all four events fire with correct placements,
 the PHI page stays silent, `/thank-you/` counts once and not on reload, and the
