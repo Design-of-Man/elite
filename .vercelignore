@@ -2,3 +2,8 @@ _dev/
 *.md
 !README.md
 !pricing.md
+# Build scripts, post sources and workflows are not site pages.
+# /scripts/seo.py returned 200 on production until 2026-10-23.
+scripts/
+_posts/
+.github/
