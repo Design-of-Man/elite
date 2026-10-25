@@ -126,9 +126,16 @@ them, from a borrowed 2026-08-19 to the day each file was really first committed
   root post `/mako-robotic-assisted-knee-replacement-system/` competed with it for the same
   searches, so its copy was folded in verbatim and it 301s there (2026-10-21). Don't
   recreate a second MAKO page.
-- `vercel.json` 301-maps every old WordPress URL (including the peptide pages,
-  which now point at regenorthopb.com) — keep them ≥12 months post-launch. It is
-  a standalone file; edit it directly.
+- `vercel.json` 301-maps every old WordPress URL — keep them ≥12 months post-launch.
+  It is a standalone file; edit it directly.
+- PEPTIDES are split by geography so the two sites don't compete (2026-10-25). Elite has
+  ONE peptide page, `/services/peptide-therapy/`, aimed at Port St. Lucie (too far from
+  RegenOrtho to send those patients there); it hands Palm Beach Gardens patients to
+  regenorthopb.com. The nine per-compound pages (GHK-Cu, KPV, BPC-157…) stay 301'd to
+  regenorthopb.com, which owns those searches. Do not bring the compound pages back or
+  write compound blog posts here: they pulled informational, largely out-of-state traffic
+  and competed with RegenOrtho's pages for it. The old hub FAQ "Are peptides safe? Yes"
+  was dropped on purpose; it contradicted the page's own FDA notice.
 - `vercel.json` also sends `X-Robots-Tag: noindex, nofollow` on any host matching
   `.*\.vercel\.app`. Any such host serving this repo is a duplicate of
   elitesportsmed.org, and a duplicate is what cost regenorthopb.com 45% of its
