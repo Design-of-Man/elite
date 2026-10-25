@@ -67,11 +67,6 @@
       "permanent": true
     },
     {
-      "source": "/services/peptide-therapy/",
-      "destination": "https://regenorthopb.com/services/peptide-therapy",
-      "permanent": true
-    },
-    {
       "source": "/minimally-invasive-procedure/",
       "destination": "/minimally-invasive-procedures/",
       "permanent": true
@@ -253,7 +248,7 @@
     },
     {
       "source": "/peptide-therapy/",
-      "destination": "https://regenorthopb.com/services/peptide-therapy",
+      "destination": "/services/peptide-therapy/",
       "permanent": true
     },
     {
