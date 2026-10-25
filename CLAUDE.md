@@ -44,6 +44,17 @@ was a copy of a page that still exists (a true rename leaves the old path gone).
 2026-10-12; that run moved `datePublished` on 10 older pages, `/accessibility/` among
 them, from a borrowed 2026-08-19 to the day each file was really first committed.
 
+## Fonts (self-hosted since 2026-10-25)
+Instrument Serif, DM Sans and IBM Plex Mono are served from `/assets/fonts/` (latin
+subset) via `@font-face` at the top of `v2.css`, and every page preloads the two
+above-the-fold files (Instrument Serif regular, DM Sans). Do NOT add a Google Fonts
+`<link>` or `@import` back: loading them from fonts.googleapis.com made headlines
+re-wrap after first paint on phones (CLS 0.19 on the MAKO page; 0 after the move).
+The "Instrument Serif Fallback" / "DM Sans Fallback" faces are metric-matched
+local fonts (size-adjust measured against Times New Roman / Arial metrics); they
+must stay second in `--font-display` / `--font-body`. Font files are immutable-
+cached: new bytes need a new filename (bump `-v1`).
+
 ## Page anatomy (keep consistent — the scripts depend on it)
 - Every page has exactly one `</head>`. Two location pages shipped without one
   for a while and silently missed every head-level injection.
@@ -60,7 +71,9 @@ them, from a borrowed 2026-08-19 to the day each file was really first committed
   fellowship-trained, MAKO-certified, first surgeon in Florida to implant the
   MISHA Knee System; over a decade as a team physician (NY Jets, NY Islanders).
 - 561-202-8886 · info@elitesportsmed.org
-- Port St. Lucie: 1100 SW St. Lucie West Blvd., Ste. 105, FL 34986
+- Port St. Lucie: 1100 SW St. Lucie West Blvd., Ste. 105, FL 34986 — I-95 **exit 121**
+  (St. Lucie West Blvd; FDOT). Exit 118 is Gatlin Blvd / Tradition Pkwy; three area
+  pages sent drivers there until 2026-10-25.
 - Palm Beach Gardens: 11380 Prosperity Farms Rd, Ste 204, FL 33410
 - Socials: instagram.com/drmarcmatarazzo · linkedin.com/in/matarazzo
 - Office hours are **Monday–Friday, 8:30 AM–4:00 PM**, the same at both offices
