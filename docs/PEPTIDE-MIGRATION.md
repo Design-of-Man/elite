@@ -1,5 +1,12 @@
 # Peptide migration — elitesportsmed.org → regenorthopb.com
 
+> **Update 2026-10-25 (Nick):** the hub `/services/peptide-therapy/` is back on Elite as
+> ONE page aimed at Port St. Lucie, which is too far from RegenOrtho to send those
+> patients there. It hands Palm Beach Gardens patients to regenorthopb.com. The nine
+> per-compound URLs below still 301 to RegenOrtho, which keeps those searches. The
+> rest of this document describes the 2026-09-17 move and still holds for the
+> compound pages. See CLAUDE.md, "PEPTIDES are split by geography".
+
 **Status: LIVE. Clinical sign-off on the four RegenOrtho pages is still outstanding —
 see "Open items".** (Updated 2026-10-13.)
 
