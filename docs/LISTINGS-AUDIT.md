@@ -161,6 +161,50 @@ Google-generated or owned by the former employer.
 | 15 | YellowPages, MapQuest, docspot, npidb, mycarecost | Copies of NPPES (Jupiter) | Clear up on their own after NPPES is fixed |
 | 16 | portstluciehealth.com | Elite listing shows 8–5. Practitioner listing at the old Center for Bone & Joint Surgery address. | Mirror of Google: follows the Google fixes |
 
+## Status, 2026-10-26
+
+Done on 2026-10-12 (from Nick's emails to Dr. Matarazzo):
+
+- Both Google profiles: all services, the booking link, Instagram and LinkedIn.
+- Elite added to Bing Maps for both offices.
+- Correction requests sent to Vitals and WebMD.
+- marcmatarazzomd.com redirected to elitesportsmed.org.
+- Zocdoc contacted. They replied 2026-10-13 that they can't edit the
+  auto-generated page: they will delete it, or he joins as a paid provider and
+  edits it himself. Waiting on Dr. Matarazzo's choice.
+- The Google merge requests for the two practitioner listings (128 reviews) are
+  filled out. They are **not submitted**: Google needs, for each office, a business
+  tax receipt or local business license plus a utility, phone or internet bill (or
+  a signed lease page) showing the business name and suite address. Asked for on
+  2026-10-12 and again 2026-10-20.
+
+Drafted 2026-10-26, in Nick's Gmail drafts, recipients to fill in:
+
+- Stryker Mako finder correction (row 12): replace the Jupiter address with both
+  Elite offices. Goes to his Stryker rep.
+- Moximed: add him to MISHA surgeon referrals. Goes to his Moximed rep, or the
+  form at mishaknee.com/contact-us.
+- Jupiter Medical Center find-a-physician correction (row 11).
+- A press pitch on the first MISHA implant in Florida. The date and place of
+  that first implant are left in brackets: they aren't on record yet.
+
+## Business data aggregators and chambers
+
+Many small directories copy from a few data aggregators, so one correct record
+there fixes them in bulk. Submit exactly the values in "The one rule" above.
+
+| Where | Cost | How | Notes |
+|---|---|---|---|
+| Foursquare | Free | foursquare.com/products/business-listings: search for Elite at each address, claim it or add it | Phone verification calls 561-202-8886, so warn the front desk. One listing per office. |
+| Data Axle | Paid | No free form found in 2026. Through a listings service such as BrightLocal's Citation Builder | Decide on cost before buying |
+| TransUnion Digital Business Profile (formerly Neustar Localeze) | Paid; a free plan is advertised but unconfirmed | Account, then Add a New Listing | Phone verification |
+| St. Lucie County Chamber of Commerce | Membership | stluciechamber.org | A real local link and listing for the Port St. Lucie office |
+| Northern Palm Beach County Chamber of Commerce | Membership | Its website, which wasn't confirmed here | For the Palm Beach Gardens office |
+
+Category for every listing: Orthopedic surgeon (primary), Sports medicine clinic.
+Description: reuse the Google profile description. Hours: Monday–Friday,
+8:30 AM–4:00 PM.
+
 ## Changed on the website (same change set)
 
 - Removed the "Matarazzo Orthopedics" sub-line under the logo on all 61 pages. It
