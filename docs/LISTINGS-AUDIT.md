@@ -77,6 +77,8 @@ Name, address, phone, hours and categories match the table above.
 
 These are almost certainly the "requests" Google keeps refusing. They are
 Google-generated or owned by the former employer.
+- **Email drafts** for Dr. Matarazzo to send the practice alongside the Google
+  request: `docs/GBP-ACCESS-EMAILS.md`.
 - **Path:** at business.google.com, use **Request access** on each one. The owner
   has 3 days to respond. After that, the confirmation email may offer
   "Verify / Claim".
