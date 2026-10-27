@@ -1645,8 +1645,8 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
    10b. PRESS
    Dr. Matarazzo's page, #in-the-news. One featured article with the photo
    the outlet ran (self-hosted under /assets/img/press/: the CSP allows img
-   'self' only), then a two-up grid that uses the site's own service images,
-   so the same headshot does not repeat. Each image link is aria-hidden and out of the tab order: the headline
+   'self' only), then a two-up grid whose cards show the outlet's name as a
+   masthead panel, so the same headshot does not repeat. Each image link is aria-hidden and out of the tab order: the headline
    is the real link, so a keyboard user meets each article once.
    -------------------------------------------------------------------------- */
 .press-feature,
@@ -1683,7 +1683,38 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 }
 .press-feature:hover .press-media img,
 .press-card:hover .press-media img { transform: scale(1.03); }
-.press-media--scene img { object-position: 50% 50%; }
+/* Cards without the outlet's photo show the outlet's name as a masthead
+   panel instead: distinct per article, and no stock image standing in for
+   the story. Decorative, so aria-hidden; the meta line names the outlet. */
+.press-mast {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  min-height: 15rem;
+  padding: clamp(1.5rem, 1rem + 1.8vw, 2.5rem);
+  padding-top: 4.5rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+.press-mast__name {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+}
+.press-mast__sub {
+  padding-top: 0.75rem;
+  border-top: 1px solid currentColor;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.press-mast--sky { background: var(--brand-sky); color: var(--ink); }
+.press-mast--sky .press-mast__sub { opacity: 1; }
+
 /* Article type, set on the photo so the three cards read differently at a
    glance. Decorative: the link it sits in is aria-hidden. */
 .press-tag {
@@ -1786,7 +1817,7 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 }
 @media (max-width: 560px) {
   .press-card { grid-template-columns: 1fr; }
-  .press-card .press-media { aspect-ratio: 16 / 10; }
+  .press-mast { min-height: 12rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .press-media img, .press-link span { transition: none; }
