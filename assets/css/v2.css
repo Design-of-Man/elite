@@ -1644,9 +1644,9 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 /* --------------------------------------------------------------------------
    10b. PRESS
    Dr. Matarazzo's page, #in-the-news. One featured article with the photo
-   the outlet ran, then a two-up grid. Images are the outlets' own photos of
-   him, self-hosted under /assets/img/press/ because the CSP allows img 'self'
-   only. Each image link is aria-hidden and out of the tab order: the headline
+   the outlet ran (self-hosted under /assets/img/press/: the CSP allows img
+   'self' only), then a two-up grid that uses the site's own service images,
+   so the same headshot does not repeat. Each image link is aria-hidden and out of the tab order: the headline
    is the real link, so a keyboard user meets each article once.
    -------------------------------------------------------------------------- */
 .press-feature,
@@ -1683,6 +1683,25 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 }
 .press-feature:hover .press-media img,
 .press-card:hover .press-media img { transform: scale(1.03); }
+.press-media--scene img { object-position: 50% 50%; }
+/* Article type, set on the photo so the three cards read differently at a
+   glance. Decorative: the link it sits in is aria-hidden. */
+.press-tag {
+  position: absolute;
+  top: var(--sp-sm);
+  left: var(--sp-sm);
+  z-index: 1;
+  padding: 0.5em 0.85em;
+  background: var(--paper);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--ink);
+}
 
 .press-body {
   display: flex;
