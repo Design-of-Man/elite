@@ -17,7 +17,7 @@ anything specific to their own care.
 
 ## Core pages
 - [Home](https://elitesportsmed.org/): practice overview and credentials.
-- [About Dr. Matarazzo](https://elitesportsmed.org/marc-f-matarazzo/): training, fellowships, team-physician history.
+- [About Dr. Matarazzo](https://elitesportsmed.org/marc-f-matarazzo/): training, fellowships, team-physician history, and press coverage (Florida Weekly, Jupiter Medical Center, Florida Hospital News).
 - [All services](https://elitesportsmed.org/services/): full treatment index.
 - [FAQ](https://elitesportsmed.org/faq/): 40 answers on appointments, insurance, surgery, recovery, MAKO, sports medicine and non-surgical care.
 - [Schedule an appointment](https://elitesportsmed.org/schedule-appointment/): request form and office details.
