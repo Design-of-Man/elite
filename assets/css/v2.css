@@ -1642,6 +1642,141 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
 }
 
 /* --------------------------------------------------------------------------
+   10b. PRESS
+   Dr. Matarazzo's page, #in-the-news. One featured article with the photo
+   the outlet ran, then a two-up grid. Images are the outlets' own photos of
+   him, self-hosted under /assets/img/press/ because the CSP allows img 'self'
+   only. Each image link is aria-hidden and out of the tab order: the headline
+   is the real link, so a keyboard user meets each article once.
+   -------------------------------------------------------------------------- */
+.press-feature,
+.press-card {
+  position: relative;
+  display: grid;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.press-feature { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+/* Secondary cards put the photo beside the text, so the same face does not
+   repeat at full width three times down the page. */
+.press-card { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
+.press-feature:hover,
+.press-card:hover { border-color: var(--brass); box-shadow: 0 18px 40px -28px rgba(10, 40, 80, 0.45); }
+
+.press-media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--ink);
+}
+.press-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 18%;
+  transition: transform var(--dur-slow) var(--ease);
+}
+.press-feature:hover .press-media img,
+.press-card:hover .press-media img { transform: scale(1.03); }
+
+.press-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+  padding: clamp(1.5rem, 1rem + 1.8vw, 2.5rem);
+}
+.press-feature .press-body { padding: clamp(1.75rem, 1rem + 3.2vw, 3.75rem); justify-content: center; }
+
+.press-meta {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.press-meta time { white-space: nowrap; }
+.press-body h3 { margin: 0; font-size: var(--step-1); line-height: 1.15; }
+.press-feature h3 { font-size: var(--step-3); line-height: 1.02; }
+.press-body h3 a { color: var(--ink); text-decoration: none; }
+.press-body h3 a:hover { color: var(--accent-text); }
+
+.press-quote {
+  margin: var(--sp-xs) 0 0;
+  padding-left: var(--sp-md);
+  border-left: 2px solid var(--brass);
+}
+.press-quote p {
+  margin: 0;
+  max-width: none;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--step-0);
+  line-height: 1.3;
+  color: var(--ink);
+}
+.press-feature .press-quote p { font-size: var(--step-2); line-height: 1.22; }
+.press-quote footer {
+  margin-top: 0.7em;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-on-paper);
+}
+.press-summary { margin: 0; font-size: var(--step--1); color: var(--fg-body); }
+.press-summary a { color: var(--accent-text); text-decoration: underline; text-underline-offset: 0.18em; }
+
+.press-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  margin-top: auto;
+  padding-top: var(--sp-sm);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+.press-link span { transition: transform var(--dur) var(--ease-quart); }
+.press-link:hover span { transform: translateX(6px); }
+
+.press-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 0.8rem + 1.6vw, 2rem);
+  margin-top: clamp(1.25rem, 0.8rem + 1.6vw, 2rem);
+}
+
+@media (max-width: 1080px) {
+  .press-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 860px) {
+  .press-feature { grid-template-columns: 1fr; }
+  .press-feature .press-media { aspect-ratio: 4 / 3; }
+}
+@media (max-width: 560px) {
+  .press-card { grid-template-columns: 1fr; }
+  .press-card .press-media { aspect-ratio: 16 / 10; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .press-media img, .press-link span { transition: none; }
+  .press-feature:hover .press-media img,
+  .press-card:hover .press-media img,
+  .press-link:hover span { transform: none; }
+}
+
+/* --------------------------------------------------------------------------
    11. CTA BAND
    -------------------------------------------------------------------------- */
 .cta-band {
