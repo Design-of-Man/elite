@@ -177,6 +177,7 @@ module.exports = async function handler(req, res) {
           "",
           `Thank you for reaching out to ${PRACTICE}. Your request came through and our team will contact you within one business day.`,
           "",
+          ...(/^[A-Z]{2}-[A-Z0-9]{5}$/.test(String(body.ref || "")) ? [`Your reference number is ${body.ref}.`, ""] : []),
           `If it's urgent, call us at ${PHONE}.`,
           "",
           PRACTICE,
