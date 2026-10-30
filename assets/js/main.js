@@ -1290,9 +1290,13 @@
    condition name: attaching "knee pain" to an individual visitor's action is
    the line where analytics becomes a health-privacy problem.
 
-   gtag is mirrored but not currently loaded here. It is what Google Ads can
-   import as a conversion, so the call is left in place and no-ops until a GA4
-   tag is added rather than needing this file edited again on that day. */
+   Two engagement events sit beside them, under the same names on all five
+   client sites: directions_click (a link to a map) and chat_open (the visitor
+   opens the front desk assistant). Neither is a lead; they show intent.
+
+   Every event goes to Vercel and is mirrored to GA4 (G-1HSFDBS6Q8, loaded in
+   <head> on every page except the three PHI forms since 2026-10-23). GA4 is
+   what Google Ads imports conversions from. */
 (function () {
   "use strict";
 
@@ -1350,11 +1354,29 @@
     return "body";
   }
 
+  var MAP_LINK = /google\.[a-z.]+\/maps|maps\.google\.|goo\.gl\/maps|maps\.app\.goo\.gl|maps\.apple\.com|waze\.com/i;
+  var chatOpened = false;
+
   /* Delegated in the capture phase so it covers every link on every page,
      including markup added later, and still records the click on a tel: link
-     that navigates away immediately. */
+     that navigates away immediately.
+
+     chat_open: capture runs before the launcher's own handler toggles the
+     panel, so a click that lands while the panel is closed is the click that
+     opens it. Enter and Space on the launcher button arrive as clicks too.
+     Once per page view; the assistant never opens itself, so this is always
+     the visitor's doing. */
   document.addEventListener("click", function (e) {
-    var a = e.target && e.target.closest && e.target.closest("a[href]");
+    var t = e.target;
+    if (!chatOpened && t && t.closest && t.closest("#ai-assistant-launcher")) {
+      var chat = document.getElementById("ai-assistant-panel");
+      if (chat && !chat.classList.contains("is-open")) {
+        chatOpened = true;
+        leadEvent("chat_open", { path: window.location.pathname, location: "assistant" });
+      }
+      return;
+    }
+    var a = t && t.closest && t.closest("a[href]");
     if (!a) return;
     var href = a.getAttribute("href") || "";
     var payload = { path: window.location.pathname, location: placementOf(a) };
@@ -1365,6 +1387,10 @@
     }
     if (href.indexOf("mailto:") === 0) {
       leadEvent("email_click", payload);
+      return;
+    }
+    if (MAP_LINK.test(href)) {
+      leadEvent("directions_click", payload);
       return;
     }
     if (a.host && a.host !== window.location.host) return;
@@ -1441,19 +1467,38 @@
      signal, and counting the submit instead would count sends that failed.
      Same rule both sibling sites follow: fire on delivery, not intent.
 
-     sessionStorage stops a refresh or a back-navigation from counting the same
-     lead twice; if it is unavailable the event simply fires, since an
-     occasional double beats silently losing the conversion. */
+     The navigation type decides whether this load is a new lead: a form post
+     redirected here is "navigate", so it counts every time, including a second
+     real request from the same tab. A refresh ("reload") or Back/Forward
+     ("back_forward") is the same lead seen again and does not count. Until
+     2026-10-30 a sessionStorage flag did this job, but nothing ever cleared
+     it, so only the first lead in a tab was ever counted. Old browsers fall
+     back to performance.navigation; with neither, the event simply fires,
+     since an occasional double beats silently losing the conversion. */
+  function navigationType() {
+    try {
+      var nav = window.performance && window.performance.getEntriesByType &&
+        window.performance.getEntriesByType("navigation")[0];
+      if (nav && nav.type) return nav.type;
+      var legacy = window.performance && window.performance.navigation;
+      if (legacy) {
+        if (legacy.type === 1) return "reload";
+        if (legacy.type === 2) return "back_forward";
+        return "navigate";
+      }
+    } catch (err) {}
+    return "navigate";
+  }
   if (window.location.pathname.indexOf("/thank-you/") === 0) {
-    var counted = false;
+    var navType = navigationType();
+    var repeat = navType === "reload" || navType === "back_forward";
     var flagged = false;
     try {
-      counted = window.sessionStorage.getItem("esm-thankyou-counted") === "1";
-      window.sessionStorage.setItem("esm-thankyou-counted", "1");
       flagged = window.sessionStorage.getItem("esm-lead-flagged") === "1";
       window.sessionStorage.removeItem("esm-lead-flagged");
+      window.sessionStorage.removeItem("esm-thankyou-counted"); // the retired flag
     } catch (err) {}
-    if (!counted && !flagged) {
+    if (!repeat && !flagged) {
       leadEvent("form_submit", {
         path: window.location.pathname,
         form: "schedule-appointment"
