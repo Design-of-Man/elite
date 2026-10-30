@@ -166,6 +166,20 @@ cached: new bytes need a new filename (bump `-v1`).
   `curl -s "https://api.indexnow.org/indexnow?url=https://elitesportsmed.org/&key=5b1495cc7c963fae41d9396f8b82b92a"`
   Bing and Yandex act in minutes; Google ignores it.
 
+## Front desk assistant (chat bubble, every page except the three PHI forms)
+Set answers, no AI, since 2026-10-30. It used to call `api/chat.js`, an LLM proxy that needed
+ANTHROPIC_API_KEY or XAI_API_KEY; the Vercel project never had either, so every visitor got
+"not fully connected yet" and nothing could be booked. That file is deleted. The assistant
+lives in `assets/js/main.js` ("Front Desk Assistant"): answers come only from the facts above
+(update both together), clinical questions get no advice and an offer to book, and a booking
+flow (name, phone, optional email, office, a few words of reason) posts to FormSubmit's
+`/ajax/` endpoint on the same activated alias as `/schedule-appointment/`, CC
+info@elitesportsmed.org, matarazzomd@gmail.com and hello@designofman.com. It reports success
+only on `success: "true"`; anything else keeps the request in localStorage
+(`esm-assist-pending`), retries on the next page load and tells the visitor to call. A
+delivered booking fires `form_submit` with `form: "assistant"`. `vercel.json` connect-src
+allows formsubmit.co for this. The assistant removes itself on the PHI pages.
+
 ## Patient forms — PHI (do not regress)
 `/new-patient-intake-form/`, `/elite-injection-consent-form/` and
 `/elite-medical-records-request/` collect PHI and are built to keep it in the

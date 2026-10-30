@@ -434,21 +434,285 @@
     });
   }
 
-  // ---------------- AI Front Desk Assistant ----------------
+  // ---------------- Front Desk Assistant ----------------
+  /* SET ANSWERS, no AI. Until 2026-10-30 this posted every message to
+     /api/chat, an LLM proxy that needed ANTHROPIC_API_KEY or XAI_API_KEY. The
+     Vercel project never had either, so every visitor who typed anything got
+     "Our online assistant isn't fully connected yet", and it could not take a
+     booking at all. It now works the way the sister sites' assistants do
+     (regenorthopb.com, firstrehabnpb.com): fixed answers written only from the
+     canonical facts in CLAUDE.md, no medical advice, unknowns go to the phone,
+     and a short booking flow that delivers exactly like the appointment form.
+
+     Booking delivery: FormSubmit's AJAX endpoint on the SAME activated alias as
+     /schedule-appointment/, so no new activation is needed, with the same _cc
+     list plus hello@designofman.com. The AJAX endpoint honours _cc (verified
+     against delivered copies from jupiterlaser.com and regenorthopb.com). A
+     send is only reported as received when FormSubmit answers success "true";
+     anything else keeps the request in localStorage, retries on the next page
+     load, and tells the visitor to call. Never loaded on the three PHI pages. */
   var launcher = document.getElementById("ai-assistant-launcher");
   var panel = document.getElementById("ai-assistant-panel");
   var closeBtn = document.getElementById("ai-close");
   var messages = document.getElementById("ai-messages");
   var form = document.getElementById("ai-form");
   var input = document.getElementById("ai-input");
-  var history = [];
+
+  var PHONE = "561-202-8886";
+  var TEL = "tel:+15612028886";
+  var ENDPOINT = "https://formsubmit.co/ajax/9603b985721c50e3ba9e2e711ff856e6";
+  var CC = "info@elitesportsmed.org,matarazzomd@gmail.com,hello@designofman.com";
+  var PENDING_KEY = "esm-assist-pending";
+  var PHI_PREFIXES = ["/new-patient-intake-form/", "/elite-injection-consent-form/", "/elite-medical-records-request/"];
+
+  var onPHIPage = PHI_PREFIXES.some(function (p) { return window.location.pathname.indexOf(p) === 0; });
+  if (onPHIPage) {
+    if (launcher) launcher.remove();
+    if (panel) panel.remove();
+    launcher = panel = null;
+  }
+
+  function scrollDown() { messages.scrollTop = messages.scrollHeight; }
 
   function addMsg(role, text) {
     var div = document.createElement("div");
     div.className = "ai-msg " + (role === "user" ? "user" : "bot");
     div.textContent = text;
     messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+    scrollDown();
+    return div;
+  }
+
+  // A bot message with links. Parts are [text] or [label, href]; built with
+  // DOM nodes so nothing typed by a visitor is ever parsed as HTML.
+  function addRich(parts) {
+    var div = document.createElement("div");
+    div.className = "ai-msg bot";
+    parts.forEach(function (part) {
+      if (part.length === 1) {
+        div.appendChild(document.createTextNode(part[0]));
+      } else {
+        var a = document.createElement("a");
+        a.textContent = part[0];
+        a.href = part[1];
+        div.appendChild(a);
+      }
+    });
+    messages.appendChild(div);
+    scrollDown();
+  }
+
+  function addChips(labels) {
+    var wrap = document.createElement("div");
+    wrap.className = "ai-chips";
+    labels.forEach(function (label) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = label;
+      b.addEventListener("click", function () {
+        wrap.remove();
+        handle(label);
+      });
+      wrap.appendChild(b);
+    });
+    messages.appendChild(wrap);
+    scrollDown();
+  }
+
+  var MAIN_CHIPS = ["Book an appointment", "Locations & hours", "Services", "About Dr. Matarazzo"];
+
+  /* Every answer below restates CLAUDE.md "Business facts" or an existing page.
+     Do not add a price, an insurance plan, a wait time or a credential here
+     that is not already published on the site. */
+  var ANSWERS = [
+    {
+      test: /\b(emergency|911|chest pain|can'?t breathe|bleeding)s?\b/i,
+      parts: [["If this is a medical emergency, call 911 or go to the nearest emergency room."]]
+    },
+    {
+      test: /\b(where|location|address|office|directions|port st|psl|st\.? lucie|palm beach gardens|pbg|parking|exit)s?\b/i,
+      parts: [
+        ["Port St. Lucie: 1100 SW St. Lucie West Blvd., Ste. 105, FL 34986 (I-95 exit 121, St. Lucie West Blvd). "],
+        ["Palm Beach Gardens: 11380 Prosperity Farms Rd, Ste 204, FL 33410. "],
+        ["Both are open Monday to Friday, 8:30 AM to 4:00 PM. "],
+        ["Directions and maps", "/areas-we-serve/"]
+      ]
+    },
+    {
+      test: /\b(hour|open|close|closing|when are you|saturday|sunday|weekend)s?\b/i,
+      parts: [["Both offices are open Monday to Friday, 8:30 AM to 4:00 PM. Call "], [PHONE, TEL], [" to book."]]
+    },
+    {
+      test: /\b(insurance|insur|medicare|medicaid|aetna|cigna|humana|united|blue ?cross|bcbs|tricare|accept|cover|copay)s?\b/i,
+      parts: [["For insurance questions, please call "], [PHONE, TEL], [" and the office can tell you about your plan."]]
+    },
+    {
+      test: /\b(price|prices|cost|how much|fee|fees|pay|payment|membership|concierge)s?\b/i,
+      parts: [["We don't publish prices online, including memberships. The office will go over costs with you: call "], [PHONE, TEL], [". "], ["Memberships", "/memberships/"]]
+    },
+    {
+      test: /\b(dr\.?|doctor|matarazzo|surgeon|who is|credentials|experience|jets|islanders|board)s?\b/i,
+      parts: [
+        ["Dr. Marc F. Matarazzo, MD is board-certified, fellowship-trained and MAKO-certified, the first surgeon in Florida to implant the MISHA Knee System, and spent over a decade as a team physician for the NY Jets and NY Islanders. "],
+        ["Meet Dr. Matarazzo", "/marc-f-matarazzo/"]
+      ]
+    },
+    {
+      test: /\b(mako|robot|knee replacement|partial knee|total knee)s?\b/i,
+      parts: [["Dr. Matarazzo performs MAKO robotic-assisted total and partial knee replacement. "], ["MAKO knee replacement", "/services/mako-total-and-partial-knee-replacement/"]]
+    },
+    {
+      test: /\bmisha\b/i,
+      parts: [["Dr. Matarazzo was the first surgeon in Florida to implant the MISHA Knee System. "], ["About the MISHA implant", "/services/misha-minimally-invasive-implantable-shock-absorber-implant/"]]
+    },
+    {
+      test: /\b(shoulder|rotator|reverse shoulder)s?\b/i,
+      parts: [["Shoulder care here includes rotator cuff repair and total and reverse shoulder replacement. "], ["Shoulder and knee surgery", "/services/shoulder-and-knee-surgery/"]]
+    },
+    {
+      test: /\b(acl|ligament|meniscus|cartilage|maci|kneecap|patella)s?\b/i,
+      parts: [["Sports knee injuries are a core part of the practice: ACL reconstruction, meniscus repair, cartilage restoration and kneecap stabilization. "], ["Sports medicine", "/services/sports-medicine/"]]
+    },
+    {
+      test: /\b(prp|regenerative|orthobiologic|stem cell|injection)s?\b/i,
+      parts: [["Non-surgical options include PRP injections and orthobiologic therapies. "], ["Regenerative treatments", "/regenerative-treatments/"]]
+    },
+    {
+      test: /\b(peptide)s?\b/i,
+      parts: [["Peptide therapy is offered at the Port St. Lucie office. "], ["Peptide therapy", "/services/peptide-therapy/"]]
+    },
+    {
+      test: /\b(shockwave|laser|mls)s?\b/i,
+      parts: [["Shockwave and MLS laser therapy are available. "], ["Shockwave therapy", "/services/shockwave-therapy/"], [" · "], ["Laser therapy", "/services/laser-therapy/"]]
+    },
+    {
+      test: /\b(second opinion)s?\b/i,
+      parts: [["Dr. Matarazzo offers second opinions. "], ["Second opinions", "/second-opinions/"]]
+    },
+    {
+      test: /\b(workers'? ?comp|work injury|ime|cme|independent medical|compulsory|legal|attorney|lawyer|personal injury|car accident|auto accident|pip)s?\b/i,
+      parts: [["The practice handles workers' compensation, personal injury and legal work, including IMEs and CMEs. "], ["Workers' comp", "/services/workers-compensation-injuries/"], [" · "], ["Legal reviews", "/services/legal-reviews/"]]
+    },
+    {
+      test: /\b(form|forms|paperwork|intake|records|consent)s?\b/i,
+      parts: [["New-patient paperwork is on the site to fill in and print, then bring to your visit: "], ["New patient intake", "/new-patient-intake-form/"]]
+    },
+    {
+      test: /\b(services|treat|treatment|what do you do|offer)s?\b/i,
+      parts: [["Sports medicine, ACL and meniscus surgery, cartilage restoration, MAKO robotic knee replacement, shoulder replacement, PRP and orthobiologics, shockwave and laser therapy, second opinions, and workers' comp and legal evaluations. "], ["All services", "/services/"]]
+    },
+    {
+      test: /\b(phone|call|number|email|contact|talk to|speak)s?\b/i,
+      parts: [["Call "], [PHONE, TEL], [" or email "], ["info@elitesportsmed.org", "mailto:info@elitesportsmed.org"], ["."]]
+    }
+  ];
+
+  var CLINICAL = /\b(pain|hurt|swollen|swelling|injur|torn|tear|broke|fractur|diagnos|should i|do i need|surgery or|symptom|medicat|dose|dosing)/i;
+  var BOOK = /\b(book|appointment|appt|schedul|consult|see the doctor|be seen|visit|new patient)/i;
+
+  // ---------------- booking flow ----------------
+  var booking = null; // { step, data }
+  var STEPS = [
+    { key: "name", ask: "Happy to set that up. What's your full name?" },
+    { key: "phone", ask: "What's the best phone number to reach you?" },
+    { key: "email", ask: "And your email? (Type \"skip\" if you'd rather not.)" },
+    { key: "office", ask: "Which office works best?", chips: ["Port St. Lucie", "Palm Beach Gardens", "Either"] },
+    { key: "reason", ask: "In a few words, what would you like to be seen for? Please leave out medical history and insurance details; the team will go over those on the phone." }
+  ];
+
+  function startBooking() {
+    booking = { step: 0, data: {} };
+    askStep();
+  }
+
+  function askStep() {
+    var s = STEPS[booking.step];
+    addMsg("bot", s.ask);
+    if (s.chips) addChips(s.chips);
+  }
+
+  function validate(key, value) {
+    if (key === "name") return value.length >= 2 ? "" : "Please type your name.";
+    if (key === "phone") {
+      var d = value.replace(/\D/g, "");
+      return d.length === 10 || (d.length === 11 && d.charAt(0) === "1") ? "" : "That doesn't look like a 10-digit phone number. Could you check it?";
+    }
+    if (key === "email") {
+      if (/^skip$/i.test(value)) return "";
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value) ? "" : "That email doesn't look right. Try again, or type \"skip\".";
+    }
+    if (key === "reason") return value.length >= 2 ? "" : "Just a few words is fine.";
+    return "";
+  }
+
+  function bookingInput(text) {
+    var s = STEPS[booking.step];
+    var value = text.trim();
+    var problem = validate(s.key, value);
+    if (problem) { addMsg("bot", problem); if (s.chips) addChips(s.chips); return; }
+    booking.data[s.key] = s.key === "email" && /^skip$/i.test(value) ? "" : value.slice(0, s.key === "reason" ? 500 : 200);
+    booking.step++;
+    if (booking.step < STEPS.length) { askStep(); return; }
+    var data = booking.data;
+    booking = null;
+    sendBooking(data, true);
+  }
+
+  function payload(data) {
+    return {
+      _subject: "[Appointment Request] elitesportsmed.org (website chat)",
+      _cc: CC,
+      _template: "table",
+      _captcha: "false",
+      Name: data.name,
+      Phone: data.phone,
+      Email: data.email || "(not given)",
+      "Preferred office": data.office,
+      "Reason for visit": data.reason,
+      Source: "Website chat assistant",
+      Page: window.location.pathname
+    };
+  }
+
+  function post(data) {
+    return fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload(data))
+    }).then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (out) {
+        if (String(out && out.success) !== "true") throw new Error("not delivered");
+        return true;
+      });
+  }
+
+  function remember(data) { try { window.localStorage.setItem(PENDING_KEY, JSON.stringify(data)); } catch (e) {} }
+  function forget() { try { window.localStorage.removeItem(PENDING_KEY); } catch (e) {} }
+
+  function sendBooking(data, interactive) {
+    remember(data); // kept until delivery is confirmed, so an outage cannot lose it
+    var typing = interactive ? addTyping() : null;
+    post(data).then(function () {
+      forget();
+      if (typing) typing.remove();
+      if (interactive) {
+        addRich([["Thanks, " + data.name.split(" ")[0] + ". Your request is in, and the team will call you to set a time. If you'd rather not wait, call "], [PHONE, TEL], ["."]]);
+      }
+      try { document.dispatchEvent(new CustomEvent("esm:assistant-lead")); } catch (e) {}
+    }).catch(function () {
+      if (typing) typing.remove();
+      if (interactive) {
+        addRich([["Sorry, I couldn't send that just now, so please don't assume we have it. Call "], [PHONE, TEL], [" and the team will book you directly. I'll also try sending it again next time you open a page here."]]);
+      }
+    });
+  }
+
+  // Retry a request an earlier page could not deliver.
+  if (!onPHIPage) {
+    try {
+      var pending = JSON.parse(window.localStorage.getItem(PENDING_KEY) || "null");
+      if (pending && pending.name && pending.phone) sendBooking(pending, false);
+    } catch (e) {}
   }
 
   function addTyping() {
@@ -456,8 +720,34 @@
     div.className = "ai-msg bot ai-typing-wrap";
     div.innerHTML = '<span class="ai-typing"><span></span><span></span><span></span></span>';
     messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+    scrollDown();
     return div;
+  }
+
+  // ---------------- answering ----------------
+  function handle(text) {
+    addMsg("user", text);
+    if (booking) { bookingInput(text); return; }
+    if (BOOK.test(text) && !/\b(form|forms|paperwork)\b/i.test(text)) { startBooking(); return; }
+    for (var i = 0; i < ANSWERS.length; i++) {
+      if (ANSWERS[i].test.test(text)) {
+        addRich(ANSWERS[i].parts);
+        addChips(["Book an appointment", "Something else"]);
+        return;
+      }
+    }
+    if (/^something else$/i.test(text)) {
+      addMsg("bot", "Sure. Ask me about booking, locations and hours, services, or Dr. Matarazzo.");
+      addChips(MAIN_CHIPS);
+      return;
+    }
+    if (CLINICAL.test(text)) {
+      addRich([["I can't give medical advice, but Dr. Matarazzo can evaluate that in person. I can request an appointment for you, or call "], [PHONE, TEL], ["."]]);
+      addChips(["Book an appointment"]);
+      return;
+    }
+    addRich([["I can help with booking, locations and hours, services, or Dr. Matarazzo's background. For anything else, call "], [PHONE, TEL], ["."]]);
+    addChips(MAIN_CHIPS);
   }
 
   if (launcher && panel) {
@@ -465,7 +755,8 @@
       panel.classList.add("is-open");
       launcher.setAttribute("aria-expanded", "true");
       if (!messages.dataset.greeted) {
-        addMsg("bot", "Hi, I'm the Elite Sports Medicine front desk assistant. Ask me about services, locations, insurance, or booking with Dr. Matarazzo.");
+        addMsg("bot", "Hi, I'm the Elite Sports Medicine front desk assistant. I can request an appointment for you or answer questions about our offices, hours and services.");
+        addChips(MAIN_CHIPS);
         messages.dataset.greeted = "1";
       }
       input && input.focus();
@@ -478,40 +769,14 @@
     });
   }
 
-  if (form) {
+  if (form && panel) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var text = input.value.trim();
       if (!text) return;
-      addMsg("user", text);
-      history.push({ role: "user", content: text });
       input.value = "";
-      input.disabled = true;
-      var typingEl = addTyping();
-
-      fetch("/api/chat/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history }),
-      })
-        .then(function (r) {
-          if (!r.ok) throw new Error("bad response");
-          return r.json();
-        })
-        .then(function (data) {
-          typingEl.remove();
-          var reply = data.reply || "Sorry, I couldn't process that. Please call 561-202-8886.";
-          addMsg("bot", reply);
-          history.push({ role: "assistant", content: reply });
-        })
-        .catch(function () {
-          typingEl.remove();
-          addMsg("bot", "I'm having trouble connecting right now — please call 561-202-8886 or use the Schedule Appointment page.");
-        })
-        .finally(function () {
-          input.disabled = false;
-          input.focus();
-        });
+      handle(text);
+      input.focus();
     });
   }
 })();
@@ -668,6 +933,13 @@
       } catch (err) {}
     });
   }
+
+  /* An appointment request delivered by the front desk assistant. The
+     assistant dispatches this only after FormSubmit answered success "true",
+     so, like /thank-you/, it counts deliveries, not attempts. */
+  document.addEventListener("esm:assistant-lead", function () {
+    leadEvent("form_submit", { path: window.location.pathname, form: "assistant" });
+  });
 
   /* form_submit fires on /thank-you/, not on submit. The appointment form is a
      plain POST to FormSubmit, which only follows its _next redirect here once
