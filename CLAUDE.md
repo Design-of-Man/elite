@@ -172,13 +172,17 @@ ANTHROPIC_API_KEY or XAI_API_KEY; the Vercel project never had either, so every 
 "not fully connected yet" and nothing could be booked. That file is deleted. The assistant
 lives in `assets/js/main.js` ("Front Desk Assistant"): answers come only from the facts above
 (update both together), clinical questions get no advice and an offer to book, and a booking
-flow (name, phone, optional email, office, a few words of reason) posts to FormSubmit's
-`/ajax/` endpoint on the same activated alias as `/schedule-appointment/`, CC
-info@elitesportsmed.org, matarazzomd@gmail.com and hello@designofman.com. It reports success
-only on `success: "true"`; anything else keeps the request in localStorage
-(`esm-assist-pending`), retries on the next page load and tells the visitor to call. A
-delivered booking fires `form_submit` with `form: "assistant"`. `vercel.json` connect-src
-allows formsubmit.co for this. The assistant removes itself on the PHI pages.
+flow (name, phone, optional email, office, a few words of reason) posts JSON to `/api/lead`
+(`api/lead.js`, `source: "assistant"`), the same endpoint as `/schedule-appointment/`. That
+function stores every lead via the portal's `contact-lead` Supabase function and emails it via
+Resend (Vercel env `LEAD_TO`, `LEAD_CC`, `LEAD_FROM`, `CONFIRM_FROM`, `RESEND_API_KEY`);
+recipients live in env, not in page source. Success means stored OR emailed. FormSubmit was
+removed 2026-10-30 after its outage (Cloudflare 521 from 2026-10-28) dropped every request;
+don't add it back. The assistant reports success only on `success: "true"`; anything else
+keeps the request in localStorage (`esm-assist-pending`), retries on the next page load and
+tells the visitor to call. A delivered booking fires `form_submit` with `form: "assistant"`.
+`vercel.json` connect-src/form-action are `'self'` for this. The assistant removes itself on
+the PHI pages.
 
 ## Patient forms — PHI (do not regress)
 `/new-patient-intake-form/`, `/elite-injection-consent-form/` and
@@ -194,7 +198,10 @@ on-page notice promises the form is not submitted online. Consequently:
   BAA, plus encryption, access controls, audit logging and a retention schedule —
   and the on-page notice would have to be rewritten in the same change.
 - `/schedule-appointment/` is different: it collects contact details and a reason
-  for calling, not clinical history, and may keep using FormSubmit.
+  for calling, not clinical history. It posts to `/api/lead`, which stores every
+  lead via the portal's `contact-lead` Supabase function and emails via Resend
+  (env `LEAD_TO`, `LEAD_CC`, `LEAD_FROM`, `CONFIRM_FROM`, `RESEND_API_KEY`).
+  FormSubmit was removed 2026-10-30 after its outage.
 
 ## Analytics
 Vercel Web Analytics (`/_vercel/insights/script.js`, cookieless, no consent
@@ -215,8 +222,8 @@ one decision about what counts as a conversion applies to all three properties:
   it records a `tel:` click that navigates away immediately, and covers markup
   added later without each page opting in.
 - **`form_submit` fires on `/thank-you/`, not on submit.** The appointment form
-  is a plain POST to FormSubmit, which only follows its `_next` redirect to that
-  page once the send actually succeeded — so the page IS the confirmed-delivery
+  is a plain POST to `/api/lead`, which only 303s to its `_next` (that page)
+  once the lead was actually stored or emailed — so the page IS the confirmed-delivery
   signal. Counting the submit instead would count sends that failed, which is
   precisely how jupiterlaser.com reported leads it never received. A
   sessionStorage flag stops a refresh counting twice.
