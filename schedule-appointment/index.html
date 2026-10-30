@@ -199,8 +199,8 @@
   <section class="section">
     <div class="container split">
       <div class="reveal">
-        <form action="/api/lead" method="POST" class="form-stack">
-          <!-- Appointment requests post to this site's own /api/lead (api/lead.js),
+        <form action="/api/lead/" method="POST" class="form-stack">
+          <!-- Appointment requests post to this site's own /api/lead/ (api/lead.js),
                which stores every lead through the portal's `contact-lead` Supabase
                function and emails the office through Resend. Recipients are set on the
                server (LEAD_TO / LEAD_CC Vercel env), so no address sits in this page's
@@ -366,7 +366,7 @@
   </form>
 </div>
 
-<script src="/assets/js/main.js?v=7cd632cc06"></script>
+<script src="/assets/js/main.js?v=05e6ec93b8"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

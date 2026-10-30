@@ -172,8 +172,10 @@ ANTHROPIC_API_KEY or XAI_API_KEY; the Vercel project never had either, so every 
 "not fully connected yet" and nothing could be booked. That file is deleted. The assistant
 lives in `assets/js/main.js` ("Front Desk Assistant"): answers come only from the facts above
 (update both together), clinical questions get no advice and an offer to book, and a booking
-flow (name, phone, optional email, office, a few words of reason) posts JSON to `/api/lead`
-(`api/lead.js`, `source: "assistant"`), the same endpoint as `/schedule-appointment/`. That
+flow (name, phone, optional email, office, a few words of reason) posts JSON to `/api/lead/`
+(`api/lead.js`, `source: "assistant"`), the same endpoint as `/schedule-appointment/`. Always the
+slashed path `/api/lead/`: `"trailingSlash": true` 308s `/api/lead` there, an extra hop on every
+send. That
 function stores every lead via the portal's `contact-lead` Supabase function and emails it via
 Resend (Vercel env `LEAD_TO`, `LEAD_CC`, `LEAD_FROM`, `CONFIRM_FROM`, `RESEND_API_KEY`);
 recipients live in env, not in page source. Success means stored OR emailed. FormSubmit was
@@ -198,7 +200,7 @@ on-page notice promises the form is not submitted online. Consequently:
   BAA, plus encryption, access controls, audit logging and a retention schedule —
   and the on-page notice would have to be rewritten in the same change.
 - `/schedule-appointment/` is different: it collects contact details and a reason
-  for calling, not clinical history. It posts to `/api/lead`, which stores every
+  for calling, not clinical history. It posts to `/api/lead/`, which stores every
   lead via the portal's `contact-lead` Supabase function and emails via Resend
   (env `LEAD_TO`, `LEAD_CC`, `LEAD_FROM`, `CONFIRM_FROM`, `RESEND_API_KEY`).
   FormSubmit was removed 2026-10-30 after its outage.
@@ -222,7 +224,7 @@ one decision about what counts as a conversion applies to all three properties:
   it records a `tel:` click that navigates away immediately, and covers markup
   added later without each page opting in.
 - **`form_submit` fires on `/thank-you/`, not on submit.** The appointment form
-  is a plain POST to `/api/lead`, which only 303s to its `_next` (that page)
+  is a plain POST to `/api/lead/`, which only 303s to its `_next` (that page)
   once the lead was actually stored or emailed — so the page IS the confirmed-delivery
   signal. Counting the submit instead would count sends that failed, which is
   precisely how jupiterlaser.com reported leads it never received. A
