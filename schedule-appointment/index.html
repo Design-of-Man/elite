@@ -199,52 +199,23 @@
   <section class="section">
     <div class="container split">
       <div class="reveal">
-        <form action="https://formsubmit.co/9603b985721c50e3ba9e2e711ff856e6" method="POST" class="form-stack">
-          <!-- Appointment requests deliver via FormSubmit, matching regenorthopb.com and
-               jupiterlaser.com. This form collects contact details and a reason for
-               visit, NOT clinical history — the on-form notice below asks patients not
-               to include medical or insurance detail, and that notice is the mitigation
-               for a transport with no BAA. The three PHI forms must never be pointed
-               here. They are print-and-bring (onsubmit="return false", no action) and
-               transmit nothing, the same way regenorthopb.com and
-               jupiterlaser.com handle patient forms.
-               FormSubmit binds activation to the ONE address in the action URL above:
-               changing it mints a new activation requirement, and until that link is
-               clicked every submission is accepted, answered {"success":"false"} and
-               dropped. CC addresses need no activation, which is why extras go in _cc.
-               The action was info@elitesportsmed.org until 2026-09-20 and was never
-               activated, so every request from the 2026-09-18 cutover to that date was
-               accepted and dropped. The opaque string in the action URL above is
-               FormSubmit's alias for the activated recipient inbox — it is deliberately
-               NOT a naked email address, so the recipient is not sitting in the public
-               page source for spam harvesters. It is an address alias, not a secret:
-               it only routes to an inbox and grants nothing. Activation is confirmed
-               and info@elitesportsmed.org keeps receiving via _cc, which needs no
-               activation of its own. Do not change the action again without someone
-               standing by to click the new activation email.
-               api/schedule.js is left in the repo for a revert. -->
+        <form action="/api/lead/" method="POST" class="form-stack">
+          <!-- Appointment requests post to this site's own /api/lead/ (api/lead.js),
+               which stores every lead through the portal's `contact-lead` Supabase
+               function and emails the office through Resend. Recipients are set on the
+               server (LEAD_TO / LEAD_CC Vercel env), so no address sits in this page's
+               source. FormSubmit was removed 2026-10-30 after its outage (Cloudflare 521
+               from 2026-10-28) dropped every request.
+               This form collects contact details and a reason for visit, NOT clinical
+               history — the on-form notice below asks patients not to include medical
+               or insurance detail. The three PHI forms must never be pointed here. They
+               are print-and-bring (onsubmit="return false", no action) and transmit
+               nothing. -->
           <input type="hidden" name="_subject" value="[Appointment Request] elitesportsmed.org">
-          <input type="hidden" name="_captcha" value="false">
-          <!-- matarazzomd@gmail.com added 2026-09-23 at Nick's request: appointment
-               requests were being forwarded to Dr. Matarazzo by hand, and a CC does
-               that automatically. A CC needs no activation of its own, so this does
-               not disturb the activated alias in the action URL above.
-               TRADE-OFF, on the record: the action URL is deliberately an opaque
-               alias so no recipient address sits in public page source for spam
-               harvesters. _cc has no such alias, so this line publishes a personal
-               address on a public page. info@elitesportsmed.org was already public
-               (it is on every page); this gmail was not. The alternative that
-               publishes nothing is a server-side forward from info@ to the doctor,
-               configured in the mailbox rather than here. -->
-          <!-- hello@designofman.com (the agency) added 2026-10-30 at Nick's request so
-               every practice's requests reach one agency inbox. CC, so no activation. -->
-          <input type="hidden" name="_cc" value="info@elitesportsmed.org,matarazzomd@gmail.com,hello@designofman.com">
-          <input type="hidden" name="_template" value="table">
-          <!-- Absolute URL by necessity: FormSubmit redirects the browser here after a
-               plain POST. Correct once DNS points at this build; on a preview deploy it
-               lands on whatever elitesportsmed.org currently serves. -->
-          <input type="hidden" name="_next" value="https://elitesportsmed.org/thank-you/">
-          <input type="hidden" name="source" value="elitesportsmed.org schedule-appointment page">
+          <!-- The endpoint 303s the browser here after the lead is stored or emailed,
+               and only then, so /thank-you/ stays the confirmed-delivery signal. -->
+          <input type="hidden" name="_next" value="/thank-you/">
+          <input type="hidden" name="source" value="schedule-appointment">
           <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="grid grid--2" style="gap:var(--sp-sm)">
             <div class="field">
@@ -395,7 +366,7 @@
   </form>
 </div>
 
-<script src="/assets/js/main.js?v=85d3f41999"></script>
+<script src="/assets/js/main.js?v=05e6ec93b8"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

@@ -444,13 +444,14 @@
      canonical facts in CLAUDE.md, no medical advice, unknowns go to the phone,
      and a short booking flow that delivers exactly like the appointment form.
 
-     Booking delivery: FormSubmit's AJAX endpoint on the SAME activated alias as
-     /schedule-appointment/, so no new activation is needed, with the same _cc
-     list plus hello@designofman.com. The AJAX endpoint honours _cc (verified
-     against delivered copies from jupiterlaser.com and regenorthopb.com). A
-     send is only reported as received when FormSubmit answers success "true";
-     anything else keeps the request in localStorage, retries on the next page
-     load, and tells the visitor to call. Never loaded on the three PHI pages. */
+     Booking delivery: this site's own /api/lead/ (api/lead.js), the same
+     endpoint as the /schedule-appointment/ form. It stores the lead through
+     the portal's contact-lead Supabase function and emails the office via
+     Resend; recipients are set on the server, not here. FormSubmit was removed
+     2026-10-30 after its outage dropped every request. A send is only reported
+     as received when the endpoint answers success "true"; anything else keeps
+     the request in localStorage, retries on the next page load, and tells the
+     visitor to call. Never loaded on the three PHI pages. */
   var launcher = document.getElementById("ai-assistant-launcher");
   var panel = document.getElementById("ai-assistant-panel");
   var closeBtn = document.getElementById("ai-close");
@@ -460,8 +461,7 @@
 
   var PHONE = "561-202-8886";
   var TEL = "tel:+15612028886";
-  var ENDPOINT = "https://formsubmit.co/ajax/9603b985721c50e3ba9e2e711ff856e6";
-  var CC = "info@elitesportsmed.org,matarazzomd@gmail.com,hello@designofman.com";
+  var ENDPOINT = "/api/lead/";
   var PENDING_KEY = "esm-assist-pending";
   var PHI_PREFIXES = ["/new-patient-intake-form/", "/elite-injection-consent-form/", "/elite-medical-records-request/"];
 
@@ -660,17 +660,15 @@
 
   function payload(data) {
     return {
+      // Lowercase keys: /api/lead/ reads name / phone / email by these names.
       _subject: "[Appointment Request] elitesportsmed.org (website chat)",
-      _cc: CC,
-      _template: "table",
-      _captcha: "false",
-      Name: data.name,
-      Phone: data.phone,
-      Email: data.email || "(not given)",
-      "Preferred office": data.office,
-      "Reason for visit": data.reason,
-      Source: "Website chat assistant",
-      Page: window.location.pathname
+      source: "assistant",
+      name: data.name,
+      phone: data.phone,
+      email: data.email || "",
+      office: data.office,
+      reason: data.reason,
+      page: window.location.pathname
     };
   }
 
@@ -885,13 +883,13 @@
      cold-pitch and crypto spam typed into the page was counted as a lead.
 
      On submit this (a) marks the request as having come through the page
-     (verified: yes — a bot POSTing straight to FormSubmit skips this script
+     (verified: yes — a bot POSTing straight to /api/lead/ skips this script
      and arrives without it), (b) lists anything suspicious in a `flags`
      field and prefixes the subject so the inbox sorts itself, and (c) if
      flagged, tells /thank-you/ not to count this one as a lead. Nothing here
      stops the send. Flags look at the typed text only to decide the label;
      none of it is sent to analytics. */
-  var apptForm = document.querySelector('form[action^="https://formsubmit.co/"]');
+  var apptForm = document.querySelector('form[action="/api/lead/"]');
   if (apptForm) {
     var formLoadedAt = Date.now();
     var SPAM_WORDS = /\b(seo|backlinks?|guest post|link building|bitcoin|crypto|coinbase|nft|virtual assistant|va services|web design services)\b/i;
@@ -935,15 +933,15 @@
   }
 
   /* An appointment request delivered by the front desk assistant. The
-     assistant dispatches this only after FormSubmit answered success "true",
+     assistant dispatches this only after /api/lead/ answered success "true",
      so, like /thank-you/, it counts deliveries, not attempts. */
   document.addEventListener("esm:assistant-lead", function () {
     leadEvent("form_submit", { path: window.location.pathname, form: "assistant" });
   });
 
   /* form_submit fires on /thank-you/, not on submit. The appointment form is a
-     plain POST to FormSubmit, which only follows its _next redirect here once
-     the send actually succeeded — so this page IS the confirmed-delivery
+     plain POST to /api/lead/, which only redirects here (its _next) once the
+     lead was actually stored or emailed — so this page IS the confirmed-delivery
      signal, and counting the submit instead would count sends that failed.
      Same rule both sibling sites follow: fire on delivery, not intent.
 
