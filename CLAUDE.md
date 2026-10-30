@@ -248,6 +248,13 @@ one decision about what counts as a conversion applies to all three properties:
 | `email_click` | any `mailto:` link is clicked | `path`, `location` |
 | `appointment_cta` | a link to `/schedule-appointment/` is followed | `path`, `location` |
 | `form_submit` | `/thank-you/` loads, or the assistant's send is confirmed | `path`, `form` |
+| `directions_click` | a link to a map is clicked (Google, Apple Maps, Waze; regex `MAP_LINK`) | `path`, `location` |
+| `chat_open` | the visitor opens the Front Desk Assistant (launcher click or keyboard), once per page view | `path`, `location` (always `assistant`) |
+
+The last two (added 2026-10-30) are engagement, not leads: never add them to a lead
+count. They use the same names on all five client sites. The assistant has no auto-invite,
+so every `chat_open` is the visitor's own action; if an invite is ever added it must not
+fire `chat_open`. All six events go to Vercel and are mirrored to GA4 by `leadEvent()`.
 
 - `location` comes from `placementOf()`: `mobile-nav`, `header`, `footer`,
   `hero`, `assistant`, `body`. (`assistant` keys off `#ai-assistant-panel` /
@@ -259,8 +266,12 @@ one decision about what counts as a conversion applies to all three properties:
   is a plain POST to `/api/lead/`, which only 303s to its `_next` (that page)
   once the lead was actually stored or emailed — so the page IS the confirmed-delivery
   signal. Counting the submit instead would count sends that failed, which is
-  precisely how jupiterlaser.com reported leads it never received. A
-  sessionStorage flag stops a refresh counting twice.
+  precisely how jupiterlaser.com reported leads it never received. It counts
+  only when the page's navigation type is `navigate` (a form's redirect lands
+  as one), not on `reload` or `back_forward`, so a refresh does not count twice
+  and a second real request from the same tab does count. Until 2026-10-30 a
+  sessionStorage flag (`esm-thankyou-counted`) did this and was never cleared,
+  so a tab only ever counted its first lead.
 - **Payload is placement and path only.** Never a field value, never a service
   or condition name — attaching "knee pain" to an individual visitor's action is
   where analytics becomes a health-privacy problem.
