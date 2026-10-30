@@ -167,24 +167,54 @@ cached: new bytes need a new filename (bump `-v1`).
   Bing and Yandex act in minutes; Google ignores it.
 
 ## Front desk assistant (chat bubble, every page except the three PHI forms)
-Set answers, no AI, since 2026-10-30. It used to call `api/chat.js`, an LLM proxy that needed
-ANTHROPIC_API_KEY or XAI_API_KEY; the Vercel project never had either, so every visitor got
-"not fully connected yet" and nothing could be booked. That file is deleted. The assistant
-lives in `assets/js/main.js` ("Front Desk Assistant"): answers come only from the facts above
-(update both together), clinical questions get no advice and an offer to book, and a booking
-flow (name, phone, optional email, office, a few words of reason) posts JSON to `/api/lead/`
-(`api/lead.js`, `source: "assistant"`), the same endpoint as `/schedule-appointment/`. Always the
-slashed path `/api/lead/`: `"trailingSlash": true` 308s `/api/lead` there, an extra hop on every
-send. That
-function stores every lead via the portal's `contact-lead` Supabase function and emails it via
-Resend (Vercel env `LEAD_TO`, `LEAD_CC`, `LEAD_FROM`, `CONFIRM_FROM`, `RESEND_API_KEY`);
-recipients live in env, not in page source. Success means stored OR emailed. FormSubmit was
-removed 2026-10-30 after its outage (Cloudflare 521 from 2026-10-28) dropped every request;
-don't add it back. The assistant reports success only on `success: "true"`; anything else
-keeps the request in localStorage (`esm-assist-pending`), retries on the next page load and
-tells the visitor to call. A delivered booking fires `form_submit` with `form: "assistant"`.
-`vercel.json` connect-src/form-action are `'self'` for this. The assistant removes itself on
-the PHI pages.
+Set answers, no AI, no external API, no medical advice. It used to call `api/chat.js`, an LLM
+proxy whose keys the Vercel project never had, so every visitor got "not fully connected yet";
+that file is deleted. The assistant lives in `assets/js/main.js` ("Front Desk Assistant"), styled
+by the `.ai-*` rules in `v2.css`; the launcher and panel markup is on every page.
+
+Since 2026-10-30 its conversation follows First Rehabilitation's intake assistant
+(firstrehabnpb.com `assets/js/intake.js`), which Nick asked for on every client site:
+- Greeting, then three chips: Request an appointment / Ask a question / Just looking around.
+  Typed text at the greeting is treated as a question.
+- Ask a question: the set answers (`ANSWERS`, matched by regex) as tappable question chips
+  (`FAQ_CHIPS`, each label run through the same matcher), plus Request an appointment and Leave a
+  message for the front desk (message, name, phone, email, confirm; `intent: "question"`). A
+  question with no set answer goes to the front desk; a clinical one (`CLINICAL`) gets no advice
+  and an offer to book.
+- Appointment: reason (`TOPICS`, the site's service lines, plus "Not sure yet"), office (Port St.
+  Lucie / Palm Beach Gardens / Either is fine; skipped and set to Port St. Lucie for peptide
+  therapy, which is offered there only), a sentence about what's going on, first and last name,
+  phone (10 digits, or 11 starting with 1), optional email (Skip), best time to call (chips inside
+  the published hours, Monday to Friday 8:30 AM to 4:00 PM), then a confirm card with "Yes, send
+  it" / "Fix something". **No insurance step**: the site publishes no plan list ("most major
+  carriers"), so don't add one. No prices anywhere (`/pricing.md`).
+- Answers save as they are given to localStorage `esm.assist.draft.v1`; reopening on a later page
+  offers "Pick up where you left off?" (Continue / Start over). A "Start over" control sits in the
+  panel header. Enter sends, Escape closes, focus returns to the launcher; the log is `aria-live`.
+  On phones the panel pins to the visual viewport while the iOS keyboard is up.
+- Answers and chips come only from the facts above and published pages. Update both together;
+  hours in particular appear in the assistant too (`HOURS`, the hours answer, the time chips).
+
+Delivery: JSON to `/api/lead/` (`api/lead.js`, `source: "assistant"`), the same endpoint as
+`/schedule-appointment/`, with `intent`, `ref`, `topic`, `office`, `message`, `name`, `phone`,
+`email`, `preferred_time`, `page`, and `_subject` "Appointment request ES-XXXXX (website chat)" or
+"Website question ES-XXXXX (website chat)". `ES-` plus 5 characters is the reference number the
+visitor sees; `api/lead.js` adds "Your reference number is ES-XXXXX." to the patient confirmation
+(only when `ref` matches `^[A-Z]{2}-[A-Z0-9]{5}$`). Always the slashed path `/api/lead/`:
+`"trailingSlash": true` 308s `/api/lead` there, an extra hop on every send. That function stores
+every lead via the portal's `contact-lead` Supabase function and emails it via Resend (Vercel env
+`LEAD_TO`, `LEAD_CC`, `LEAD_FROM`, `CONFIRM_FROM`, `RESEND_API_KEY`); recipients live in env, not
+in page source. Success means stored OR emailed. FormSubmit was removed 2026-10-30 after its
+outage (Cloudflare 521 from 2026-10-28) dropped every request; don't add it back.
+
+The assistant reports success only on HTTP 200 with `success: "true"`. The request is put in the
+localStorage queue `esm-assist-pending` (an array; a single object left by the old assistant is
+still read and sent in its old shape) BEFORE it is sent, removed on confirmed delivery, and
+retried on every page load and when the browser comes back online; a failed send tells the
+visitor to call. Every confirmed delivery (live or retried, appointment or message) dispatches
+`esm:assistant-lead`, which fires `form_submit` with `form: "assistant"` once. Nothing typed or
+chosen in the chat goes to analytics. `vercel.json` connect-src/form-action are `'self'` for
+this. The assistant removes itself on the PHI pages and sends nothing from them.
 
 ## Patient forms — PHI (do not regress)
 `/new-patient-intake-form/`, `/elite-injection-consent-form/` and
@@ -217,10 +247,12 @@ one decision about what counts as a conversion applies to all three properties:
 | `call_click` | any `tel:` link is clicked | `path`, `location` |
 | `email_click` | any `mailto:` link is clicked | `path`, `location` |
 | `appointment_cta` | a link to `/schedule-appointment/` is followed | `path`, `location` |
-| `form_submit` | `/thank-you/` loads | `path`, `form` |
+| `form_submit` | `/thank-you/` loads, or the assistant's send is confirmed | `path`, `form` |
 
 - `location` comes from `placementOf()`: `mobile-nav`, `header`, `footer`,
-  `hero`, `assistant`, `body`. The listener is delegated in the CAPTURE phase so
+  `hero`, `assistant`, `body`. (`assistant` keys off `#ai-assistant-panel` /
+  `#ai-assistant-launcher`; until 2026-10-30 it looked for classes that do not exist, so a
+  phone tap inside the chat was filed as `body`.) The listener is delegated in the CAPTURE phase so
   it records a `tel:` click that navigates away immediately, and covers markup
   added later without each page opting in.
 - **`form_submit` fires on `/thank-you/`, not on submit.** The appointment form
@@ -240,7 +272,10 @@ one decision about what counts as a conversion applies to all three properties:
   `main.js` runs, so `form_submit` fired at load on `/thank-you/` reaches GA4.
   It is NOT on the three PHI pages; any new page needs the snippet copied too
   (blog posts inherit it from `blog/index.html`'s shell). The CSP in vercel.json
-  allows `googletagmanager.com` / `google-analytics.com` for this. `form_submit`
+  allows `googletagmanager.com` / `google-analytics.com` for this, plus `https://www.google.com`
+  and `https://*.g.doubleclick.net` in `connect-src` and `img-src` (2026-10-30, the same pattern
+  as firstrehabnpb.com): GA4 sends a second hit to `www.google.com/g/collect` for Google Ads
+  linking, and the CSP was blocking it. The PHI pages' stricter headers are untouched. `form_submit`
   is the GA4 key event; GA4's own Enhanced Measurement form tracking is turned
   off so it can't count sends that failed.
 

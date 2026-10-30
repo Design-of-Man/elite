@@ -116,7 +116,7 @@ module.exports = async function handler(req, res) {
     const val = clean(Array.isArray(v) ? v.join(", ") : v, 4000);
     if (val) fields.push([k.replace(/_/g, " "), val]);
   }
-  const reason = clean(body.reason || body.location || body.office || body.service, 120);
+  const reason = clean(body.reason || body.topic || body.location || body.office || body.service, 120);
   const message = fields.map(([k, v]) => `${k}: ${v}`).join("\n").slice(0, 4000);
 
   const fwd = req.headers["x-forwarded-for"];
@@ -177,6 +177,7 @@ module.exports = async function handler(req, res) {
           "",
           `Thank you for reaching out to ${PRACTICE}. Your request came through and our team will contact you within one business day.`,
           "",
+          ...(/^[A-Z]{2}-[A-Z0-9]{5}$/.test(String(body.ref || "")) ? [`Your reference number is ${body.ref}.`, ""] : []),
           `If it's urgent, call us at ${PHONE}.`,
           "",
           PRACTICE,

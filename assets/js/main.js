@@ -435,23 +435,33 @@
   }
 
   // ---------------- Front Desk Assistant ----------------
-  /* SET ANSWERS, no AI. Until 2026-10-30 this posted every message to
-     /api/chat, an LLM proxy that needed ANTHROPIC_API_KEY or XAI_API_KEY. The
-     Vercel project never had either, so every visitor who typed anything got
-     "Our online assistant isn't fully connected yet", and it could not take a
-     booking at all. It now works the way the sister sites' assistants do
-     (regenorthopb.com, firstrehabnpb.com): fixed answers written only from the
-     canonical facts in CLAUDE.md, no medical advice, unknowns go to the phone,
-     and a short booking flow that delivers exactly like the appointment form.
+  /* SET ANSWERS, no AI, no external API, no medical advice. Rebuilt 2026-10-30
+     on First Rehabilitation's intake conversation (firstrehabnpb.com,
+     assets/js/intake.js), which Nick asked for on every client site: a greeting
+     with three intents, one question per bubble with a typing pause, chips that
+     are real buttons, a confirm card with "Fix something", a reference number,
+     a draft that survives a reload, and a retry queue. The look (.ai-* in
+     v2.css), the answers and the markup on every page are this site's own.
 
-     Booking delivery: this site's own /api/lead/ (api/lead.js), the same
-     endpoint as the /schedule-appointment/ form. It stores the lead through
-     the portal's contact-lead Supabase function and emails the office via
-     Resend; recipients are set on the server, not here. FormSubmit was removed
-     2026-10-30 after its outage dropped every request. A send is only reported
-     as received when the endpoint answers success "true"; anything else keeps
-     the request in localStorage, retries on the next page load, and tells the
-     visitor to call. Never loaded on the three PHI pages. */
+     Facts: every answer and chip below restates CLAUDE.md "Business facts" or a
+     published page. Do not add a price, an insurance plan, a wait time or a
+     credential that is not already on the site. The site publishes no
+     insurance list ("most major carriers"), so the booking flow has no
+     insurance step; do not invent one.
+
+     Delivery: this site's own /api/lead/ (api/lead.js), the same endpoint as
+     the /schedule-appointment/ form. A send is only reported as received when
+     the endpoint answers success "true". Before the request leaves, it is put
+     in the localStorage queue under the original key (esm-assist-pending, now
+     an array; a single object queued by the old assistant is read and sent as
+     it was), so a closed tab or an outage cannot lose it; it is retried on the
+     next page load and when the browser comes back online.
+
+     Analytics: unchanged. A confirmed delivery dispatches esm:assistant-lead,
+     which the analytics block turns into form_submit {path, form:"assistant"}.
+     Nothing typed, chosen or answered here is ever sent to analytics.
+
+     Never loaded on the three PHI pages. */
   var launcher = document.getElementById("ai-assistant-launcher");
   var panel = document.getElementById("ai-assistant-panel");
   var closeBtn = document.getElementById("ai-close");
@@ -462,8 +472,14 @@
   var PHONE = "561-202-8886";
   var TEL = "tel:+15612028886";
   var ENDPOINT = "/api/lead/";
-  var PENDING_KEY = "esm-assist-pending";
+  var PENDING_KEY = "esm-assist-pending";     // retry queue (kept from the old assistant)
+  var DRAFT_KEY = "esm.assist.draft.v1";      // answers given so far
+  var DRAFT_TTL = 72 * 3600 * 1000;
   var PHI_PREFIXES = ["/new-patient-intake-form/", "/elite-injection-consent-form/", "/elite-medical-records-request/"];
+  var HOURS = "Monday to Friday, 8:30 AM to 4:00 PM";
+  var PSL = "Port St. Lucie";
+  var PBG = "Palm Beach Gardens";
+  var PEPTIDES = "Peptide therapy";
 
   var onPHIPage = PHI_PREFIXES.some(function (p) { return window.location.pathname.indexOf(p) === 0; });
   if (onPHIPage) {
@@ -472,55 +488,210 @@
     launcher = panel = null;
   }
 
-  function scrollDown() { messages.scrollTop = messages.scrollHeight; }
-
-  function addMsg(role, text) {
-    var div = document.createElement("div");
-    div.className = "ai-msg " + (role === "user" ? "user" : "bot");
-    div.textContent = text;
-    messages.appendChild(div);
-    scrollDown();
-    return div;
+  // ---------- storage (never throws) ----------
+  function load(key) {
+    try { return JSON.parse(window.localStorage.getItem(key) || "null"); } catch (e) { return null; }
+  }
+  function save(key, value) {
+    try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+  }
+  function drop(key) {
+    try { window.localStorage.removeItem(key); } catch (e) {}
   }
 
-  // A bot message with links. Parts are [text] or [label, href]; built with
-  // DOM nodes so nothing typed by a visitor is ever parsed as HTML.
-  function addRich(parts) {
-    var div = document.createElement("div");
-    div.className = "ai-msg bot";
-    parts.forEach(function (part) {
-      if (part.length === 1) {
-        div.appendChild(document.createTextNode(part[0]));
-      } else {
+  // ---------- retry queue ----------
+  /* The old assistant kept ONE pending booking as a bare object of its form
+     data. Read that shape too and send it exactly as it would have gone. */
+  function legacyPayload(d) {
+    return {
+      _subject: "[Appointment Request] elitesportsmed.org (website chat)",
+      source: "assistant",
+      name: d.name, phone: d.phone, email: d.email || "",
+      office: d.office, reason: d.reason, page: d.page || window.location.pathname
+    };
+  }
+  function readQueue() {
+    var q = load(PENDING_KEY);
+    if (!q) return [];
+    if (!Array.isArray(q)) q = (q.name && q.phone) ? [legacyPayload(q)] : [];
+    return q.filter(function (p) { return p && p.name && p.phone; });
+  }
+  function writeQueue(q) { if (q.length) save(PENDING_KEY, q.slice(-20)); else drop(PENDING_KEY); }
+  function keyOf(p) { return p.ref || (p.name + "|" + p.phone + "|" + (p.message || p.reason || "")); }
+  function enqueue(p) {
+    var q = readQueue().filter(function (x) { return keyOf(x) !== keyOf(p); });
+    q.push(p);
+    writeQueue(q);
+  }
+  function dequeue(p) {
+    writeQueue(readQueue().filter(function (x) { return keyOf(x) !== keyOf(p); }));
+  }
+
+  var inFlight = {};
+  function post(p) {
+    return fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(p)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (out) {
+        if (!r.ok || String(out && out.success) !== "true") throw new Error("not delivered");
+        return true;
+      });
+    });
+  }
+  // Every confirmed delivery, live or retried, counts once.
+  function deliver(p) {
+    var k = keyOf(p);
+    if (inFlight[k]) return inFlight[k];
+    inFlight[k] = post(p).then(function () {
+      dequeue(p);
+      delete inFlight[k];
+      try { document.dispatchEvent(new CustomEvent("esm:assistant-lead")); } catch (e) {}
+      return true;
+    }, function (err) {
+      delete inFlight[k];
+      throw err;
+    });
+    return inFlight[k];
+  }
+  function flushQueue() {
+    var q = readQueue();
+    (function next(i) {
+      if (i >= q.length) return;
+      deliver(q[i]).then(function () { next(i + 1); }, function () { /* still down; next load */ });
+    })(0);
+  }
+  if (!onPHIPage) {
+    flushQueue();
+    window.addEventListener("online", flushQueue);
+  }
+
+  if (!(launcher && panel && messages && form && input)) return;
+
+  // ---------- accessibility + chrome ----------
+  messages.setAttribute("role", "log");
+  messages.setAttribute("aria-live", "polite");
+  panel.setAttribute("tabindex", "-1");
+  var aiHeader = panel.querySelector(".ai-header");
+  var restartBtn = document.createElement("button");
+  restartBtn.type = "button";
+  restartBtn.className = "ai-restart";
+  restartBtn.textContent = "Start over";
+  if (aiHeader && closeBtn) aiHeader.insertBefore(restartBtn, closeBtn);
+  var disclaimer = messages.querySelector(".disclaimer");
+
+  // ---------- rendering (DOM only: nothing a visitor types is parsed as HTML) ----------
+  /* A message is a list of parts: "text", ["label", href], {b: "bold"} or
+     {note: "small print"}. */
+  function scrollDown() { messages.scrollTop = messages.scrollHeight; }
+  function partsInto(div, parts) {
+    (typeof parts === "string" ? [parts] : parts).forEach(function (part) {
+      if (typeof part === "string") { div.appendChild(document.createTextNode(part)); return; }
+      if (Array.isArray(part)) {
         var a = document.createElement("a");
         a.textContent = part[0];
         a.href = part[1];
         div.appendChild(a);
+        return;
+      }
+      if (part.b != null) {
+        var s = document.createElement("strong");
+        s.textContent = part.b;
+        div.appendChild(s);
+        return;
+      }
+      if (part.note != null) {
+        var n = document.createElement("span");
+        n.className = "ai-note";
+        n.textContent = part.note;
+        div.appendChild(n);
       }
     });
+  }
+  function addBot(parts) {
+    var div = document.createElement("div");
+    div.className = "ai-msg bot";
+    partsInto(div, parts);
+    messages.appendChild(div);
+    scrollDown();
+    return div;
+  }
+  function addUser(text) {
+    var div = document.createElement("div");
+    div.className = "ai-msg user";
+    div.textContent = text;
     messages.appendChild(div);
     scrollDown();
   }
+  function addTyping() {
+    var div = document.createElement("div");
+    div.className = "ai-msg bot ai-typing-wrap";
+    div.setAttribute("aria-hidden", "true");
+    div.innerHTML = '<span class="ai-typing"><span></span><span></span><span></span></span>';
+    messages.appendChild(div);
+    scrollDown();
+    return div;
+  }
+  function addNode(node) { messages.appendChild(node); scrollDown(); }
 
-  function addChips(labels) {
-    var wrap = document.createElement("div");
-    wrap.className = "ai-chips";
-    labels.forEach(function (label) {
+  var busy = false;
+  var chipsEl = null;
+  var chipDefs = [];
+  function clearChips() { if (chipsEl) chipsEl.remove(); chipsEl = null; chipDefs = []; }
+  /* Chips: [{label, value, cls}]. Typing a chip's label (emoji optional, any
+     case) is the same as tapping it. */
+  function showChips(defs) {
+    clearChips();
+    if (!defs || !defs.length) return;
+    chipDefs = defs;
+    chipsEl = document.createElement("div");
+    chipsEl.className = "ai-chips";
+    defs.forEach(function (c) {
       var b = document.createElement("button");
       b.type = "button";
-      b.textContent = label;
+      b.textContent = c.label;
+      if (c.cls) b.className = c.cls;
       b.addEventListener("click", function () {
-        wrap.remove();
-        handle(label);
+        if (busy) return;
+        var defsNow = chipDefs;
+        clearChips();
+        choose(c, defsNow);
       });
-      wrap.appendChild(b);
+      chipsEl.appendChild(b);
     });
-    messages.appendChild(wrap);
-    scrollDown();
+    addNode(chipsEl);
+  }
+  function plain(label) {
+    return String(label).replace(/^[^A-Za-z0-9]+/, "").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+  function chipFor(text) {
+    var t = plain(text);
+    for (var i = 0; i < chipDefs.length; i++) if (plain(chipDefs[i].label) === t) return chipDefs[i];
+    return null;
   }
 
-  var MAIN_CHIPS = ["Book an appointment", "Locations & hours", "Services", "About Dr. Matarazzo"];
+  // Bot messages one at a time, each after a short typing pause.
+  var typingTimer = null;
+  function say(list, done) {
+    busy = true;
+    clearChips();
+    var i = 0;
+    (function next() {
+      if (i >= list.length) { busy = false; if (done) done(); return; }
+      var item = list[i];
+      var typing = addTyping();
+      var len = typeof item === "string" ? item.length : (item.nodeType ? 120 : JSON.stringify(item).length);
+      typingTimer = setTimeout(function () {
+        typing.remove();
+        if (item && item.nodeType) addNode(item); else addBot(item);
+        i++;
+        next();
+      }, Math.min(350 + len * 6, 1100));
+    })();
+  }
 
+  // ---------- set answers ----------
   /* Every answer below restates CLAUDE.md "Business facts" or an existing page.
      Do not add a price, an insurance plan, a wait time or a credential here
      that is not already published on the site. */
@@ -606,177 +777,502 @@
       parts: [["Call "], [PHONE, TEL], [" or email "], ["info@elitesportsmed.org", "mailto:info@elitesportsmed.org"], ["."]]
     }
   ];
+  function flat(parts) { return parts.map(function (p) { return p.length === 1 ? p[0] : p; }); }
+  function answerFor(text) {
+    for (var i = 0; i < ANSWERS.length; i++) if (ANSWERS[i].test.test(text)) return flat(ANSWERS[i].parts);
+    return null;
+  }
 
   var CLINICAL = /\b(pain|hurt|swollen|swelling|injur|torn|tear|broke|fractur|diagnos|should i|do i need|surgery or|symptom|medicat|dose|dosing)/i;
   var BOOK = /\b(book|appointment|appt|schedul|consult|see the doctor|be seen|visit|new patient)/i;
 
-  // ---------------- booking flow ----------------
-  var booking = null; // { step, data }
-  var STEPS = [
-    { key: "name", ask: "Happy to set that up. What's your full name?" },
-    { key: "phone", ask: "What's the best phone number to reach you?" },
-    { key: "email", ask: "And your email? (Type \"skip\" if you'd rather not.)" },
-    { key: "office", ask: "Which office works best?", chips: ["Port St. Lucie", "Palm Beach Gardens", "Either"] },
-    { key: "reason", ask: "In a few words, what would you like to be seen for? Please leave out medical history and insurance details; the team will go over those on the phone." }
+  // The question chips. Each label is run through answerFor(), so a chip can
+  // only ever show an answer that already exists above.
+  var FAQ_CHIPS = [
+    "Where are your offices?",
+    "What are your hours?",
+    "What services do you offer?",
+    "About Dr. Matarazzo",
+    "Do you take my insurance?",
+    "How much does it cost?",
+    "Do you offer second opinions?",
+    "New-patient paperwork"
   ];
 
-  function startBooking() {
-    booking = { step: 0, data: {} };
-    askStep();
-  }
+  // Service lines from /services/ and the site's own service pages.
+  var TOPICS = [
+    "Knee pain or injury",
+    "MAKO knee replacement",
+    "Shoulder pain or injury",
+    "Sports injury",
+    "Regenerative treatments (PRP)",
+    "Shockwave or laser therapy",
+    PEPTIDES,
+    "Second opinion",
+    "Workers' comp or personal injury",
+    "Not sure yet"
+  ];
 
-  function askStep() {
-    var s = STEPS[booking.step];
-    addMsg("bot", s.ask);
-    if (s.chips) addChips(s.chips);
-  }
+  // ---------- conversation ----------
+  var flow = { state: "intent", data: {}, editing: false };
 
-  function validate(key, value) {
-    if (key === "name") return value.length >= 2 ? "" : "Please type your name.";
-    if (key === "phone") {
-      var d = value.replace(/\D/g, "");
-      return d.length === 10 || (d.length === 11 && d.charAt(0) === "1") ? "" : "That doesn't look like a 10-digit phone number. Could you check it?";
-    }
-    if (key === "email") {
-      if (/^skip$/i.test(value)) return "";
-      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value) ? "" : "That email doesn't look right. Try again, or type \"skip\".";
-    }
-    if (key === "reason") return value.length >= 2 ? "" : "Just a few words is fine.";
-    return "";
-  }
+  function saveDraft() { save(DRAFT_KEY, { state: flow.state, data: flow.data, editing: flow.editing, t: Date.now() }); }
+  function clearDraft() { drop(DRAFT_KEY); }
+  function firstName(d) { return String(d.name || "").trim().split(/\s+/)[0] || ""; }
+  function isQuestion(d) { return d.intent === "question"; }
 
-  function bookingInput(text) {
-    var s = STEPS[booking.step];
-    var value = text.trim();
-    var problem = validate(s.key, value);
-    if (problem) { addMsg("bot", problem); if (s.chips) addChips(s.chips); return; }
-    booking.data[s.key] = s.key === "email" && /^skip$/i.test(value) ? "" : value.slice(0, s.key === "reason" ? 500 : 200);
-    booking.step++;
-    if (booking.step < STEPS.length) { askStep(); return; }
-    var data = booking.data;
-    booking = null;
-    sendBooking(data, true);
-  }
-
-  function payload(data) {
-    return {
-      // Lowercase keys: /api/lead/ reads name / phone / email by these names.
-      _subject: "[Appointment Request] elitesportsmed.org (website chat)",
-      source: "assistant",
-      name: data.name,
-      phone: data.phone,
-      email: data.email || "",
-      office: data.office,
-      reason: data.reason,
-      page: window.location.pathname
-    };
-  }
-
-  function post(data) {
-    return fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(payload(data))
-    }).then(function (r) { return r.json().catch(function () { return {}; }); })
-      .then(function (out) {
-        if (String(out && out.success) !== "true") throw new Error("not delivered");
-        return true;
-      });
-  }
-
-  function remember(data) { try { window.localStorage.setItem(PENDING_KEY, JSON.stringify(data)); } catch (e) {} }
-  function forget() { try { window.localStorage.removeItem(PENDING_KEY); } catch (e) {} }
-
-  function sendBooking(data, interactive) {
-    remember(data); // kept until delivery is confirmed, so an outage cannot lose it
-    var typing = interactive ? addTyping() : null;
-    post(data).then(function () {
-      forget();
-      if (typing) typing.remove();
-      if (interactive) {
-        addRich([["Thanks, " + data.name.split(" ")[0] + ". Your request is in, and the team will call you to set a time. If you'd rather not wait, call "], [PHONE, TEL], ["."]]);
-      }
-      try { document.dispatchEvent(new CustomEvent("esm:assistant-lead")); } catch (e) {}
-    }).catch(function () {
-      if (typing) typing.remove();
-      if (interactive) {
-        addRich([["Sorry, I couldn't send that just now, so please don't assume we have it. Call "], [PHONE, TEL], [" and the team will book you directly. I'll also try sending it again next time you open a page here."]]);
-      }
+  function summaryCard(d) {
+    var card = document.createElement("div");
+    card.className = "ai-summary";
+    var rows = [
+      ["For", isQuestion(d) ? "A message for the front desk" : "Appointment request"],
+      ["Reason", d.topic], ["Office", d.office], ["Details", d.message], ["Name", d.name],
+      ["Phone", d.phone], ["Email", d.email], ["Call time", d.preferred_time]
+    ];
+    rows.forEach(function (r) {
+      if (!r[1]) return;
+      var row = document.createElement("div");
+      var k = document.createElement("span"); k.className = "k"; k.textContent = r[0];
+      var v = document.createElement("span"); v.className = "v"; v.textContent = r[1];
+      row.appendChild(k); row.appendChild(v);
+      card.appendChild(row);
     });
+    return card;
   }
 
-  // Retry a request an earlier page could not deliver.
-  if (!onPHIPage) {
-    try {
-      var pending = JSON.parse(window.localStorage.getItem(PENDING_KEY) || "null");
-      if (pending && pending.name && pending.phone) sendBooking(pending, false);
-    } catch (e) {}
-  }
+  var FIELDS = [
+    { step: "topic", label: "Reason", appt: true },
+    { step: "office", label: "Office", appt: true },
+    { step: "message", label: "Details" },
+    { step: "name", label: "Name" },
+    { step: "phone", label: "Phone" },
+    { step: "email", label: "Email" },
+    { step: "time", label: "Call time", appt: true }
+  ];
 
-  function addTyping() {
-    var div = document.createElement("div");
-    div.className = "ai-msg bot ai-typing-wrap";
-    div.innerHTML = '<span class="ai-typing"><span></span><span></span><span></span></span>';
-    messages.appendChild(div);
-    scrollDown();
-    return div;
-  }
+  var STEPS = {
+    intent: {
+      prompt: function () {
+        return [
+          "Hi, welcome to Elite Sports Medicine! I'm the front desk assistant. I can request an appointment with Dr. Matarazzo for you, or answer questions about our offices, hours and services.",
+          "What brings you in today?"
+        ];
+      },
+      chips: function () {
+        return [
+          { label: "📅 Request an appointment", value: "appointment", cls: "primary" },
+          { label: "💬 Ask a question", value: "ask" },
+          { label: "👀 Just looking around", value: "browse" }
+        ];
+      }
+      // Typed text here is a question: handled in typed().
+    },
+    browse: {
+      terminal: true,
+      prompt: function () {
+        return [["Enjoy the site! I'll be right here in the corner if you need anything. You can also call us at ", [PHONE, TEL], ", " + HOURS + "."]];
+      },
+      chips: function () {
+        return [
+          { label: "📅 Actually, book me in", value: "appointment" },
+          { label: "💬 I do have a question", value: "ask" }
+        ];
+      }
+    },
+    topic: {
+      field: "topic",
+      prompt: function () { return ["Happy to set that up. What would you like to be seen for?"]; },
+      chips: function () { return TOPICS.map(function (t) { return { label: t, value: t }; }); },
+      accept: function (v) {
+        if (v.length < 2) return { error: "Just a few words is fine, or tap one of the options." };
+        return { value: v.slice(0, 120) };
+      },
+      next: function () { return "office"; }
+    },
+    office: {
+      field: "office",
+      // Peptide therapy is offered at the Port St. Lucie office only
+      // (/services/peptide-therapy/), so there is nothing to choose.
+      auto: function (d) {
+        if (d.topic !== PEPTIDES) return null;
+        return { value: PSL, say: "Peptide therapy is offered at our Port St. Lucie office, so I've noted Port St. Lucie." };
+      },
+      prompt: function () {
+        return ["Which office works best? Port St. Lucie is at 1100 SW St. Lucie West Blvd., Ste. 105, and Palm Beach Gardens is at 11380 Prosperity Farms Rd, Ste 204."];
+      },
+      chips: function () {
+        return [{ label: PSL, value: PSL }, { label: PBG, value: PBG }, { label: "Either is fine", value: "Either is fine" }];
+      },
+      accept: function () { return { error: "Please tap Port St. Lucie, Palm Beach Gardens, or Either is fine." }; },
+      next: function () { return "message"; }
+    },
+    message: {
+      field: "message",
+      prompt: function (d) {
+        if (isQuestion(d)) {
+          return [["Of course. What would you like to ask? I'll pass it straight to the front desk. ", { note: "Please leave out medical history; the team will go over that with you on the phone." }]];
+        }
+        return [["Tell me a little about what's going on… a sentence or two is perfect. ", { note: "No detailed medical history needed, just the basics please." }]];
+      },
+      accept: function (v) {
+        if (v.length < 2) return { error: "Could you give me just a few words about it?" };
+        return { value: v.slice(0, 1000) };
+      },
+      next: function () { return "name"; }
+    },
+    name: {
+      field: "name",
+      prompt: function () { return [["Thanks. Now your contact details so the front desk can reach you. What's your ", { b: "first and last name" }, "?"]]; },
+      accept: function (v) {
+        if (v.replace(/[^A-Za-zÀ-ɏ]/g, "").length < 2) return { error: "Please type your first and last name." };
+        return { value: v.slice(0, 200) };
+      },
+      next: function () { return "phone"; }
+    },
+    phone: {
+      field: "phone",
+      prompt: function (d) {
+        var f = firstName(d);
+        return [["Thanks" + (f ? ", " + f : "") + "! What's the best ", { b: "phone number" }, " to reach you?"]];
+      },
+      accept: function (v) {
+        var d = v.replace(/\D/g, "");
+        if (!(d.length === 10 || (d.length === 11 && d.charAt(0) === "1"))) {
+          return { error: "Hmm, that doesn't look like a 10-digit phone number. Mind checking it? (For example 561-555-0123.)" };
+        }
+        return { value: v.slice(0, 40) };
+      },
+      next: function () { return "email"; }
+    },
+    email: {
+      field: "email",
+      prompt: function () { return [["And your ", { b: "email" }, ", in case we can't reach you by phone? ", { note: "Optional. Tap Skip if you'd rather not." }]]; },
+      chips: function () { return [{ label: "Skip", value: "" }]; },
+      accept: function (v) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return { error: "That email doesn't look quite right. Try again, or tap Skip." };
+        return { value: v.slice(0, 200) };
+      },
+      next: function (d) { return isQuestion(d) ? "confirm" : "time"; }
+    },
+    time: {
+      field: "preferred_time",
+      // Inside the published hours only (CLAUDE.md: Monday to Friday, 8:30 AM to 4:00 PM).
+      prompt: function () { return ["When's the best time for the front desk to call? Both offices are open " + HOURS + "."]; },
+      chips: function () {
+        return [
+          { label: "Morning (8:30–11)", value: "Morning (8:30–11)" },
+          { label: "Midday (11–2)", value: "Midday (11–2)" },
+          { label: "Afternoon (2–4)", value: "Afternoon (2–4)" },
+          { label: "Any time", value: "Any time" }
+        ];
+      },
+      accept: function () { return { error: "Please tap one of the times above. They're all within office hours, " + HOURS + "." }; },
+      next: function () { return "confirm"; }
+    },
+    confirm: {
+      prompt: function (d) { return [summaryCard(d), "Did I get everything right?"]; },
+      chips: function () {
+        return [
+          { label: "✅ Yes, send it", value: "send", cls: "primary" },
+          { label: "✏️ Fix something", value: "fix" }
+        ];
+      },
+      accept: function (v) {
+        var t = v.toLowerCase();
+        if (/^(y|yes|yep|send|ok|okay|correct)\b/.test(t)) return { value: "send" };
+        if (/^(no|fix|change|edit|wrong)\b/.test(t)) return { value: "fix" };
+        return { error: "Tap “Yes, send it” when you're ready, or “Fix something” to change an answer." };
+      }
+    },
+    fix: {
+      prompt: function () { return ["No problem. Which part should I change?"]; },
+      chips: function (d) {
+        return FIELDS.filter(function (f) {
+          if (f.appt && isQuestion(d)) return false;
+          if (f.step === "office" && d.topic === PEPTIDES) return false;
+          return true;
+        }).map(function (f) { return { label: f.label, value: "edit:" + f.step }; })
+          .concat([{ label: "Nothing, it's right", value: "back" }]);
+      },
+      accept: function () { return { error: "Tap the part you'd like to change." }; }
+    },
+    sent: { terminal: true }
+  };
 
-  // ---------------- answering ----------------
-  function handle(text) {
-    addMsg("user", text);
-    if (booking) { bookingInput(text); return; }
-    if (BOOK.test(text) && !/\b(form|forms|paperwork)\b/i.test(text)) { startBooking(); return; }
-    for (var i = 0; i < ANSWERS.length; i++) {
-      if (ANSWERS[i].test.test(text)) {
-        addRich(ANSWERS[i].parts);
-        addChips(["Book an appointment", "Something else"]);
+  function runStep(id) {
+    flow.state = id;
+    var step = STEPS[id];
+    if (step.auto) {
+      var a = step.auto(flow.data);
+      if (a) {
+        flow.data[step.field] = a.value;
+        saveDraft();
+        say([a.say], function () { advance(step); });
         return;
       }
     }
-    if (/^something else$/i.test(text)) {
-      addMsg("bot", "Sure. Ask me about booking, locations and hours, services, or Dr. Matarazzo.");
-      addChips(MAIN_CHIPS);
-      return;
+    if (!step.terminal || id === "browse") saveDraft();
+    if (id === "browse" || id === "intent") clearDraft();
+    say(step.prompt(flow.data), function () {
+      if (step.chips) showChips(step.chips(flow.data));
+    });
+  }
+
+  function advance(step) {
+    if (flow.editing) { flow.editing = false; runStep("confirm"); return; }
+    runStep(step.next(flow.data));
+  }
+
+  function startAppointment() {
+    flow.data = { intent: "appointment" };
+    flow.editing = false;
+    runStep("topic");
+  }
+  function startMessage(text) {
+    flow.data = { intent: "question" };
+    flow.editing = false;
+    if (text) {
+      flow.data.message = text.slice(0, 1000);
+      saveDraft();
+      say(["I don't have a set answer for that, so I'll pass it to the front desk and they'll follow up personally."], function () { runStep("name"); });
+    } else {
+      runStep("message");
     }
+  }
+  function questionMenu(lead) {
+    flow.state = "ask";
+    clearDraft();
+    say(lead ? [lead] : [], function () {
+      var chips = [{ label: "📅 Request an appointment", value: "appointment", cls: "primary" }];
+      FAQ_CHIPS.forEach(function (q) { chips.push({ label: q, value: "faq" }); });
+      chips.push({ label: "📨 Leave a message for the front desk", value: "message" });
+      showChips(chips);
+    });
+  }
+  // A question, tapped or typed: set answer, booking, no advice, or the front desk.
+  function answerQuestion(text) {
+    var emergency = ANSWERS[0].test.test(text);
+    if (!emergency && BOOK.test(text) && !/\b(form|forms|paperwork)\b/i.test(text)) { startAppointment(); return; }
+    var ans = answerFor(text);
+    if (ans) { flow.state = "ask"; say([ans], function () { questionMenu("Anything else I can help with?"); }); return; }
     if (CLINICAL.test(text)) {
-      addRich([["I can't give medical advice, but Dr. Matarazzo can evaluate that in person. I can request an appointment for you, or call "], [PHONE, TEL], ["."]]);
-      addChips(["Book an appointment"]);
+      flow.state = "ask";
+      say([["I can't give medical advice, but Dr. Matarazzo can evaluate that in person. I can request an appointment for you, or you can call ", [PHONE, TEL], "."]], function () {
+        showChips([
+          { label: "📅 Request an appointment", value: "appointment", cls: "primary" },
+          { label: "💬 Ask something else", value: "ask" }
+        ]);
+      });
       return;
     }
-    addRich([["I can help with booking, locations and hours, services, or Dr. Matarazzo's background. For anything else, call "], [PHONE, TEL], ["."]]);
-    addChips(MAIN_CHIPS);
+    startMessage(text);
   }
 
-  if (launcher && panel) {
-    launcher.addEventListener("click", function () {
-      panel.classList.add("is-open");
-      launcher.setAttribute("aria-expanded", "true");
-      if (!messages.dataset.greeted) {
-        addMsg("bot", "Hi, I'm the Elite Sports Medicine front desk assistant. I can request an appointment for you or answer questions about our offices, hours and services.");
-        addChips(MAIN_CHIPS);
-        messages.dataset.greeted = "1";
+  // A chip was tapped (or its label typed).
+  function choose(c) {
+    addUser(c.label);
+    var v = c.value;
+    if (v === "appointment") { startAppointment(); return; }
+    if (v === "ask") { questionMenu("Happy to help! Tap a question below and I'll answer right away, or I can take a message for the front desk."); return; }
+    if (v === "browse") { runStep("browse"); return; }
+    if (v === "message") { startMessage(""); return; }
+    if (v === "faq") { answerQuestion(c.label); return; }
+    if (v === "close") { closePanel(); return; }
+    if (v === "resume") { resume(); return; }
+    if (v === "fresh") { startOver(true); return; }
+    if (flow.state === "confirm") {
+      if (v === "send") { submit(); return; }
+      if (v === "fix") { runStep("fix"); return; }
+    }
+    if (flow.state === "fix") {
+      if (v === "back") { runStep("confirm"); return; }
+      if (v.indexOf("edit:") === 0) { flow.editing = true; runStep(v.slice(5)); return; }
+    }
+    var step = STEPS[flow.state];
+    if (step && step.field) {
+      flow.data[step.field] = v;
+      // A new reason of peptide therapy moves the request to Port St. Lucie.
+      if (step.field === "topic" && v === PEPTIDES && flow.editing) flow.data.office = PSL;
+      saveDraft();
+      advance(step);
+    }
+  }
+
+  // Free text from the input box.
+  function typed(text) {
+    var c = chipFor(text);
+    if (c) { clearChips(); choose(c); return; }
+    if (flow.state === "intent" || flow.state === "ask" || flow.state === "browse" || flow.state === "sent" || flow.state === "resume") {
+      clearChips();
+      addUser(text);
+      answerQuestion(text);
+      return;
+    }
+    var step = STEPS[flow.state];
+    if (!step || !step.accept) return;
+    addUser(text);
+    var res = step.accept(text);
+    if (res.error) {
+      var defs = chipDefs;
+      say([res.error], function () { if (defs.length) showChips(defs); });
+      return;
+    }
+    clearChips();
+    if (flow.state === "confirm") { choose({ label: "", value: res.value }); return; }
+    flow.data[step.field] = res.value;
+    if (step.field === "topic" && res.value === PEPTIDES && flow.editing) flow.data.office = PSL;
+    saveDraft();
+    advance(step);
+  }
+
+  // ---------- send ----------
+  function refCode() {
+    var abc = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", out = "";
+    for (var i = 0; i < 5; i++) out += abc.charAt(Math.floor(Math.random() * abc.length));
+    return "ES-" + out;
+  }
+  function buildPayload(d) {
+    var q = isQuestion(d);
+    var p = {
+      _subject: (q ? "Website question " : "Appointment request ") + d.ref + " (website chat)",
+      source: "assistant",
+      intent: q ? "question" : "appointment",
+      ref: d.ref,
+      name: d.name,
+      phone: d.phone,
+      email: d.email || "",
+      message: d.message || "",
+      page: window.location.pathname
+    };
+    if (!q) {
+      p.topic = d.topic || "";
+      p.office = d.office || "";
+      p.preferred_time = d.preferred_time || "";
+    }
+    return p;
+  }
+
+  function submit() {
+    flow.data.ref = flow.data.ref || refCode();
+    var p = buildPayload(flow.data);
+    enqueue(p); // kept until delivery is confirmed, so an outage cannot lose it
+    busy = true;
+    var typing = addTyping();
+    deliver(p).then(function () {
+      typing.remove();
+      busy = false;
+      clearDraft();
+      flow.state = "sent";
+      say([
+        ["Perfect, it's on its way! 🎉 Your reference number is ", { b: p.ref }, "."],
+        ["Our front desk will call you at " + p.phone + " during office hours, " + HOURS + ". Need us sooner? Call ", [PHONE, TEL], "."]
+      ], function () {
+        showChips([{ label: "💬 Ask a question", value: "ask" }, { label: "Close", value: "close" }]);
+      });
+    }, function () {
+      typing.remove();
+      busy = false;
+      clearDraft(); // it is in the queue now; a resumed draft would send it twice
+      flow.state = "sent";
+      say([
+        ["Sorry, I couldn't send that just now, so please don't assume we have it. Call ", [PHONE, TEL], " and the team will book you directly."],
+        "I've kept your request on this device and will try sending it again next time you open a page here."
+      ], function () {
+        showChips([{ label: "💬 Ask a question", value: "ask" }, { label: "Close", value: "close" }]);
+      });
+    });
+  }
+
+  // ---------- open / close / resume ----------
+  var started = false;
+  var savedDraft = null;
+
+  function resetLog() {
+    if (typingTimer) clearTimeout(typingTimer);
+    busy = false;
+    clearChips();
+    Array.prototype.slice.call(messages.children).forEach(function (n) { if (n !== disclaimer) n.remove(); });
+  }
+  function startOver(fromChip) {
+    clearDraft();
+    flow = { state: "intent", data: {}, editing: false };
+    if (!fromChip) resetLog();
+    runStep("intent");
+  }
+  function resume() {
+    var d = savedDraft;
+    savedDraft = null;
+    flow = { state: d.state, data: d.data || {}, editing: !!d.editing };
+    runStep(d.state);
+  }
+
+  var RESUMABLE = { topic: 1, office: 1, message: 1, name: 1, phone: 1, email: 1, time: 1, confirm: 1, fix: 1 };
+  function openPanel() {
+    panel.classList.add("is-open");
+    launcher.setAttribute("aria-expanded", "true");
+    fitViewport();
+    if (!started) {
+      started = true;
+      var d = load(DRAFT_KEY);
+      if (d && d.state && RESUMABLE[d.state] && d.data && Date.now() - (d.t || 0) < DRAFT_TTL) {
+        savedDraft = d;
+        flow.state = "resume";
+        say(["Welcome back! Pick up where you left off?"], function () {
+          showChips([{ label: "Continue", value: "resume", cls: "primary" }, { label: "Start over", value: "fresh" }]);
+        });
+      } else {
+        runStep("intent");
       }
-      input && input.focus();
-    });
+    }
+    if (window.matchMedia("(min-width: 641px)").matches) input.focus();
+    else panel.focus({ preventScroll: true });
   }
-  if (closeBtn && panel) {
-    closeBtn.addEventListener("click", function () {
-      panel.classList.remove("is-open");
-      launcher.setAttribute("aria-expanded", "false");
-    });
+  function closePanel() {
+    panel.classList.remove("is-open");
+    launcher.setAttribute("aria-expanded", "false");
+    panel.style.top = panel.style.bottom = panel.style.height = "";
+    launcher.focus();
   }
 
-  if (form && panel) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var text = input.value.trim();
-      if (!text) return;
-      input.value = "";
-      handle(text);
-      input.focus();
-    });
+  /* iOS keeps the layout viewport the same size when the keyboard opens, so a
+     panel anchored to the bottom of the screen ends up behind the keyboard.
+     On phones, while the keyboard is up, pin the panel to the VISUAL viewport
+     (the same fix regenorthopb.com uses). */
+  function fitViewport() {
+    var vv = window.visualViewport;
+    if (!vv || !panel.classList.contains("is-open")) return;
+    var phone = window.matchMedia("(max-width: 640px)").matches;
+    if (phone && vv.height < window.innerHeight - 120) {
+      panel.style.top = (vv.offsetTop + 8) + "px";
+      panel.style.bottom = "auto";
+      panel.style.height = Math.max(240, vv.height - 16) + "px";
+    } else {
+      panel.style.top = panel.style.bottom = panel.style.height = "";
+    }
+    scrollDown();
   }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", fitViewport);
+    window.visualViewport.addEventListener("scroll", fitViewport);
+  }
+
+  launcher.addEventListener("click", function () {
+    if (panel.classList.contains("is-open")) closePanel(); else openPanel();
+  });
+  if (closeBtn) closeBtn.addEventListener("click", closePanel);
+  restartBtn.addEventListener("click", function () { addUser("Start over"); startOver(false); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && panel.classList.contains("is-open")) closePanel();
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var text = input.value.trim();
+    if (!text || busy) return;
+    input.value = "";
+    if (!started) openPanel();
+    typed(text);
+  });
 })();
 
 /* ---------------------------------------------------------------- analytics
@@ -850,7 +1346,7 @@
     if (el.closest(".site-header")) return "header";
     if (el.closest(".site-footer")) return "footer";
     if (el.closest(".hero")) return "hero";
-    if (el.closest(".ai-panel, .ai-launcher")) return "assistant";
+    if (el.closest("#ai-assistant-panel, #ai-assistant-launcher")) return "assistant";
     return "body";
   }
 
