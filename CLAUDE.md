@@ -260,8 +260,9 @@ count. They use the same names on all five client sites. The assistant has no au
 so every `chat_open` is the visitor's own action; if an invite is ever added it must not
 fire `chat_open`. All six events go to Vercel and are mirrored to GA4 by `leadEvent()`.
 
-- `location` comes from `placementOf()`: `mobile-nav`, `header`, `footer`,
-  `hero`, `assistant`, `body`. (`assistant` keys off `#ai-assistant-panel` /
+- `location` comes from `placementOf()`: `mobile-nav`, `sticky-bar`, `header`, `footer`,
+  `hero`, `assistant`, `body`. `sticky-bar` is the Call / Request bar `main.js` adds at
+  980px and under (not on the PHI forms; Call only on `/schedule-appointment/`). (`assistant` keys off `#ai-assistant-panel` /
   `#ai-assistant-launcher`; until 2026-10-30 it looked for classes that do not exist, so a
   phone tap inside the chat was filed as `body`.) The listener is delegated in the CAPTURE phase so
   it records a `tel:` click that navigates away immediately, and covers markup

@@ -1317,6 +1317,22 @@
     return false;
   }
 
+  /* Sticky Call / Request bar for phones and tablets (CSS shows it at 980px and
+     under, the width where the header drops its own CTA). Built here so all the
+     hand-written pages get it from one place. Not on the PHI forms; on the
+     appointment page itself only Call is useful. Clicks are recorded by the
+     delegated listener below, with placement "sticky-bar". */
+  if (!isPHIPage()) {
+    var bar = document.createElement("nav");
+    bar.className = "mobile-cta";
+    bar.setAttribute("aria-label", "Call or request an appointment");
+    bar.innerHTML = '<a class="mobile-cta-call" href="tel:+15612028886">Call 561-202-8886</a>' +
+      (window.location.pathname.indexOf("/schedule-appointment/") === 0 ? "" :
+        '<a class="mobile-cta-request" href="/schedule-appointment/">Request Appointment</a>');
+    document.body.appendChild(bar);
+    document.documentElement.classList.add("has-mobile-cta");
+  }
+
   /* Fire-and-forget. A blocked, missing or throwing analytics script must
      never delay a tel: dial or break a page.
 
@@ -1347,6 +1363,7 @@
   function placementOf(el) {
     if (!el || !el.closest) return "body";
     if (el.closest(".mobile-nav")) return "mobile-nav";
+    if (el.closest(".mobile-cta")) return "sticky-bar";
     if (el.closest(".site-header")) return "header";
     if (el.closest(".site-footer")) return "footer";
     if (el.closest(".hero")) return "hero";

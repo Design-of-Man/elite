@@ -2195,6 +2195,45 @@ label {
 }
 .map-embed iframe { width: 100%; height: 100%; border: 0; }
 
+/* Sticky Call / Request bar, added by main.js. Sits under the mobile nav (99)
+   and the chat (200). It steps aside while a field has focus, so it never rides
+   the on-screen keyboard, and while the chat is open. */
+.mobile-cta { display: none; }
+@media (max-width: 980px) {
+  .has-mobile-cta { --mobile-cta-h: calc(3.75rem + env(safe-area-inset-bottom, 0px)); }
+  .has-mobile-cta body { padding-bottom: var(--mobile-cta-h); }
+  .mobile-cta {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 98;
+    display: flex;
+    gap: 0.5rem;
+    height: var(--mobile-cta-h);
+    padding: 0.5rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
+    background: var(--paper);
+    border-top: 1px solid var(--rule-strong);
+  }
+  .mobile-cta a {
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: clamp(0.8rem, 3.6vw, 1rem);
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .mobile-cta-call { background: var(--ink); color: var(--paper); }
+  .mobile-cta-request { background: var(--brass); color: var(--ink); }
+  .has-mobile-cta #ai-assistant-launcher { bottom: calc(var(--mobile-cta-h) + 0.75rem); }
+  .has-mobile-cta:has(#ai-assistant-panel.is-open) .mobile-cta,
+  .has-mobile-cta:has(input:focus, textarea:focus, select:focus) .mobile-cta { display: none; }
+  .has-mobile-cta:has(#ai-assistant-panel.is-open) #ai-assistant-launcher { bottom: 1.5rem; }
+}
+
 /* --------------------------------------------------------------------------
    16. MOTION
    Every curve is custom. Nothing animates but transform and opacity.
@@ -2662,7 +2701,8 @@ label {
 
 @media print {
   .site-header, .mobile-nav, .site-footer, .scroll-cue, .hero-glow,
-  #ai-assistant-launcher, #ai-assistant-panel, .notice-box, .cta-band { display: none !important; }
+  #ai-assistant-launcher, #ai-assistant-panel, .notice-box, .cta-band, .mobile-cta { display: none !important; }
+  .has-mobile-cta body { padding-bottom: 0; }
   .print-form input, .print-form textarea, .print-form select {
     border: 1px solid #999 !important;
     background: #fff !important;
