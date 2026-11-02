@@ -234,6 +234,10 @@ on-page notice promises the form is not submitted online. Consequently:
   lead via the portal's `contact-lead` Supabase function and emails via Resend
   (env `LEAD_TO`, `LEAD_CC`, `LEAD_FROM`, `CONFIRM_FROM`, `RESEND_API_KEY`).
   FormSubmit was removed 2026-10-30 after its outage.
+  Since 2026-11-02 it silently discards the form bot that hit firstrehabnpb.com and
+  jupiterlaser.com: a user agent wrapped in literal quote marks, or a name AND a
+  message that are each one random mixed-case word (`looksRandom()`). Nothing is
+  kept, emailed or confirmed.
 
 ## Analytics
 Vercel Web Analytics (`/_vercel/insights/script.js`, cookieless, no consent
