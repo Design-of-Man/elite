@@ -32,7 +32,8 @@ WHAT IT WRITES, and nothing else:
   - blog/{slug}/index.html for every post. The page shell (everything outside
     <main>) is taken from blog/index.html at run time, with the title,
     description, canonical, Open Graph tags and breadcrumb swapped for the
-    post's own. The seo:graph block is removed; seo.py writes the real one.
+    post's own, plus a BlogPosting node authored by the practice. The seo:graph
+    block is removed; seo.py writes the real one.
   - The cards between the blog:posts markers in blog/index.html, newest first.
     The hand-written cards after the end marker are left alone.
 
@@ -156,6 +157,26 @@ def render_post(shell_head, shell_tail, post, cta):
         ],
     }, ensure_ascii=False)
 
+    # The author is the practice, never a named clinician: see NO BYLINE above.
+    # seo.py's WebPage node carries the dates from git; "date" here is the date
+    # shown to readers. The second replace stops text closing the script tag.
+    org = {"@type": "Organization", "@id": f"{SITE}/#organization",
+           "name": "Elite Sports Medicine", "url": f"{SITE}/"}
+    posting = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "@id": f"{url}#article",
+        "mainEntityOfPage": {"@id": f"{url}#webpage"},
+        "headline": post["title"],
+        "description": post["description"],
+        "url": url,
+        "image": f"{SITE}/assets/img/og-cover.jpg",
+        "datePublished": post["date"],
+        "inLanguage": "en-US",
+        "author": org,
+        "publisher": {**org, "logo": {"@type": "ImageObject", "url": f"{SITE}/assets/img/logo-elite-on-light.png"}},
+    }, ensure_ascii=False).replace("</", "<\\/")
+
     head = shell_head
     head = sub_once(r"<title>.*?</title>", f"<title>{title}</title>", head, "<title>")
     head = sub_once(r'<meta name="description" content=".*?">',
@@ -171,7 +192,8 @@ def render_post(shell_head, shell_tail, post, cta):
     head = sub_once(r'<meta property="og:url" content=".*?">',
                     f'<meta property="og:url" content="{url}">', head, "og:url")
     head = sub_once(r'<script type="application/ld\+json">\{"@context": "https://schema.org", "@type": "BreadcrumbList".*?</script>',
-                    f'<script type="application/ld+json">{crumbs}</script>', head, "BreadcrumbList")
+                    f'<script type="application/ld+json">{crumbs}</script>\n'
+                    f'<script type="application/ld+json">{posting}</script>', head, "BreadcrumbList")
     # seo.py owns this block and re-adds it with the post's own dates.
     head = re.sub(r"<!-- seo:graph -->.*?<!-- /seo:graph -->\n?", "", head, flags=re.S)
 

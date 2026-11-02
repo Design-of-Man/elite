@@ -34,7 +34,9 @@ then runs `scripts/blog.py` (renders `blog/{slug}/index.html` from `blog/index.h
 shell and refreshes the cards between the `blog:posts` markers on `/blog/`) and
 `scripts/seo.py`, as two commits, page first. Don't hand-edit a `blog/{slug}/` page: the
 next run re-renders it from its JSON. To change a post, edit its JSON. Agency posts carry
-no physician byline on purpose (see the header of `scripts/blog.py`).
+no physician byline on purpose (see the header of `scripts/blog.py`), which goes for the
+`BlogPosting` schema `blog.py` writes on each post too: the author is the organization, with no
+named clinician and no `reviewedBy`.
 
 Blog posts are dated without `--follow` in `seo.py`: a new post shares its shell with
 every other page, so git would otherwise read it as a copy and give it another page's
