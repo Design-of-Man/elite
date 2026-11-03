@@ -32,6 +32,14 @@ WEBSITE = f"{SITE}/#website"
 DEFAULT_IMAGE = f"{SITE}/assets/img/og-cover.jpg"
 FALLBACK_DATE = "2026-09-14"
 
+# Pages whose whole subject is one person. Google's ProfilePage markup tells it the
+# page is that person's profile (mainEntity), which is what lets a search for the
+# doctor's name resolve to this page rather than an office or location page. The
+# Physician node itself is hand-written on the page under the same @id.
+PROFILE_PAGES = {
+    "marc-f-matarazzo/index.html": f"{SITE}/#physician",
+}
+
 START = "<!-- seo:graph -->"
 END = "<!-- /seo:graph -->"
 
@@ -150,6 +158,9 @@ def graph_for(rel, doc):
     }
     if clinical:
         page["audience"] = {"@type": "MedicalAudience", "audienceType": "Patient"}
+    if rel in PROFILE_PAGES:
+        page["@type"] = "ProfilePage"
+        page["mainEntity"] = {"@id": PROFILE_PAGES[rel]}
     # The hero heading and lede are what a voice assistant should read back.
     # If .hero h1 / .hero-lede are ever renamed, update these selectors.
     if '"hero-lede"' in doc:
