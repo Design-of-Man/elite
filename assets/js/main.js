@@ -1,4 +1,107 @@
 // ELITE Sports Medicine — interaction layer. No framework, no build step.
+
+/* Cloudflare Turnstile bot check, shared by every Design of Man client site
+   (keep this block identical across abacoapodiatry, elite, regenortho,
+   firstrehabnpb and legacymed).
+
+   OFF until TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY are both set in the
+   site's Vercel environment. The site key reaches the browser through a GET on
+   the site's own lead endpoint ({"siteKey": "..."}, empty when off), so turning
+   it on or off is an env change, never a code change.
+
+   It NEVER blocks a send. Any failure (key unset, script blocked by an ad
+   blocker, Cloudflare down, challenge timeout) resolves token() to "", the
+   form still posts, and the server routes that lead as "unverified" (kept and
+   sent to the monitoring inbox, no patient confirmation) instead of dropping it.
+
+   Nothing loads from Cloudflare until a visitor starts a form or opens the chat
+   (warm) or sends (token), so pages without a lead form never contact it.
+
+   Usage:
+     dmTurnstile.warm('/api/lead/');               // on first focus / chat open
+     dmTurnstile.token('/api/lead/').then(function (t) { body._turnstile = t; ... });
+*/
+(function () {
+  if (window.dmTurnstile) return;
+  var SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+  var cfg = {}, lib = null, widget = null, waiting = [];
+
+  function config(endpoint) {
+    if (!cfg[endpoint]) {
+      cfg[endpoint] = fetch(endpoint, { method: 'GET', headers: { Accept: 'application/json' }, credentials: 'same-origin' })
+        .then(function (r) { return r.ok ? r.json() : {}; })
+        .then(function (j) { return j && typeof j.siteKey === 'string' ? j.siteKey : ''; })
+        .catch(function () { return ''; });
+    }
+    return cfg[endpoint];
+  }
+
+  function load() {
+    if (!lib) {
+      lib = new Promise(function (resolve, reject) {
+        if (window.turnstile) return resolve(window.turnstile);
+        var s = document.createElement('script');
+        s.src = SCRIPT;
+        s.async = true;
+        s.onload = function () { window.turnstile ? resolve(window.turnstile) : reject(new Error('no turnstile')); };
+        s.onerror = function () { lib = null; reject(new Error('turnstile blocked')); };
+        document.head.appendChild(s);
+      });
+    }
+    return lib;
+  }
+
+  function settle(tok) {
+    var w = waiting;
+    waiting = [];
+    for (var i = 0; i < w.length; i++) w[i](tok || '');
+  }
+
+  function ensure(ts, key) {
+    if (widget !== null) return;
+    // interaction-only: invisible unless Cloudflare needs the visitor to click,
+    // in which case it appears pinned bottom-centre above everything else.
+    var box = document.createElement('div');
+    box.className = 'dm-turnstile';
+    box.style.cssText = 'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2147483000;';
+    document.body.appendChild(box);
+    widget = ts.render(box, {
+      sitekey: key,
+      execution: 'execute',
+      appearance: 'interaction-only',
+      'refresh-expired': 'manual',
+      callback: function (t) { settle(t); },
+      'error-callback': function () { settle(''); return true; },
+      'timeout-callback': function () { settle(''); }
+    });
+  }
+
+  function token(endpoint, ms) {
+    return config(endpoint).then(function (key) {
+      if (!key) return '';
+      return load().then(function (ts) {
+        return new Promise(function (resolve) {
+          var done = false;
+          function finish(t) { if (!done) { done = true; resolve(t || ''); } }
+          waiting.push(finish);
+          setTimeout(function () { finish(''); }, ms || 20000);
+          try {
+            ensure(ts, key);
+            ts.reset(widget);   // tokens are single-use: a fresh one per send
+            ts.execute(widget);
+          } catch (e) { finish(''); }
+        });
+      });
+    }).catch(function () { return ''; });
+  }
+
+  function warm(endpoint) {
+    config(endpoint).then(function (key) { if (key) load().catch(function () {}); });
+  }
+
+  window.dmTurnstile = { token: token, warm: warm };
+})();
+
 (function () {
   "use strict";
 
@@ -528,11 +631,19 @@
   }
 
   var inFlight = {};
+  /* A Turnstile token is fetched fresh for every send, retries included, and
+     never stored in the queue: tokens are single use and expire in 300 s.
+     token() always resolves ("" on any failure), so it never blocks a send. */
   function post(p) {
-    return fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(p)
+    return window.dmTurnstile.token(ENDPOINT).then(function (t) {
+      var body = {};
+      for (var k in p) if (Object.prototype.hasOwnProperty.call(p, k)) body[k] = p[k];
+      body._turnstile = t;
+      return fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(body)
+      });
     }).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (out) {
         if (!r.ok || String(out && out.success) !== "true") throw new Error("not delivered");
@@ -1208,6 +1319,7 @@
 
   var RESUMABLE = { topic: 1, office: 1, message: 1, name: 1, phone: 1, email: 1, time: 1, confirm: 1, fix: 1 };
   function openPanel() {
+    window.dmTurnstile.warm(ENDPOINT);
     panel.classList.add("is-open");
     launcher.setAttribute("aria-expanded", "true");
     fitViewport();
@@ -1452,6 +1564,31 @@
         window.sessionStorage.setItem("esm-lead-flagged", flags.length ? "1" : "0");
       } catch (err) {}
     });
+
+    /* Turnstile (off until the keys are set in Vercel). This is a plain HTML
+       POST, so the send is held just long enough to fetch a token into a
+       hidden _turnstile field, then form.submit() posts it (which does not
+       fire submit again). token() always resolves, "" on any failure, so the
+       form always posts. With JS off it posts with no token and the server
+       treats it as unverified. Registered after the labelling listener above,
+       so the verified/flags fields are already set. Never on the PHI pages. */
+    if (!isPHIPage() && window.dmTurnstile) {
+      var tsSending = false;
+      // Back from /thank-you/ via the bfcache: let the form send again.
+      window.addEventListener("pageshow", function () { tsSending = false; });
+      apptForm.addEventListener("focusin", function () {
+        window.dmTurnstile.warm("/api/lead/");
+      }, { once: true });
+      apptForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (tsSending) return;
+        tsSending = true;
+        window.dmTurnstile.token("/api/lead/").then(function (t) {
+          setField("_turnstile", t);
+          HTMLFormElement.prototype.submit.call(apptForm);
+        });
+      });
+    }
   }
 
   /* An appointment request delivered by the front desk assistant. The

@@ -216,6 +216,24 @@ visitor to call. Every confirmed delivery (live or retried, appointment or messa
 chosen in the chat goes to analytics. `vercel.json` connect-src/form-action are `'self'` for
 this. The assistant removes itself on the PHI pages and sends nothing from them.
 
+**Cloudflare Turnstile (2026-11-03), on top of the bot filters, not instead of them.** An
+invisible bot check on both lead paths (`/schedule-appointment/` and the assistant, live sends
+and queued retries alike). It is OFF until both `TURNSTILE_SITE_KEY` and
+`TURNSTILE_SECRET_KEY` are set in Vercel (optional `TURNSTILE_UNVERIFIED_TO` names the
+monitoring inbox). `GET /api/lead/` hands the browser the site key (empty when off). main.js
+warms it on first focus in the appointment form or when the chat opens, and fetches a FRESH
+`_turnstile` token for every send, retries included (never stored in `esm-assist-pending`).
+The appointment form holds its submit to add a hidden `_turnstile`, then posts as before;
+with JS off it posts with none. A missing or rejected token is "unverified": the lead is
+still stored, the visitor still gets success / the 303, but the email goes only to
+`TURNSTILE_UNVERIFIED_TO` (else `LEAD_CC`, else `LEAD_TO`) with "[Unverified] " on the
+subject, and NO patient confirmation is sent. If Cloudflare is unreachable it fails open as
+verified. The token never reaches an email, the stored message or analytics. Nothing
+Turnstile-related runs on the three PHI pages; the sitewide CSP allows
+`https://challenges.cloudflare.com` in script-src, connect-src and frame-src. The two
+Turnstile blocks (top of `assets/js/main.js`, and the one above the handler in `api/lead.js`)
+are shared verbatim with the other four client sites: keep them identical.
+
 ## Patient forms — PHI (do not regress)
 `/new-patient-intake-form/`, `/elite-injection-consent-form/` and
 `/elite-medical-records-request/` collect PHI and are built to keep it in the
