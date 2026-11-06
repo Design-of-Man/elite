@@ -23,7 +23,7 @@
 <link rel="preload" href="/assets/fonts/instrument-serif-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/dm-sans-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/assets/css/v2.css?v=525c1d372d">
+<link rel="stylesheet" href="/assets/css/v2.min.css?v=eec84774ae">
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": ["MedicalTherapy", "Service"], "name": "Regenerative Treatments", "provider": {"@id": "https://elitesportsmed.org/#physician"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What exactly are regenerative treatments?", "acceptedAnswer": {"@type": "Answer", "text": "Regenerative treatments are non-surgical procedures that use the body's own healing mechanisms to repair damaged tissue, including Platelet-Rich Plasma (PRP), stem cell therapy, and growth factor injections. They concentrate and reintroduce natural healing components into the injured area to accelerate recovery, reduce inflammation, and improve function, rather than masking symptoms or replacing tissue."}}, {"@type": "Question", "name": "How do regenerative therapies help with joint or tendon injuries?", "acceptedAnswer": {"@type": "Answer", "text": "When injected into a damaged tendon, ligament, or joint, concentrated platelets or cells release growth factors that encourage tissue regeneration, collagen formation, and improved blood flow — strengthening weak or torn areas, reducing inflammation, and restoring joint mechanics over time."}}, {"@type": "Question", "name": "Are regenerative treatments safe and approved for use?", "acceptedAnswer": {"@type": "Answer", "text": "Regenerative treatments are considered safe when performed by trained medical professionals using sterile, evidence-based technique. Most procedures use your own biological material, which reduces the risk of allergic reaction or rejection. At Elite Sports Medicine, each procedure follows medical protocol and is customized to your diagnosis."}}, {"@type": "Question", "name": "How long does it take to see results from treatment?", "acceptedAnswer": {"@type": "Answer", "text": "Timelines vary with the severity of the condition and your body's healing rate. Some patients notice improvement within a few weeks, while deeper tissue healing can continue over several months. Your physician will monitor progress and may recommend follow-up sessions."}}, {"@type": "Question", "name": "Who is an ideal candidate for regenerative medicine?", "acceptedAnswer": {"@type": "Answer", "text": "Good candidates include patients with chronic joint pain, tendon or ligament injuries, mild-to-moderate arthritis, or those recovering from sports-related trauma, and anyone seeking an alternative to surgery. Your specialist will evaluate your condition, medical history, and activity level during a consultation to confirm fit."}}]}</script>
@@ -31,9 +31,10 @@
 <!-- seo:graph -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://elitesportsmed.org/#website", "url": "https://elitesportsmed.org/", "name": "Elite Sports Medicine", "inLanguage": "en-US", "publisher": {"@id": "https://elitesportsmed.org/#organization"}}, {"@type": "MedicalWebPage", "@id": "https://elitesportsmed.org/regenerative-treatments/#webpage", "url": "https://elitesportsmed.org/regenerative-treatments/", "name": "Regenerative Treatments: PRP & Stem Cell | Port St. Lucie", "description": "PRP, stem cell therapy and growth factor injections that work with your body's own healing response. Non-surgical care in South Florida.", "inLanguage": "en-US", "isPartOf": {"@id": "https://elitesportsmed.org/#website"}, "about": {"@id": "https://elitesportsmed.org/#organization"}, "primaryImageOfPage": {"@type": "ImageObject", "url": "https://elitesportsmed.org/assets/img/og-cover.jpg"}, "datePublished": "2026-08-20", "dateModified": "2026-10-25", "audience": {"@type": "MedicalAudience", "audienceType": "Patient"}, "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".hero h1", ".hero-lede"]}}]}</script>
 <!-- /seo:graph -->
-<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");</script>
+<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics). The stub queues
+     every gtag() call; the 170 KB library is fetched after the load event (2026-11-06). -->
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");
+(function(){function l(){var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8";document.head.appendChild(s);}if(document.readyState==="complete")l();else addEventListener("load",l,{once:true});})();</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -405,7 +406,7 @@
   </form>
 </div>
 
-<script src="/assets/js/main.js?v=46362b6a51"></script>
+<script src="/assets/js/main.min.js?v=745a4b85e3"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

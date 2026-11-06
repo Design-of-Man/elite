@@ -6,10 +6,17 @@ identical across all 51 files — run them after any edit that touches what they
 manage.
 
 ## Scripts (run from anywhere in the repo)
-- `python3 scripts/stamp-assets.py` — rewrites the `?v=` cache-buster on
-  `/assets/css/v2.css` and `/assets/js/main.js` from the file's own bytes. Run
-  after ANY edit to either asset: `/assets/*` is served `immutable` for a week,
-  so an unchanged URL means visitors keep the old file.
+- `python3 scripts/stamp-assets.py` — minifies `assets/css/v2.css` ->
+  `assets/css/v2.min.css` and `assets/js/main.js` -> `assets/js/main.min.js`,
+  then rewrites every page's `?v=` cache-buster from the minified file's bytes.
+  Run after ANY edit to either source: pages load only the `.min` files, and
+  `/assets/css`, `/assets/js` and `/assets/fonts` are served `immutable` for a
+  year (other `/assets/*` for a week), so an unchanged URL means visitors keep
+  the old file. Edit the readable sources, never the `.min` files (the next run
+  overwrites them); commit both. The minifier is pure Python and conservative
+  (see the script's docstring); if a run ever raises on new syntax, fix the
+  script rather than hand-editing a `.min` file. Added 2026-11-06 after Semrush
+  flagged 132 unminified-CSS/JS warnings (two per page).
 - `python3 scripts/seo.py` — rewrites the per-page schema graph (the block
   between the `<!-- seo:graph -->` markers) and regenerates `sitemap.xml`. Run
   after adding a page, or after changing any page's `<title>`, description or
@@ -54,6 +61,20 @@ The "Instrument Serif Fallback" / "DM Sans Fallback" faces are metric-matched
 local fonts (size-adjust measured against Times New Roman / Arial metrics); they
 must stay second in `--font-display` / `--font-body`. Font files are immutable-
 cached: new bytes need a new filename (bump `-v1`).
+
+## Mobile speed (2026-11-06; Lighthouse mobile, keep these)
+- Homepage hero: the poster is the `.hero-video` CSS background in `v2.css`, not a
+  `poster=""` attribute, so portrait screens (`max-aspect-ratio: 2/3`) get
+  `jupiter-inlet-sunset-poster-portrait.webp` (a centre crop of the same frame, half
+  the bytes). `index.html` preloads whichever file applies with the SAME media
+  queries; change one and you must change the other, or the phone downloads both.
+- main.js starts the hero video only after the `load` event (then idle). Started
+  earlier, the 7 MB file took a phone's bandwidth before the headline painted.
+- The doctor portrait is served as `dr-matarazzo-portrait-{600,840,1024}.webp` via
+  `srcset`; the JPG stays only because schema/OG point at it. On
+  `/marc-f-matarazzo/` the portrait is in the first screen and is often the LCP
+  element, so it is NOT `loading="lazy"` there (it is lazy everywhere else).
+- Never put `loading="lazy"` on an image in the first screen.
 
 ## Page anatomy (keep consistent — the scripts depend on it)
 - Every page has exactly one `</head>`. Two location pages shipped without one
@@ -300,11 +321,18 @@ fire `chat_open`. All six events go to Vercel and are mirrored to GA4 by `leadEv
 - `leadEvent()` hard-bails on the three PHI paths, on top of those pages having
   no analytics tag at all. Two independent guards on purpose.
 - GA4 (`G-1HSFDBS6Q8`, property "elitesportsmed.org" in the "Elite Sports
-  Medicine" GA account) is loaded in `<head>` on every page that carries the
-  Vercel tag, added 2026-10-23. The gtag stub is defined in `<head>`, before
-  `main.js` runs, so `form_submit` fired at load on `/thank-you/` reaches GA4.
-  It is NOT on the three PHI pages; any new page needs the snippet copied too
-  (blog posts inherit it from `blog/index.html`'s shell). The CSP in vercel.json
+  Medicine" GA account) is on every page that carries the Vercel tag, added
+  2026-10-23. The gtag stub (`dataLayer`, `gtag()`, `config`) is defined inline
+  in `<head>`, before `main.js` runs, so every call queues from the first
+  moment. Since 2026-11-06 the 170 KB `gtag/js` library itself is injected
+  after the window `load` event, not as an `async` tag in `<head>`: on a phone
+  it was downloading in the same window as the stylesheet and fonts and was
+  the largest file on every page but the homepage. GA processes the queued
+  calls when it arrives, so nothing is lost except pageviews from a visitor
+  who leaves before `load`. `/thank-you/` keeps the old immediate `async` tag
+  on purpose: its `form_submit` is the key event, and a visitor may close that
+  tab at once. It is NOT on the three PHI pages; any new page needs the snippet
+  copied too (blog posts inherit it from `blog/index.html`'s shell). The CSP in vercel.json
   allows `googletagmanager.com` / `google-analytics.com` for this, plus `https://www.google.com`
   and `https://*.g.doubleclick.net` in `connect-src` and `img-src` (2026-10-30, the same pattern
   as firstrehabnpb.com): GA4 sends a second hit to `www.google.com/g/collect` for Google Ads

@@ -23,7 +23,7 @@
 <link rel="preload" href="/assets/fonts/instrument-serif-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/dm-sans-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/assets/css/v2.css?v=525c1d372d">
+<link rel="stylesheet" href="/assets/css/v2.min.css?v=eec84774ae">
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": ["MedicalProcedure", "Service"], "name": "MISHA Knee System", "provider": {"@id": "https://elitesportsmed.org/#physician"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What makes MISHA different from knee replacement?", "acceptedAnswer": {"@type": "Answer", "text": "A replacement resurfaces the joint; MISHA leaves it untouched and unloads it from outside. No bone is cut and no cartilage is removed."}}, {"@type": "Question", "name": "Who is the ideal candidate for MISHA?", "acceptedAnswer": {"@type": "Answer", "text": "Someone with inner-compartment arthritis at an early to moderate stage, still active, and not ready for a replacement."}}, {"@type": "Question", "name": "How soon can I walk after the procedure?", "acceptedAnswer": {"@type": "Answer", "text": "Walking starts the same day. Exercise comes back in stages, led by the rehabilitation plan."}}, {"@type": "Question", "name": "Can MISHA delay the need for knee replacement surgery?", "acceptedAnswer": {"@type": "Answer", "text": "It can. Taking load off the worn compartment may slow the wear, and it leaves a replacement fully available whenever you do need one."}}, {"@type": "Question", "name": "Will I feel the implant inside my knee?", "acceptedAnswer": {"@type": "Answer", "text": "Once it has healed in, no. Patients generally stop being aware of it and move normally."}}, {"@type": "Question", "name": "What are the benefits of the MISHA Implantable Shock Absorber?", "acceptedAnswer": {"@type": "Answer", "text": "Pain relief and better movement, through a small incision, without giving up any of your own joint or closing off a replacement later."}}, {"@type": "Question", "name": "How can I find out if the MISHA implant is right for me?", "acceptedAnswer": {"@type": "Answer", "text": "It needs an assessment — the arthritis has to be in the inner compartment and at the right stage. Call 561-202-8886 or request an appointment online and we will tell you honestly whether you are a candidate."}}]}</script>
@@ -31,9 +31,10 @@
 <!-- seo:graph -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://elitesportsmed.org/#website", "url": "https://elitesportsmed.org/", "name": "Elite Sports Medicine", "inLanguage": "en-US", "publisher": {"@id": "https://elitesportsmed.org/#organization"}}, {"@type": "MedicalWebPage", "@id": "https://elitesportsmed.org/services/misha-minimally-invasive-implantable-shock-absorber-implant/#webpage", "url": "https://elitesportsmed.org/services/misha-minimally-invasive-implantable-shock-absorber-implant/", "name": "MISHA Knee System | First Implanted in Florida by Dr. Matarazzo", "description": "The MISHA Knee System is an implantable shock absorber for early inner-knee arthritis. Dr. Marc Matarazzo was the first surgeon in Florida to implant one.", "inLanguage": "en-US", "isPartOf": {"@id": "https://elitesportsmed.org/#website"}, "about": {"@id": "https://elitesportsmed.org/#organization"}, "primaryImageOfPage": {"@type": "ImageObject", "url": "https://elitesportsmed.org/assets/img/og-cover.jpg"}, "datePublished": "2026-08-19", "dateModified": "2026-10-25", "audience": {"@type": "MedicalAudience", "audienceType": "Patient"}, "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".hero h1", ".hero-lede"]}}]}</script>
 <!-- /seo:graph -->
-<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");</script>
+<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics). The stub queues
+     every gtag() call; the 170 KB library is fetched after the load event (2026-11-06). -->
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");
+(function(){function l(){var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8";document.head.appendChild(s);}if(document.readyState==="complete")l();else addEventListener("load",l,{once:true});})();</script>
 </head>
 <body data-hero="media">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -408,7 +409,7 @@ It goes in through a small incision, recovery is quicker than a replacement, and
   </form>
 </div>
 
-<script src="/assets/js/main.js?v=46362b6a51"></script>
+<script src="/assets/js/main.min.js?v=745a4b85e3"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

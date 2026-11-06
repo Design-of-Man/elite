@@ -1133,8 +1133,21 @@ body[data-hero="media"] .site-header:not(.is-scrolled) .nav-desktop a::after {
   left: 0;
   object-fit: cover;
   will-change: transform;
-  /* The poster is the same frame, so an unloaded video is not an empty box. */
-  background: var(--ink) center / cover no-repeat;
+  /* The poster is the same frame, so an unloaded video is not an empty box.
+     It is this background, not a poster="" attribute (2026-11-06): a poster
+     can only name one file, and a phone was fetching the whole 2400px-wide
+     landscape frame (230 KB) to show a 412px-wide slice of it. Portrait
+     screens get a centre crop of the same frame at the same quality (114 KB).
+     `cover` + `center` frames a background exactly as object-fit: cover frames
+     a poster. index.html preloads whichever file these media queries pick, with
+     the same queries, so the image is not discovered late. The crop is 1080 of
+     the 2400 source px (aspect 0.8): enough to fill the box on any screen
+     narrower than 2:3, including the taller 100%-height box under reduced
+     motion with mobile browser chrome showing. */
+  background: var(--ink) url("/assets/img/jupiter-inlet-sunset-poster.webp") center / cover no-repeat;
+}
+@media (max-aspect-ratio: 2/3) {
+  .hero-video { background-image: url("/assets/img/jupiter-inlet-sunset-poster-portrait.webp"); }
 }
 
 /* Two gradients, not one: the horizontal pass protects the copy column, the

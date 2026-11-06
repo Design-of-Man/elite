@@ -23,7 +23,7 @@
 <link rel="preload" href="/assets/fonts/instrument-serif-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/dm-sans-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/assets/css/v2.css?v=525c1d372d">
+<link rel="stylesheet" href="/assets/css/v2.min.css?v=eec84774ae">
 
 <script type="application/ld+json">
 {
@@ -38,9 +38,10 @@
 <!-- seo:graph -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://elitesportsmed.org/#website", "url": "https://elitesportsmed.org/", "name": "Elite Sports Medicine", "inLanguage": "en-US", "publisher": {"@id": "https://elitesportsmed.org/#organization"}}, {"@type": "MedicalWebPage", "@id": "https://elitesportsmed.org/services/acl-reconstruction/#webpage", "url": "https://elitesportsmed.org/services/acl-reconstruction/", "name": "ACL Reconstruction Surgery | Port St. Lucie & Palm Beach", "description": "Arthroscopic ACL reconstruction to restore knee stability after a tear, with sport-specific rehab. Serving Port St. Lucie and Palm Beach Gardens, FL.", "inLanguage": "en-US", "isPartOf": {"@id": "https://elitesportsmed.org/#website"}, "about": {"@id": "https://elitesportsmed.org/#organization"}, "primaryImageOfPage": {"@type": "ImageObject", "url": "https://elitesportsmed.org/assets/img/og-cover.jpg"}, "datePublished": "2026-08-19", "dateModified": "2026-10-25", "audience": {"@type": "MedicalAudience", "audienceType": "Patient"}, "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".hero h1", ".hero-lede"]}}]}</script>
 <!-- /seo:graph -->
-<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");</script>
+<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics). The stub queues
+     every gtag() call; the 170 KB library is fetched after the load event (2026-11-06). -->
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");
+(function(){function l(){var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8";document.head.appendChild(s);}if(document.readyState==="complete")l();else addEventListener("load",l,{once:true});})();</script>
 </head>
 <body data-hero="media">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -217,7 +218,7 @@
         </ul>
       </div>
       <div class="split-media reveal">
-        <img src="/assets/img/dr-matarazzo-portrait.jpg" alt="Dr. Marc F. Matarazzo, orthopedic surgeon, at Elite Sports Medicine" loading="lazy" width="1024" height="1024">
+        <img src="/assets/img/dr-matarazzo-portrait-1024.webp" srcset="/assets/img/dr-matarazzo-portrait-600.webp 600w, /assets/img/dr-matarazzo-portrait-840.webp 840w, /assets/img/dr-matarazzo-portrait-1024.webp 1024w" sizes="(max-width: 900px) min(37.5rem, calc(125vw - 3.5rem)), 35rem" alt="Dr. Marc F. Matarazzo, orthopedic surgeon, at Elite Sports Medicine" loading="lazy" decoding="async" width="1024" height="1024">
       </div>
     </div>
   </section>
@@ -363,7 +364,7 @@
   </form>
 </div>
 
-<script src="/assets/js/main.js?v=46362b6a51"></script>
+<script src="/assets/js/main.min.js?v=745a4b85e3"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

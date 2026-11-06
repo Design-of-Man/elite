@@ -23,14 +23,15 @@
 <link rel="preload" href="/assets/fonts/instrument-serif-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/dm-sans-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/assets/css/v2.css?v=525c1d372d">
+<link rel="stylesheet" href="/assets/css/v2.min.css?v=eec84774ae">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "MedicalTherapy", "name": "Peptide Therapy", "alternateName": ["Peptide therapy for recovery", "Physician-guided peptide therapy"], "url": "https://elitesportsmed.org/services/peptide-therapy/", "provider": {"@id": "https://elitesportsmed.org/#physician"}, "availableAtOrFrom": {"@id": "https://elitesportsmed.org/#clinic-port-st-lucie"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Are peptides FDA-approved?", "acceptedAnswer": {"@type": "Answer", "text": "No. The peptide therapies discussed here are compounded preparations that are not approved by the U.S. Food and Drug Administration (FDA) for the treatment, cure, or prevention of any medical condition, and much of the supporting research is preclinical or preliminary. They are offered only after evaluation by a physician, as one part of an individualized treatment plan."}}, {"@type": "Question", "name": "How soon will I notice results?", "acceptedAnswer": {"@type": "Answer", "text": "Many patients notice recovery and energy improvements within several weeks, with continued benefits over time."}}, {"@type": "Question", "name": "How are peptides administered?", "acceptedAnswer": {"@type": "Answer", "text": "They may be given as small injections, creams, nasal sprays, or capsules depending on the treatment goal."}}, {"@type": "Question", "name": "Can peptide therapy be combined with physical therapy or training?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Peptides are commonly used alongside training and rehab to support recovery and performance."}}, {"@type": "Question", "name": "Will treatment be customized to my goals?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Therapy is tailored to your condition, activity level, metabolism, and desired outcomes."}}, {"@type": "Question", "name": "What conditions can peptide therapy help treat?", "acceptedAnswer": {"@type": "Answer", "text": "Peptide therapy may help support recovery from sports injuries, joint pain, inflammation, and muscle, tendon, or ligament injuries."}}, {"@type": "Question", "name": "Where is peptide therapy offered?", "acceptedAnswer": {"@type": "Answer", "text": "At our Port St. Lucie office, 1100 SW St. Lucie West Blvd., Ste. 105, Port St. Lucie, FL 34986, Monday to Friday, 8:30 AM to 4:00 PM. Call 561-202-8886 to book an evaluation."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://elitesportsmed.org/"}, {"@type": "ListItem", "position": 2, "name": "Services", "item": "https://elitesportsmed.org/services/"}, {"@type": "ListItem", "position": 3, "name": "Peptide Therapy", "item": "https://elitesportsmed.org/services/peptide-therapy/"}]}</script>
 
-<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");</script>
+<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics). The stub queues
+     every gtag() call; the 170 KB library is fetched after the load event (2026-11-06). -->
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");
+(function(){function l(){var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8";document.head.appendChild(s);}if(document.readyState==="complete")l();else addEventListener("load",l,{once:true});})();</script>
 <!-- seo:graph -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://elitesportsmed.org/#website", "url": "https://elitesportsmed.org/", "name": "Elite Sports Medicine", "inLanguage": "en-US", "publisher": {"@id": "https://elitesportsmed.org/#organization"}}, {"@type": "MedicalWebPage", "@id": "https://elitesportsmed.org/services/peptide-therapy/#webpage", "url": "https://elitesportsmed.org/services/peptide-therapy/", "name": "Peptide Therapy Port St. Lucie, FL | Elite Sports Medicine", "description": "Physician-guided peptide therapy for healing, joint pain and recovery, with Dr. Marc Matarazzo at Elite Sports Medicine's Port St. Lucie office.", "inLanguage": "en-US", "isPartOf": {"@id": "https://elitesportsmed.org/#website"}, "about": {"@id": "https://elitesportsmed.org/#organization"}, "primaryImageOfPage": {"@type": "ImageObject", "url": "https://elitesportsmed.org/assets/img/og-cover.jpg"}, "datePublished": "2026-10-25", "dateModified": "2026-10-25", "audience": {"@type": "MedicalAudience", "audienceType": "Patient"}, "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".hero h1", ".hero-lede"]}}]}</script>
 <!-- /seo:graph -->
@@ -401,7 +402,7 @@
   </form>
 </div>
 
-<script src="/assets/js/main.js?v=46362b6a51"></script>
+<script src="/assets/js/main.min.js?v=745a4b85e3"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

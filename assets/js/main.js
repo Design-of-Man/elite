@@ -149,12 +149,26 @@
         : heroVideo.dataset.srcLo;
 
       if (src) {
-        heroVideo.preload = "auto";
-        heroVideo.src = src;
-        // play() rejects on browsers that block autoplay even when muted; the
-        // poster is a complete fallback, so swallow it rather than logging.
-        var attempt = heroVideo.play();
-        if (attempt && typeof attempt.catch === "function") attempt.catch(function () {});
+        // Not before the page has loaded (2026-11-06). Started here, the 7 MB
+        // file was requested before the headline had painted and took the
+        // phone's bandwidth from the stylesheet, fonts and poster: Lighthouse
+        // mobile put the homepage LCP at 5.1 s, against ~3.4 s on pages with no
+        // video. The poster is the same frame, so starting a moment later looks
+        // identical.
+        var startVideo = function () {
+          heroVideo.preload = "auto";
+          heroVideo.src = src;
+          // play() rejects on browsers that block autoplay even when muted; the
+          // poster is a complete fallback, so swallow it rather than logging.
+          var attempt = heroVideo.play();
+          if (attempt && typeof attempt.catch === "function") attempt.catch(function () {});
+        };
+        var whenIdle = function () {
+          if ("requestIdleCallback" in window) requestIdleCallback(startVideo, { timeout: 2000 });
+          else setTimeout(startVideo, 200);
+        };
+        if (document.readyState === "complete") whenIdle();
+        else window.addEventListener("load", whenIdle, { once: true });
       }
     }
   }

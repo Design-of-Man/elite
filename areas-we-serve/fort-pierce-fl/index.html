@@ -23,7 +23,7 @@
 <link rel="preload" href="/assets/fonts/instrument-serif-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/dm-sans-latin-v1.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/assets/css/v2.css?v=525c1d372d">
+<link rel="stylesheet" href="/assets/css/v2.min.css?v=eec84774ae">
 
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://elitesportsmed.org/"}, {"@type": "ListItem", "position": 2, "name": "Areas We Serve", "item": "https://elitesportsmed.org/areas-we-serve/"}, {"@type": "ListItem", "position": 3, "name": "Sports Medicine & Orthopedic Care Near Fort Pierce, FL", "item": "https://elitesportsmed.org/areas-we-serve/fort-pierce-fl/"}]}</script>
@@ -31,9 +31,10 @@
 <!-- seo:graph -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://elitesportsmed.org/#website", "url": "https://elitesportsmed.org/", "name": "Elite Sports Medicine", "inLanguage": "en-US", "publisher": {"@id": "https://elitesportsmed.org/#organization"}}, {"@type": "WebPage", "@id": "https://elitesportsmed.org/areas-we-serve/fort-pierce-fl/#webpage", "url": "https://elitesportsmed.org/areas-we-serve/fort-pierce-fl/", "name": "Orthopedic Doctor Near Fort Pierce, FL | Dr. Marc Matarazzo", "description": "Sports medicine and orthopedic care near Fort Pierce, FL from Dr. Marc F. Matarazzo, former NY Jets and Islanders team physician. Call 561-202-8886.", "inLanguage": "en-US", "isPartOf": {"@id": "https://elitesportsmed.org/#website"}, "about": {"@id": "https://elitesportsmed.org/#organization"}, "primaryImageOfPage": {"@type": "ImageObject", "url": "https://elitesportsmed.org/assets/img/og-cover.jpg"}, "datePublished": "2026-08-19", "dateModified": "2026-10-25", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".hero h1", ".hero-lede"]}}]}</script>
 <!-- /seo:graph -->
-<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");</script>
+<!-- GA4 (not on the three PHI form pages; see CLAUDE.md -> Analytics). The stub queues
+     every gtag() call; the 170 KB library is fetched after the load event (2026-11-06). -->
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-1HSFDBS6Q8");
+(function(){function l(){var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-1HSFDBS6Q8";document.head.appendChild(s);}if(document.readyState==="complete")l();else addEventListener("load",l,{once:true});})();</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -432,7 +433,7 @@
   </form>
 </div>
 
-<script src="/assets/js/main.js?v=46362b6a51"></script>
+<script src="/assets/js/main.min.js?v=745a4b85e3"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
